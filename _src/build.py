@@ -216,9 +216,37 @@ main>footer{padding-left:0}
  .cards{grid-template-columns:1fr 1fr}.cnote{grid-column:1/-1}
  .mh-c span:nth-child(3){display:none}
 }
+
+/* ---- C: index list */
+.ix{max-width:var(--max);margin:9vh auto 16vh;display:grid;grid-template-columns:7fr 5fr;gap:56px;align-items:start}
+.ixh{grid-column:1/-1;margin-bottom:20px}
+.ixh h1{font-size:clamp(36px,5.4vw,68px);font-weight:600;letter-spacing:-.025em;line-height:1.08}
+.ixh h1 span{font-weight:300}
+.ixh .sub{color:var(--mute);margin-top:10px;font-size:15px}
+.ixh .lead{max-width:640px;margin-top:28px;font-size:17px;line-height:1.75}
+.ixl{list-style:none;border-top:1px solid var(--fg)}
+.ixl a{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:baseline;padding:20px 0;border-bottom:1px solid var(--line);transition:padding .35s ease,color .25s}
+.ixl .n{color:var(--mute);font-size:13px;font-variant-numeric:tabular-nums}
+.ixl .t{font-size:clamp(24px,2.7vw,38px);font-weight:500;letter-spacing:-.015em;line-height:1.15}
+.ixl .k{color:var(--mute);font-size:13px;text-align:right}
+.ixl .mt{display:none}
+.ixl:hover a{color:var(--mute)}.ixl:hover a .t{color:color-mix(in srgb,var(--fg) 35%,var(--bg))}
+.ixl li.on a,.ixl li:hover a{padding-left:14px}.ixl li:hover a .t,.ixl li.on a .t{color:var(--fg)}
+.pv{position:sticky;top:96px;aspect-ratio:4/5;overflow:hidden;background:color-mix(in srgb,var(--fg) 6%,var(--bg))}
+.pv img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .45s ease,transform 1.4s ease;transform:scale(1.04)}
+.pv img.on{opacity:1;transform:none}
+@media (max-width:760px){
+ .ix{grid-template-columns:1fr;gap:0;margin:6vh auto 12vh}.pv{display:none}
+ .ixl a{grid-template-columns:32px 1fr;padding:16px 0}.ixl .k{grid-column:2;text-align:left;margin-top:-6px}
+ .ixl .mt{display:block;grid-column:1/-1;width:100%;height:58vw;object-fit:cover;margin-top:10px}
+ .ixl:hover a{color:inherit}.ixl:hover a .t{color:var(--fg)}.ixl li:hover a{padding-left:0}
+}
 """
 
 JS = r"""
+(function(){var pv=document.querySelector('.pv');if(!pv)return;var im=pv.querySelectorAll('img');
+document.querySelectorAll('.ixl li').forEach(function(li){li.addEventListener('mouseenter',function(){var i=+li.dataset.i;im.forEach(function(x,k){x.classList.toggle('on',k===i)});document.querySelectorAll('.ixl li').forEach(function(o){o.classList.toggle('on',o===li)});});});})();
+
 const lb=document.getElementById('lb'),li=lb.querySelector('img'),lc=lb.querySelector('.c');let L=[],ix=0;
 function show(i){ix=(i+L.length)%L.length;li.src=L[ix].src;const f=L[ix].closest('figure').querySelector('figcaption');lc.textContent=(f?f.textContent:'')+'  '+(ix+1)+' / '+L.length;}
 document.addEventListener('click',e=>{
@@ -306,17 +334,14 @@ def practice():
     rows=''.join(f'<li><span class="y">{E(i["year"])}</span><span class="t">{E(i["org"] if i.get("org") else i["title"])}</span><span class="k">{E(i["role"] if i.get("role") else i["kind"])}</span></li>' for i in PRACTICE if not i.get('hide_in_list') and not i.get('slug'))
     return ('<section class="works pw">'+''.join(cards)+'</section>' if cards else '')+'<ul class="plist">'+rows+'</ul>'
 # ---- index
-cards = []
-for p in PROJECTS[1:]:
+rows, pvs = [], []
+for k, p in enumerate(PROJECTS):
     src, w, h = use(p['hero'], thumb=True)
-    cards.append(f'''<a class="work" href="works/{p["slug"]}.html"><div class="ph"><img src="{src}" width="{w}" height="{h}" alt="{E(p["title"])}" loading="lazy" style="object-position:{p.get("pos","50% 50%")}"></div>
-<div class="cap"><span class="no">{p["no"]}</span><span class="t">{E(p["title"])}</span><span class="k">{E(p["kind"])} · {p["year"]}</span></div></a>''')
-P0 = PROJECTS[0]; hs, hw, hh = use(P0['hero'])
-body = f'''<a class="mhero" href="works/{P0["slug"]}.html"><img src="{hs}" width="{hw}" height="{hh}" alt="{E(P0["title"])}" fetchpriority="high">
-<div class="mh-t"><h1>{SITE["name_ko"]} <span>{SITE["name_en"]}</span></h1><p>Selected Works 2021–2026</p></div>
-<div class="mh-c"><span class="no">{P0["no"]}</span> <b>{E(P0["title"])}</b> <span>{E(P0["kind"])} · {P0["year"]} →</span></div></a>
-<section class="intro"><p class="sch">{SITE["school"]}</p><p class="lead">{E(ABOUT.get("intro") or "")}</p></section>
-<div class="sec" id="projects"><h2>Projects</h2><span>설계 작업</span></div><section class="works">{"".join(cards)}</section>
+    pos = p.get("pos", "50% 50%")
+    rows.append(f'''<li data-i="{k}"><a href="works/{p["slug"]}.html"><span class="n">{p["no"]}</span><span class="t">{E(p["title"])}</span><span class="k">{E(p["kind"])} · {p["year"]}</span><img class="mt" src="{src}" width="{w}" height="{h}" alt="" loading="lazy" style="object-position:{pos}"></a></li>''')
+    pvs.append(f'<img src="{src}" width="{w}" height="{h}" alt="{E(p["title"])}" style="object-position:{pos}" class="{"on" if k==0 else ""}" {"" if k==0 else "loading=\"lazy\""}>')
+body = f'''<section class="ix" id="projects"><div class="ixh"><h1>{SITE["name_ko"]} <span>{SITE["name_en"]}</span></h1><p class="sub">Selected Works 2021–2026 · {SITE["school"]}</p><p class="lead">{E(ABOUT.get("intro") or "")}</p></div>
+<ul class="ixl">{"".join(rows)}</ul><div class="pv">{"".join(pvs)}</div></section>
 <div class="sec" id="publish"><h2>Publish</h2><span>출판 · 책자</span></div>{cardgrid(PUBLISH)}
 <div class="sec" id="practice"><h2>Practice &amp; Activities</h2><span>인턴 · 대외활동</span></div>{practice()}'''
 open(f'{OUT}/index.html', 'w').write(page(f'{SITE["name_ko"]} — Portfolio', body, '', on='w'))

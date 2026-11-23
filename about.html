@@ -23,6 +23,9 @@
 </main>
 <div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>
 <script>
+(function(){var pv=document.querySelector('.pv');if(!pv)return;var im=pv.querySelectorAll('img');
+document.querySelectorAll('.ixl li').forEach(function(li){li.addEventListener('mouseenter',function(){var i=+li.dataset.i;im.forEach(function(x,k){x.classList.toggle('on',k===i)});document.querySelectorAll('.ixl li').forEach(function(o){o.classList.toggle('on',o===li)});});});})();
+
 const lb=document.getElementById('lb'),li=lb.querySelector('img'),lc=lb.querySelector('.c');let L=[],ix=0;
 function show(i){ix=(i+L.length)%L.length;li.src=L[ix].src;const f=L[ix].closest('figure').querySelector('figcaption');lc.textContent=(f?f.textContent:'')+'  '+(ix+1)+' / '+L.length;}
 document.addEventListener('click',e=>{
