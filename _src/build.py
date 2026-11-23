@@ -371,7 +371,7 @@ for k, p in enumerate(PROJECTS):
     lz = '' if k == 0 else 'loading="lazy"'
     rows.append(f'''<li data-i="{k}" class="{"on" if k==0 else ""}"><a href="works/{p["slug"]}.html"><span class="n">{p["no"]}</span><span class="t">{E(p["title"])}</span><span class="k">{E(p["kind"])} · {p["year"]}</span><img class="mt" src="{src}" width="{w}" height="{h}" alt="" loading="lazy" style="object-position:{pos}"><span class="ms">{E(p.get("statement",""))}</span></a></li>''')
     pvs.append(f'''<a class="sl{" on" if k==0 else ""}" href="works/{p["slug"]}.html"><div class="r"><img src="{src}" width="{w}" height="{h}" alt="{E(p["title"])}" style="object-position:{pos}" {lz}></div><div class="d"><img src="{ds}" width="{dw_}" height="{dh}" alt="{E(p["title"])} 도면" {lz}></div>
-<div class="cd"><span class="cn">{p["no"]} — {E(p["kind"])} · {p["year"]}</span><b>{E(p["title"])}</b><p>{E(p.get("statement",""))}</p><span class="go">프로젝트 보기 →</span></div></a>''')
+<div class="cd" style="background:{p.get('tone','#d8b04a')}"><span class="cn">{p["no"]} — {E(p["kind"])} · {p["year"]}</span><b>{E(p["title"])}</b><p>{E(p.get("statement",""))}</p><span class="go">프로젝트 보기 →</span></div></a>''')
 body = f'''<section class="ix" id="projects"><div class="ixh"><h1>{SITE["name_ko"]} <span>{SITE["name_en"]}</span></h1><p class="sub">Selected Works 2021–2026 · {SITE["school"]}</p><p class="lead">{E(ABOUT.get("intro") or "")}</p></div>
 <ul class="ixl">{"".join(rows)}</ul><div class="stg">{"".join(pvs)}</div></section>
 <div class="sec" id="publish"><h2>Publish</h2><span>출판 · 책자</span></div>{cardgrid(PUBLISH)}
