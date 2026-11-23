@@ -4,7 +4,7 @@
 import os, sys, shutil, html, json
 from PIL import Image
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from content import SITE, PROJECTS, ABOUT, PUBLISH, PRACTICE
+from content import SITE, PROJECTS, ABOUT, PUBLISH, PRACTICE, PROCESS
 PRACTICE = sorted(PRACTICE, key=lambda i: i['year'][:4], reverse=True)
 
 SRC, OUT = sys.argv[1], sys.argv[2]
@@ -279,6 +279,39 @@ main>footer{padding-left:0}
 .ct p{color:var(--mute);margin-top:24px;font-size:15px}
 @media (max-width:760px){header.top nav a{margin-left:12px;font-size:13px}}
 .blk.nr img{max-width:560px;width:100%}
+
+/* process */
+.phd{max-width:var(--max);margin:10vh auto 10vh}
+.phd .k{color:var(--mute);font-size:14px}
+.phd h1{font-size:clamp(34px,5vw,64px);font-weight:600;letter-spacing:-.025em;line-height:1.1;margin-top:8px}
+.phd h1 small{display:block;font-size:.32em;font-weight:400;color:var(--mute);letter-spacing:0;margin-top:14px}
+.phd .lead{max-width:720px;margin-top:28px;font-size:18px;line-height:1.75}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:56px;border-top:1px solid var(--fg);padding-top:20px}
+.stats b{display:block;font-size:clamp(30px,3.6vw,48px);font-weight:500;letter-spacing:-.02em}
+.stats span{color:var(--mute);font-size:14px}
+.pstep{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:4fr 8fr;gap:40px;padding:56px 0;border-top:1px solid var(--line)}
+.pstep .no{color:var(--mute);font-size:14px;font-variant-numeric:tabular-nums}
+.pstep h2{font-size:clamp(24px,2.6vw,34px);font-weight:500;letter-spacing:-.015em;line-height:1.2;margin-top:6px;position:sticky;top:90px}
+.pstep h2 small{display:block;font-size:14px;color:var(--mute);font-weight:400;margin-top:8px;letter-spacing:0}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--line)}
+.cmp>div{background:var(--bg);padding:18px 20px}
+.cmp .ai{background:color-mix(in srgb,#a9b89a 28%,var(--bg))}
+.cmp h4{font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--mute);margin-bottom:8px}
+.cmp p{font-size:15.5px;line-height:1.7}
+.hm{margin-top:16px;font-size:15px}.hm b{font-weight:600;margin-right:8px}
+pre.code{margin-top:20px;background:#1d1c1a;color:#e9e4d8;padding:18px 20px;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow-x:auto;white-space:pre}
+pre.code .f{display:block;color:#a9b89a;font-family:Pretendard,sans-serif;font-size:12px;margin-bottom:10px}
+.f2{margin-top:16px;color:var(--mute);font-size:13px}
+.pfig{margin-top:20px}.pfig img{width:100%;height:auto;max-height:78vh;object-fit:contain;object-position:left;display:block}.pfig figcaption{margin-top:8px;color:var(--mute);font-size:13px}
+.flow{list-style:none;display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin:18px 0 6px;counter-reset:f}
+.flow li{border-top:2px solid #1d1c1a;padding:10px 14px 0 0;position:relative}.flow li:not(:last-child):after{content:'→';position:absolute;right:10px;top:8px}
+.flow b{display:block;font-size:15px}.flow span{font-size:13px;opacity:.75}
+@media (max-width:760px){.flow{grid-template-columns:1fr 1fr}}
+.imgph{margin-top:20px;aspect-ratio:16/9;border:1px dashed var(--line);display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:13px}
+.pnote{max-width:var(--max);margin:24px auto 56px;background:#d8b04a;color:#1d1c1a;padding:28px 32px}
+.pnote h3{font-size:18px;font-weight:600}
+.pnote ul{margin-top:12px;padding-left:1.2em}.pnote li{margin-top:6px;font-size:15.5px}
+@media (max-width:760px){.stats{grid-template-columns:1fr 1fr}.pstep{grid-template-columns:1fr;gap:16px}.pstep h2{position:static}.cmp{grid-template-columns:1fr}}
 """
 
 JS = r"""
@@ -308,7 +341,7 @@ def page(title, body, root, dark=False, on='', desc='', og='img/t_307.jpg'):
 <meta property="og:image" content="https://coin9563-max.github.io/{og}">
 </head><body class="{'dark' if dark else ''}">
 <header class="top"><a class="name" href="{root}index.html">{SITE['name_ko']}<span>{SITE['name_en']}</span></a>
-<nav><a href="{root}index.html#projects" class="{'on' if on=='w' else ''}">Projects</a><a href="{root}index.html#publish">Publish</a><a href="{root}index.html#practice">Practice</a><a href="{root}about.html" class="{'on' if on=='a' else ''}">About</a><a href="{root}index.html#contact">Contact</a></nav></header>
+<nav><a href="{root}index.html#projects" class="{'on' if on=='w' else ''}">Projects</a><a href="{root}index.html#publish">Publish</a><a href="{root}index.html#practice">Practice</a><a href="{root}process.html" class="{'on' if on=='p' else ''}">Process</a><a href="{root}about.html" class="{'on' if on=='a' else ''}">About</a><a href="{root}index.html#contact">Contact</a></nav></header>
 <main>
 {body}
 <footer>© 2026 {SITE['name_ko']} {SITE['name_en']}</footer>
@@ -461,3 +494,22 @@ for it in PUBLISH:
 <p class="bhint">클릭 · 방향키 · 스와이프로 넘기기</p>
 <script>window.BOOK={cfg};</script><script>{BOOKJS}</script>
 </body></html>""")
+
+# ---- Process page
+def process_page():
+    P = PROCESS
+    stats = ''.join(f'<div><b>{E(a)}</b><span>{E(b)}</span></div>' for a, b in P['stats'])
+    out = []
+    for st in P['steps']:
+        if st.get('note'):
+            flow = '<ol class="flow">' + ''.join(f'<li><b>{E(a)}</b><span>{E(b)}</span></li>' for a, b in st['flow']) + '</ol>' if st.get('flow') else ''
+            out.append(f'<aside class="pnote"><h3>{E(st["t"])}</h3>{flow}<ul>' + ''.join(f'<li>{E(x)}</li>' for x in st['items']) + '</ul></aside>')
+            continue
+        code = f'<pre class="code"><span class="f">{E(st["file"])}</span>{E(st["code"])}</pre>' if st.get('code') else f'<p class="f2">{E(st["file"])}</p>'
+        fig = f'<figure class="pfig">{pic(st["img"], "", alt=st["cap"])}<figcaption>{E(st["cap"])}</figcaption></figure>' if st.get('img') else ''
+        out.append(f'''<section class="pstep"><div class="ph"><span class="no">{st["no"]}</span><h2>{E(st["t"])}<small>{E(st["en"])}</small></h2></div>
+<div class="pb"><div class="cmp"><div><h4>기존</h4><p>{E(st["before"])}</p></div><div class="ai"><h4>AI와 함께</h4><p>{E(st["ai"])}</p></div></div>
+<p class="hm"><b>사람의 몫</b> {E(st["human"])}</p>{code}{fig}</div></section>''')
+    body = f'''<section class="phd"><p class="k">Process</p><h1>{E(P["title"])}<small>{E(P["sub"])}</small></h1><p class="lead">{E(P["lead"])}</p><div class="stats">{stats}</div></section>{"".join(out)}'''
+    open(f'{OUT}/process.html', 'w').write(page(f'Process — {SITE["name_ko"]}', body, '', on='p', desc=P['lead']))
+process_page()
