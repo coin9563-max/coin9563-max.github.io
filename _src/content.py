@@ -14,6 +14,7 @@ SITE = {
     'school': '홍익대학교 건축학과',
     'school_en': 'Hongik University, Architecture',
     'email': 'james9563@naver.com',
+    'phone': '010-5619-4050',
 }
 
 PROJECTS = [
@@ -164,7 +165,7 @@ dict(slug='emptying-village', no='06', title='비어가는 마을', sub='사라�
 
 ABOUT = dict(
   intro=None,  # TODO: 자기소개 2~4문장 (사용자에게 받기)
-  education=[('2021–2027','홍익대학교 건축학과','')],
+  education=[('2021–2027','홍익대학교 건축학과','졸업 예정 2027.02')],
   experience=[
     ('2026.07–2026.11','SLA','인턴'),
     ('2025.06–2025.08','디어 건축사사무소','인턴'),
