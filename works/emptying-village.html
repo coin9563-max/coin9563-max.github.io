@@ -5,6 +5,8 @@
 <meta name="description" content="비어가는 마을, 사라진 것들이 들어오는 집">
 <meta property="og:title" content="비어가는 마을 — 한승현"><meta property="og:description" content="비어가는 마을, 사라진 것들이 들어오는 집">
 <link rel="stylesheet" href="../style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%231d1c1a%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22%23f6f5f2%22 font-family=%22sans-serif%22%3EH%3C/text%3E%3C/svg%3E">
+<meta property="og:image" content="https://coin9563-max.github.io/img/t_2966.jpg">
 </head><body class="">
 <header class="top"><a class="name" href="../index.html">한승현<span>Seunghyun Han</span></a>
 <nav><a href="../index.html" class="on">Works</a><a href="../about.html" class="">About</a></nav></header>
@@ -21,14 +23,19 @@
 <figure class="blk "><img class="" src="../img/2952.jpg" width="2400" height="787" loading="lazy" decoding="async" alt="굴막 단면도"><figcaption>굴막 단면도</figcaption></figure>
 <figure class="blk "><img class="" src="../img/2950.jpg" width="2400" height="1423" loading="lazy" decoding="async" alt="빈집 문화공간 단면도"><figcaption>빈집 문화공간 단면도</figcaption></figure>
 <figure class="blk w"><img class="" src="../img/2958.jpg" width="2364" height="1596" loading="lazy" decoding="async" alt="빈집군 — 교회와 마당"><figcaption>빈집군 — 교회와 마당</figcaption></figure>
-<figure class="blk"><div class="row" style="grid-template-columns:1.481fr 1.592fr"><div><img class="" src="../img/2962.jpg" width="2364" height="1596" loading="lazy" decoding="async" alt=""></div><div><img class="" src="../img/2970.jpg" width="2400" height="1508" loading="lazy" decoding="async" alt=""></div></div><figcaption>빈집 카페 · 굴막 공동 작업장</figcaption></figure><nav class="pnav"><a href="stopover.html"><span>← 이전</span>STOPOVER</a><a href="../about.html"><span>→</span>About</a></nav>
+<figure class="blk"><div class="row " style="grid-template-columns:1.481fr 1.592fr"><div><img class="" src="../img/2962.jpg" width="2364" height="1596" loading="lazy" decoding="async" alt=""></div><div><img class="" src="../img/2970.jpg" width="2400" height="1508" loading="lazy" decoding="async" alt=""></div></div><figcaption>빈집 카페 · 굴막 공동 작업장</figcaption></figure><nav class="pnav"><a href="stopover.html"><span>← 이전</span>STOPOVER</a><a href="../about.html"><span>→</span>About</a></nav>
 <footer>© 2026 한승현 Seunghyun Han</footer>
 </main>
-<div id="lb"><img alt=""></div>
+<div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>
 <script>
-document.addEventListener('click',e=>{const lb=document.getElementById('lb');
+const lb=document.getElementById('lb'),li=lb.querySelector('img'),lc=lb.querySelector('.c');let L=[],ix=0;
+function show(i){ix=(i+L.length)%L.length;li.src=L[ix].src;const f=L[ix].closest('figure').querySelector('figcaption');lc.textContent=(f?f.textContent:'')+'  '+(ix+1)+' / '+L.length;}
+document.addEventListener('click',e=>{
+ if(e.target.closest('#lb button')){show(ix+(e.target.classList.contains('n')?1:-1));return}
  if(e.target.closest('#lb')){lb.classList.remove('on');return}
- const im=e.target.closest('figure img');if(im){lb.querySelector('img').src=im.src;lb.classList.add('on')}});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('lb').classList.remove('on')});
+ const im=e.target.closest('figure img');if(im){L=[...document.querySelectorAll('figure img')];show(L.indexOf(im));lb.classList.add('on')}});
+document.addEventListener('keydown',e=>{if(!lb.classList.contains('on'))return;if(e.key==='Escape')lb.classList.remove('on');if(e.key==='ArrowRight')show(ix+1);if(e.key==='ArrowLeft')show(ix-1)});
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.blk,.txt,.work').forEach(el=>{el.classList.add('fade');io.observe(el)})}
 </script>
 </body></html>

@@ -57,7 +57,11 @@ main{padding:0 clamp(16px,4vw,48px)}
 .work .cap .no{color:var(--mute);font-variant-numeric:tabular-nums}
 .work .cap .t{font-weight:600}
 .work .cap .k{color:var(--mute);margin-left:auto;font-size:13px;text-align:right}
+.works{grid-template-columns:repeat(6,1fr)}
+.work{grid-column:span 3}
 .work:nth-child(1){grid-column:1/-1}
+.work:nth-child(n+4){grid-column:span 2}
+.work:nth-child(n+4) .cap .k{display:none}
 /* project */
 .hero{margin:0 calc(-1*clamp(16px,4vw,48px))}
 .hero img{width:100%;height:auto}
@@ -71,8 +75,15 @@ main{padding:0 clamp(16px,4vw,48px)}
 .phead .body p+p{margin-top:1em}
 .phead .en{color:var(--mute);font-size:14.5px;margin-top:1.2em}
 .blk{max-width:var(--max);margin:0 auto 56px}
-.blk.w{max-width:1600px}
+.blk.w{max-width:var(--max)}
 figure img{width:100%;cursor:zoom-in}
+.fade{opacity:0;transform:translateY(16px);transition:opacity .8s ease,transform .8s ease}
+.fade.in{opacity:1;transform:none}
+#lb button{position:absolute;top:50%;transform:translateY(-50%);background:none;border:0;color:#fff;font-size:34px;padding:20px;cursor:pointer;opacity:.6}
+#lb button:hover{opacity:1}
+#lb .p{left:4px}#lb .n{right:4px}
+#lb .c{position:absolute;bottom:14px;left:0;right:0;text-align:center;color:#aaa;font-size:13px}
+.intro .lead{color:var(--fg);max-width:620px;margin-top:22px;font-size:17px}
 figcaption{font-size:13px;color:var(--mute);margin-top:10px;line-height:1.55}
 .row{display:grid;gap:16px;align-items:end}
 .txt{max-width:var(--max);margin:96px auto 40px;display:grid;grid-template-columns:5fr 7fr;gap:40px}
@@ -102,9 +113,11 @@ main>footer{padding-left:0}
 #lb img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
 @media (max-width:760px){
   .works{grid-template-columns:1fr;gap:48px}
+  .work,.work:nth-child(n+4){grid-column:1/-1}
   .phead,.txt,.about{grid-template-columns:1fr;gap:20px}
   .txt{margin-top:64px}
-  .row{grid-template-columns:1fr!important}
+  .row.g{grid-template-columns:1fr 1fr!important}
+  .row.g>div:last-child:nth-child(odd){grid-column:1/-1}
   ol.leg{columns:1}
   header.top .name span{display:none}
   .work .cap .k{display:none}
@@ -112,13 +125,18 @@ main>footer{padding-left:0}
 """
 
 JS = r"""
-document.addEventListener('click',e=>{const lb=document.getElementById('lb');
+const lb=document.getElementById('lb'),li=lb.querySelector('img'),lc=lb.querySelector('.c');let L=[],ix=0;
+function show(i){ix=(i+L.length)%L.length;li.src=L[ix].src;const f=L[ix].closest('figure').querySelector('figcaption');lc.textContent=(f?f.textContent:'')+'  '+(ix+1)+' / '+L.length;}
+document.addEventListener('click',e=>{
+ if(e.target.closest('#lb button')){show(ix+(e.target.classList.contains('n')?1:-1));return}
  if(e.target.closest('#lb')){lb.classList.remove('on');return}
- const im=e.target.closest('figure img');if(im){lb.querySelector('img').src=im.src;lb.classList.add('on')}});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('lb').classList.remove('on')});
+ const im=e.target.closest('figure img');if(im){L=[...document.querySelectorAll('figure img')];show(L.indexOf(im));lb.classList.add('on')}});
+document.addEventListener('keydown',e=>{if(!lb.classList.contains('on'))return;if(e.key==='Escape')lb.classList.remove('on');if(e.key==='ArrowRight')show(ix+1);if(e.key==='ArrowLeft')show(ix-1)});
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.blk,.txt,.work').forEach(el=>{el.classList.add('fade');io.observe(el)})}
 """
 
-def page(title, body, root, dark=False, on='', desc=''):
+def page(title, body, root, dark=False, on='', desc='', og='img/t_307.jpg'):
     return f"""<!doctype html>
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -126,6 +144,8 @@ def page(title, body, root, dark=False, on='', desc=''):
 <meta name="description" content="{E(desc or SITE['name_ko']+' — 건축 포트폴리오')}">
 <meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc or '')}">
 <link rel="stylesheet" href="{root}style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%231d1c1a%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22%23f6f5f2%22 font-family=%22sans-serif%22%3EH%3C/text%3E%3C/svg%3E">
+<meta property="og:image" content="https://coin9563-max.github.io/{og}">
 </head><body class="{'dark' if dark else ''}">
 <header class="top"><a class="name" href="{root}index.html">{SITE['name_ko']}<span>{SITE['name_en']}</span></a>
 <nav><a href="{root}index.html" class="{'on' if on=='w' else ''}">Works</a><a href="{root}about.html" class="{'on' if on=='a' else ''}">About</a></nav></header>
@@ -133,7 +153,7 @@ def page(title, body, root, dark=False, on='', desc=''):
 {body}
 <footer>© 2026 {SITE['name_ko']} {SITE['name_en']}</footer>
 </main>
-<div id="lb"><img alt=""></div>
+<div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>
 <script>{JS}</script>
 </body></html>"""
 
@@ -155,7 +175,7 @@ def block(b, root):
             tmpl = f'repeat({cols},1fr)'
         imgs = ''.join(f'<div>{pic(i, root)}</div>' for i in ids)
         cap = f'<figcaption>{E(b[2])}</figcaption>' if b[2] else ''
-        return f'<figure class="blk"><div class="row" style="grid-template-columns:{tmpl}">{imgs}</div>{cap}</figure>'
+        return f'<figure class="blk"><div class="row {"g" if k=="grid" else ""}" style="grid-template-columns:{tmpl}">{imgs}</div>{cap}</figure>'
     if k == 'text':
         en = f'<small>{E(b[3])}</small>' if len(b) > 3 and b[3] else ''
         return f'<section class="txt"><h2>{E(b[1])}{en}</h2><div class="b">{para(b[2])}</div></section>'
@@ -173,7 +193,7 @@ for p in PROJECTS:
     src, w, h = use(p['hero'], thumb=True)
     cards.append(f'''<a class="work" href="works/{p["slug"]}.html"><img src="{src}" width="{w}" height="{h}" alt="{E(p["title"])}" {'' if p is PROJECTS[0] else 'loading="lazy"'}>
 <div class="cap"><span class="no">{p["no"]}</span><span class="t">{E(p["title"])}</span><span class="k">{E(p["kind"])} · {p["year"]}</span></div></a>''')
-body = f'''<section class="intro"><h1>{SITE["name_ko"]} {SITE["name_en"]}<br>Selected Works 2021–2026</h1><p>{SITE["school"]}</p></section>
+body = f'''<section class="intro"><h1>{SITE["name_ko"]} {SITE["name_en"]}<br>Selected Works 2021–2026</h1><p>{SITE["school"]}</p><p class="lead">{E(ABOUT.get("intro") or "")}</p></section>
 <section class="works">{"".join(cards)}</section>'''
 open(f'{OUT}/index.html', 'w').write(page(f'{SITE["name_ko"]} — Portfolio', body, '', on='w'))
 
@@ -194,7 +214,7 @@ for n, p in enumerate(PROJECTS):
     nav += f'<a href="{nxt["slug"]}.html"><span>다음 →</span>{E(nxt["title"])}</a>' if nxt else '<a href="../about.html"><span>→</span>About</a>'
     nav += '</nav>'
     open(f'{OUT}/works/{p["slug"]}.html', 'w').write(
-        page(f'{p["title"]} — {SITE["name_ko"]}', head + blocks + nav, r, dark=p.get('dark', False), on='w', desc=p['statement']))
+        page(f'{p["title"]} — {SITE["name_ko"]}', head + blocks + nav, r, dark=p.get('dark', False), on='w', desc=p['statement'], og=use(p['hero'], thumb=True)[0]))
 
 # ---- about
 A = ABOUT

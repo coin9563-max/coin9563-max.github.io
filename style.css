@@ -23,7 +23,11 @@ main{padding:0 clamp(16px,4vw,48px)}
 .work .cap .no{color:var(--mute);font-variant-numeric:tabular-nums}
 .work .cap .t{font-weight:600}
 .work .cap .k{color:var(--mute);margin-left:auto;font-size:13px;text-align:right}
+.works{grid-template-columns:repeat(6,1fr)}
+.work{grid-column:span 3}
 .work:nth-child(1){grid-column:1/-1}
+.work:nth-child(n+4){grid-column:span 2}
+.work:nth-child(n+4) .cap .k{display:none}
 /* project */
 .hero{margin:0 calc(-1*clamp(16px,4vw,48px))}
 .hero img{width:100%;height:auto}
@@ -37,8 +41,15 @@ main{padding:0 clamp(16px,4vw,48px)}
 .phead .body p+p{margin-top:1em}
 .phead .en{color:var(--mute);font-size:14.5px;margin-top:1.2em}
 .blk{max-width:var(--max);margin:0 auto 56px}
-.blk.w{max-width:1600px}
+.blk.w{max-width:var(--max)}
 figure img{width:100%;cursor:zoom-in}
+.fade{opacity:0;transform:translateY(16px);transition:opacity .8s ease,transform .8s ease}
+.fade.in{opacity:1;transform:none}
+#lb button{position:absolute;top:50%;transform:translateY(-50%);background:none;border:0;color:#fff;font-size:34px;padding:20px;cursor:pointer;opacity:.6}
+#lb button:hover{opacity:1}
+#lb .p{left:4px}#lb .n{right:4px}
+#lb .c{position:absolute;bottom:14px;left:0;right:0;text-align:center;color:#aaa;font-size:13px}
+.intro .lead{color:var(--fg);max-width:620px;margin-top:22px;font-size:17px}
 figcaption{font-size:13px;color:var(--mute);margin-top:10px;line-height:1.55}
 .row{display:grid;gap:16px;align-items:end}
 .txt{max-width:var(--max);margin:96px auto 40px;display:grid;grid-template-columns:5fr 7fr;gap:40px}
@@ -68,9 +79,11 @@ main>footer{padding-left:0}
 #lb img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
 @media (max-width:760px){
   .works{grid-template-columns:1fr;gap:48px}
+  .work,.work:nth-child(n+4){grid-column:1/-1}
   .phead,.txt,.about{grid-template-columns:1fr;gap:20px}
   .txt{margin-top:64px}
-  .row{grid-template-columns:1fr!important}
+  .row.g{grid-template-columns:1fr 1fr!important}
+  .row.g>div:last-child:nth-child(odd){grid-column:1/-1}
   ol.leg{columns:1}
   header.top .name span{display:none}
   .work .cap .k{display:none}
