@@ -177,6 +177,45 @@ main>footer{padding-left:0}
   header.top .name span{display:none}
   .work .cap .k{display:none}
 }
+
+/* ---- v2 index */
+.mhero{display:block;position:relative;margin:0 calc(-1*clamp(16px,4vw,48px));height:calc(100svh - 62px);min-height:460px;overflow:hidden;color:#fff}
+.mhero img{width:100%;height:100%;object-fit:cover}
+.mhero::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55),rgba(0,0,0,0) 45%)}
+.mh-t{position:absolute;left:clamp(16px,4vw,48px);bottom:clamp(56px,9vh,96px);z-index:1}
+.mh-t h1{font-size:clamp(34px,6vw,84px);font-weight:600;line-height:1.05;letter-spacing:-.025em}
+.mh-t h1 span{font-weight:300}
+.mh-t p{font-size:clamp(15px,1.4vw,19px);opacity:.85;margin-top:10px}
+.mh-c{position:absolute;left:clamp(16px,4vw,48px);right:clamp(16px,4vw,48px);bottom:22px;z-index:1;font-size:13px;display:flex;gap:10px;align-items:baseline;border-top:1px solid rgba(255,255,255,.35);padding-top:12px}
+.mh-c span{opacity:.75}.mh-c span:last-child{margin-left:auto}
+.mhero:hover img{transform:scale(1.015)}.mhero img{transition:transform 1.2s ease}
+.intro{max-width:var(--max);margin:12vh auto 14vh;display:grid;grid-template-columns:4fr 8fr;gap:40px}
+.intro .sch{color:var(--mute);margin:0;font-size:14px;padding-top:6px}
+.intro .lead{font-size:clamp(19px,2vw,26px);line-height:1.6;margin:0;max-width:none;font-weight:400;letter-spacing:-.01em}
+.sec{padding-top:22px;margin-bottom:28px}
+.sec h2{font-size:clamp(22px,2.4vw,30px);font-weight:500;letter-spacing:-.01em;text-transform:none}
+.sec span{font-size:14px}
+.works{grid-template-columns:repeat(6,1fr);gap:64px 32px}
+.work,.work:nth-child(n){grid-column:span 3}
+.work:nth-child(n+3){grid-column:span 2}
+.work .ph{aspect-ratio:4/3;overflow:hidden;background:color-mix(in srgb,var(--fg) 6%,var(--bg))}
+.work .ph img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease,opacity .3s}
+.work:hover .ph img{transform:scale(1.03);opacity:1}
+.work:nth-child(n+3) .cap .k{display:block}
+.works.pw .work:nth-child(n){grid-column:span 3}
+.works.pw .work:first-child{grid-column:1/-1}.works.pw .work:first-child .ph{aspect-ratio:21/9}
+.cards{grid-template-columns:4fr 4fr 4fr;gap:32px;align-items:start}
+.cnote{color:var(--mute);font-size:15px;max-width:280px}
+.card .im{aspect-ratio:4/5}
+.plist{margin-top:0}
+@media (max-width:760px){
+ .mhero{height:78svh}
+ .intro{grid-template-columns:1fr;gap:14px;margin:8vh auto 10vh}
+ .works,.works.pw{grid-template-columns:1fr;gap:44px}
+ .work,.work:nth-child(n),.works.pw .work:nth-child(n){grid-column:1/-1}
+ .cards{grid-template-columns:1fr 1fr}.cnote{grid-column:1/-1}
+ .mh-c span:nth-child(3){display:none}
+}
 """
 
 JS = r"""
@@ -257,22 +296,26 @@ def cardgrid(items):
         else: im='<em>이미지 준비 중</em>'
         inner=f'<div class="im">{im}</div><div class="t">{E(it["title"])}</div><div class="k">{E(it["kind"])} · {it["year"]}{" · 책 펼쳐보기 →" if it.get("slug") else ""}</div>'
         out.append(f'<a class="card" href="publish/{it["slug"]}.html">{inner}</a>' if it.get('slug') else f'<div class="card">{inner}</div>')
-    return '<section class="cards">'+''.join(out)+'</section>'
+    return '<section class="cards"><p class="cnote">졸업전시 때 만든 책 두 권이에요. 표지를 누르면 실제 책처럼 펼쳐서 넘겨볼 수 있어요.</p>'+''.join(out)+'</section>'
 def practice():
     cards=[]
     for i in PRACTICE:
         if not i.get('slug'): continue
         s,w,h=use(i['thumb'],thumb=True)
-        cards.append(f'<a class="work" href="practice/{i["slug"]}.html"><img src="{s}" width="{w}" height="{h}" loading="lazy" alt="{E(i["title"])}"><div class="cap"><span class="t">{E(i["title"])}</span><span class="k">{E(i["kind"])} · {i["year"]}</span></div></a>')
-    rows=''.join(f'<li><span class="y">{E(i["year"])}</span><span class="t">{E(i["org"] if i.get("org") else i["title"])}</span><span class="k">{E(i["role"] if i.get("role") else i["kind"])}</span></li>' for i in PRACTICE if not i.get('hide_in_list'))
+        cards.append(f'<a class="work" href="practice/{i["slug"]}.html"><div class="ph"><img src="{s}" width="{w}" height="{h}" loading="lazy" alt="{E(i["title"])}" style="object-position:{i.get("pos","50% 50%")}"></div><div class="cap"><span class="t">{E(i["title"])}</span><span class="k">{E(i["kind"])} · {i["year"]}</span></div></a>')
+    rows=''.join(f'<li><span class="y">{E(i["year"])}</span><span class="t">{E(i["org"] if i.get("org") else i["title"])}</span><span class="k">{E(i["role"] if i.get("role") else i["kind"])}</span></li>' for i in PRACTICE if not i.get('hide_in_list') and not i.get('slug'))
     return ('<section class="works pw">'+''.join(cards)+'</section>' if cards else '')+'<ul class="plist">'+rows+'</ul>'
 # ---- index
 cards = []
-for p in PROJECTS:
+for p in PROJECTS[1:]:
     src, w, h = use(p['hero'], thumb=True)
-    cards.append(f'''<a class="work" href="works/{p["slug"]}.html"><img src="{src}" width="{w}" height="{h}" alt="{E(p["title"])}" {'' if p is PROJECTS[0] else 'loading="lazy"'}>
+    cards.append(f'''<a class="work" href="works/{p["slug"]}.html"><div class="ph"><img src="{src}" width="{w}" height="{h}" alt="{E(p["title"])}" loading="lazy" style="object-position:{p.get("pos","50% 50%")}"></div>
 <div class="cap"><span class="no">{p["no"]}</span><span class="t">{E(p["title"])}</span><span class="k">{E(p["kind"])} · {p["year"]}</span></div></a>''')
-body = f'''<section class="intro"><h1>{SITE["name_ko"]} {SITE["name_en"]}<br>Selected Works 2021–2026</h1><p>{SITE["school"]}</p><p class="lead">{E(ABOUT.get("intro") or "")}</p></section>
+P0 = PROJECTS[0]; hs, hw, hh = use(P0['hero'])
+body = f'''<a class="mhero" href="works/{P0["slug"]}.html"><img src="{hs}" width="{hw}" height="{hh}" alt="{E(P0["title"])}" fetchpriority="high">
+<div class="mh-t"><h1>{SITE["name_ko"]} <span>{SITE["name_en"]}</span></h1><p>Selected Works 2021–2026</p></div>
+<div class="mh-c"><span class="no">{P0["no"]}</span> <b>{E(P0["title"])}</b> <span>{E(P0["kind"])} · {P0["year"]} →</span></div></a>
+<section class="intro"><p class="sch">{SITE["school"]}</p><p class="lead">{E(ABOUT.get("intro") or "")}</p></section>
 <div class="sec" id="projects"><h2>Projects</h2><span>설계 작업</span></div><section class="works">{"".join(cards)}</section>
 <div class="sec" id="publish"><h2>Publish</h2><span>출판 · 책자</span></div>{cardgrid(PUBLISH)}
 <div class="sec" id="practice"><h2>Practice &amp; Activities</h2><span>인턴 · 대외활동</span></div>{practice()}'''
