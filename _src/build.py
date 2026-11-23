@@ -4,7 +4,7 @@
 import os, sys, shutil, html, json
 from PIL import Image
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from content import SITE, PROJECTS, ABOUT
+from content import SITE, PROJECTS, ABOUT, PUBLISH, PRACTICE
 
 SRC, OUT = sys.argv[1], sys.argv[2]
 os.makedirs(OUT + '/img', exist_ok=True)
@@ -50,7 +50,7 @@ main{padding:0 clamp(16px,4vw,48px)}
 .intro{max-width:var(--max);margin:9vh auto 7vh}
 .intro h1{font-size:clamp(28px,4.4vw,54px);font-weight:500;line-height:1.25;letter-spacing:-.02em}
 .intro p{color:var(--mute);margin-top:18px}
-.works{max-width:var(--max);margin:0 auto 14vh;display:grid;grid-template-columns:1fr 1fr;gap:72px 40px}
+.works{max-width:var(--max);margin:28px auto 14vh;display:grid;grid-template-columns:1fr 1fr;gap:72px 40px}
 .work img{width:100%;transition:opacity .3s}
 .work:hover img{opacity:.85}
 .work .cap{display:flex;gap:14px;margin-top:14px;font-size:15px;align-items:baseline}
@@ -111,6 +111,23 @@ main>footer{padding-left:0}
 #lb{position:fixed;inset:0;background:rgba(10,10,9,.96);display:none;align-items:center;justify-content:center;z-index:50;cursor:zoom-out;padding:2vw}
 #lb.on{display:flex}
 #lb img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+
+.sec{max-width:var(--max);margin:0 auto 18px;display:flex;align-items:baseline;gap:16px;border-top:1px solid var(--line);padding-top:18px}
+.sec h2{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.sec span{color:var(--mute);font-size:13px}
+.works+.sec,.cards+.sec{margin-top:0}
+.cards{max-width:var(--max);margin:28px auto 14vh;display:grid;grid-template-columns:repeat(4,1fr);gap:40px 24px}
+.card .im{aspect-ratio:4/5;background:color-mix(in srgb,var(--fg) 5%,var(--bg));display:flex;align-items:center;justify-content:center;overflow:hidden}
+.card .im img{width:100%;height:100%;object-fit:contain}
+.card .im em{font-style:normal;color:var(--mute);font-size:13px;padding:16px;text-align:center}
+.card .t{font-weight:600;margin-top:12px;font-size:15px;line-height:1.4}
+.card .k{color:var(--mute);font-size:13px}
+.plist{max-width:var(--max);margin:28px auto 14vh;list-style:none}
+.plist li{display:grid;grid-template-columns:120px 1fr auto;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.plist .y{color:var(--mute);font-variant-numeric:tabular-nums;font-size:14px}
+.plist .t{font-weight:600}
+.plist .k{color:var(--mute);font-size:14px}
+@media (max-width:760px){.cards{grid-template-columns:1fr 1fr}.plist li{grid-template-columns:70px 1fr}.plist .k{grid-column:2}}
 @media (max-width:760px){
   .works{grid-template-columns:1fr;gap:48px}
   .work,.work:nth-child(n+4){grid-column:1/-1}
@@ -148,7 +165,7 @@ def page(title, body, root, dark=False, on='', desc='', og='img/t_307.jpg'):
 <meta property="og:image" content="https://coin9563-max.github.io/{og}">
 </head><body class="{'dark' if dark else ''}">
 <header class="top"><a class="name" href="{root}index.html">{SITE['name_ko']}<span>{SITE['name_en']}</span></a>
-<nav><a href="{root}index.html" class="{'on' if on=='w' else ''}">Works</a><a href="{root}about.html" class="{'on' if on=='a' else ''}">About</a></nav></header>
+<nav><a href="{root}index.html#projects" class="{'on' if on=='w' else ''}">Projects</a><a href="{root}index.html#publish">Publish</a><a href="{root}index.html#practice">Practice</a><a href="{root}about.html" class="{'on' if on=='a' else ''}">About</a></nav></header>
 <main>
 {body}
 <footer>© 2026 {SITE['name_ko']} {SITE['name_en']}</footer>
@@ -187,6 +204,19 @@ def block(b, root):
 open(f'{OUT}/style.css', 'w').write(CSS)
 open(f'{OUT}/.nojekyll', 'w').write('')
 
+
+def cardgrid(items):
+    out=[]
+    for it in items:
+        if it.get('img') is not None:
+            s,w,h=use(it['img'],thumb=True); im=f'<img src="{s}" width="{w}" height="{h}" loading="lazy" alt="{E(it["title"])}">'
+        else: im='<em>이미지 준비 중</em>'
+        out.append(f'<div class="card"><div class="im">{im}</div><div class="t">{E(it["title"])}</div><div class="k">{E(it["kind"])} · {it["year"]}</div></div>')
+    return '<section class="cards">'+''.join(out)+'</section>'
+def practice():
+    withimg=[i for i in PRACTICE if i.get('img') is not None or i.get('feature')]
+    rows=''.join(f'<li><span class="y">{E(i["year"])}</span><span class="t">{E(i["title"])}</span><span class="k">{E(i["kind"])}{(" · "+E(i["desc"])) if i.get("desc") and i["desc"]!=i["kind"] else ""}</span></li>' for i in PRACTICE)
+    return '<ul class="plist">'+rows+'</ul>'
 # ---- index
 cards = []
 for p in PROJECTS:
@@ -194,7 +224,9 @@ for p in PROJECTS:
     cards.append(f'''<a class="work" href="works/{p["slug"]}.html"><img src="{src}" width="{w}" height="{h}" alt="{E(p["title"])}" {'' if p is PROJECTS[0] else 'loading="lazy"'}>
 <div class="cap"><span class="no">{p["no"]}</span><span class="t">{E(p["title"])}</span><span class="k">{E(p["kind"])} · {p["year"]}</span></div></a>''')
 body = f'''<section class="intro"><h1>{SITE["name_ko"]} {SITE["name_en"]}<br>Selected Works 2021–2026</h1><p>{SITE["school"]}</p><p class="lead">{E(ABOUT.get("intro") or "")}</p></section>
-<section class="works">{"".join(cards)}</section>'''
+<div class="sec" id="projects"><h2>Projects</h2><span>설계 작업</span></div><section class="works">{"".join(cards)}</section>
+<div class="sec" id="publish"><h2>Publish</h2><span>출판 · 책자</span></div>{cardgrid(PUBLISH)}
+<div class="sec" id="practice"><h2>Practice &amp; Activities</h2><span>인턴 · 대외활동</span></div>{practice()}'''
 open(f'{OUT}/index.html', 'w').write(page(f'{SITE["name_ko"]} — Portfolio', body, '', on='w'))
 
 # ---- projects
@@ -227,7 +259,7 @@ body = f'''<section class="about"><div><img src="{src}" width="{w}" height="{h}"
 {f'<h3>Areas of Interest</h3><p>{E(A["interests"])}</p>' if A.get("interests") else ''}<h3>Contact</h3><table><tr><td>E-mail</td><td><a href="mailto:{SITE["email"]}">{SITE["email"]}</a></td></tr><tr><td>Phone</td><td><a href="tel:{SITE["phone"].replace('-','')}">{SITE["phone"]}</a></td></tr></table>
 <h3>Education</h3>{tbl(A["education"])}
 <h3>Experience</h3>{tbl(A["experience"])}
-<h3>Activities</h3>{tbl(A["activities"])}
+<h3>Awards &amp; Activities</h3>{tbl(A["activities"])}
 <h3>Skills</h3><table>{"".join(f"<tr><td>{E(a)}</td><td>{E(b)}</td></tr>" for a,b in A["skills"])}</table>
 </div></section>'''
 open(f'{OUT}/about.html', 'w').write(page(f'About — {SITE["name_ko"]}', body, '', on='a'))

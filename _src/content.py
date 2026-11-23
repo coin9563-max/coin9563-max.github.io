@@ -175,6 +175,22 @@ ABOUT = dict(
     ('2024.10–2025.02','정림 디지털 아카데미 유닛','jadu 수료'),
     ('2024.04–2024.09','삶것 건축사사무소','인턴'),
   ],
-  activities=[('2025','D5 Render Student Ambassador','공개 강연 · 홍익대학교')],
+  activities=[('2025','정림 디지털 아카데미 유닛 JADU','프로젝트 우수상'),('2025','D5 Render Student Ambassador','공개 강연 · 홍익대학교')],
   skills=[('Modeling & Scripting','Rhino · Grasshopper · GhPython · SketchUp'),('Visualization','D5 Render · Enscape'),('Drafting & BIM','Revit · AutoCAD')],
 )
+
+# ---- 메인 2: Publish (출판·책자·게재)
+PUBLISH = [
+  dict(title='FROM CITY TO EARTH', kind='졸업전시 책자', year='2026', img=2069, desc='MOSSCAPE OREUM 졸업전시 책자'),
+  dict(title='UNWASHED', kind='졸업전시 책자', year='2026', img=2071, desc='From Social Escape to Biological Survival'),
+]
+
+# ---- 메인 3: Practice & Activities (인턴 · 대외활동 작업)
+PRACTICE = [
+  dict(title='SLA', kind='인턴', year='2026', img=None, desc=''),
+  dict(title='디어 건축사사무소', kind='인턴', year='2025', img=None, desc=''),
+  dict(title='JADU 프로젝트 우수상', kind='정림 디지털 아카데미 유닛', year='2025', img=None, desc='프로젝트 우수상'),
+  dict(title='D5 Render Student Ambassador', kind='공개 강연 · 홍익대학교', year='2025', img=405, desc=''),
+  dict(title='우동우 건축사사무소', kind='프리랜서', year='2024–', img=None, desc=''),
+  dict(title='삶것 건축사사무소', kind='인턴', year='2024', img=None, desc=''),
+]
