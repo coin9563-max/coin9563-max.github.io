@@ -278,6 +278,7 @@ main>footer{padding-left:0}
 .ct .big:hover{border-color:currentColor;color:var(--acc)}
 .ct p{color:var(--mute);margin-top:24px;font-size:15px}
 @media (max-width:760px){header.top nav a{margin-left:12px;font-size:13px}}
+.blk.nr img{max-width:560px;width:100%}
 """
 
 JS = r"""
@@ -321,6 +322,9 @@ def para(t):
 
 def block(b, root):
     k = b[0]
+    if k == 'narrow':
+        cap = f'<figcaption>{E(b[2])}</figcaption>' if b[2] else ''
+        return f'<figure class="blk nr">{pic(b[1], root, alt=b[2])}{cap}</figure>'
     if k in ('img', 'wide'):
         cap = f'<figcaption>{E(b[2])}</figcaption>' if b[2] else ''
         return f'<figure class="blk {"w" if k=="wide" else ""}">{pic(b[1], root, alt=b[2])}{cap}</figure>'

@@ -239,3 +239,4 @@ main>footer{padding-left:0}
 .ct .big:hover{border-color:currentColor;color:var(--acc)}
 .ct p{color:var(--mute);margin-top:24px;font-size:15px}
 @media (max-width:760px){header.top nav a{margin-left:12px;font-size:13px}}
+.blk.nr img{max-width:560px;width:100%}
