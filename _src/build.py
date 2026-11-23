@@ -365,7 +365,7 @@ pre.code.ask .f{color:var(--mute)}
 .labpg .cmp .ai h4{color:#b6d36b}
 .labpg pre.code.ask{background:#0c0d0b;color:#d8d6cc;border:1px solid var(--line);border-left:3px solid #b6d36b;font-family:var(--mono);font-size:13px}
 .labpg pre.code.ask .f{color:#b6d36b}
-.labpg pre.code.ask:before{content:'> ';color:#b6d36b}
+
 .labpg .pnote{background:transparent;color:var(--fg);border:1px solid #b6d36b}
 .labpg .pnote h3{font-family:var(--mono);font-size:15px;color:#b6d36b}
 .labpg .flow li{border-top-color:#b6d36b}
@@ -375,6 +375,18 @@ pre.code.ask .f{color:var(--mute)}
 .labpg .reroll{background:#b6d36b}
 .labpg .lctl input{accent-color:#b6d36b}
 .labpg .lgrid .pk{outline-color:#b6d36b}
+
+.labcard{max-width:var(--max);margin:0 auto 56px;display:grid;grid-template-columns:5fr 7fr;border:1px solid #b6d36b;background:#0c0d0b;color:inherit;text-decoration:none;transition:background .2s}
+.labcard:hover{background:#1c2117}
+.labcard img{width:100%;height:240px;object-fit:cover;object-position:left top;display:block}
+.labcard>div{padding:26px 30px;display:flex;flex-direction:column;gap:8px}
+.labcard .k{font-family:var(--mono);color:#b6d36b;font-size:12px}
+.labcard h3{font-size:clamp(20px,2.2vw,28px);font-weight:500}
+.labcard p{font-size:15px;opacity:.85}
+.labcard .go{margin-top:auto;font-family:var(--mono);font-size:13px;color:#b6d36b}
+.labpg .lab{margin-top:40px}
+.lab .k a{color:inherit}
+@media (max-width:760px){.labcard{grid-template-columns:1fr}.labcard img{min-height:0;aspect-ratio:16/9}}
 """
 
 JS = r"""
@@ -559,8 +571,9 @@ for it in PUBLISH:
 </body></html>""")
 
 # ---- Process page
+LABS = {'plan': dict(no='01', t='평면 대안 생성기', d='실 6개의 면적 · 채광 · 인접 조건에 가중치를 주고, 평면 대안 수백 개 중 기준을 넘으면서 서로 다른 안만 골라낸다.')}
 LABJS = {'plan': open(os.path.join(os.path.dirname(__file__), 'lab_plan.js')).read()}
-LABHTML = {'plan': '''<section class="lab" id="lab-plan"><div class="lh"><p class="k">LAB 01 · 직접 돌려보기</p><h3>평면 대안 생성기</h3>
+LABHTML = {'plan': '''<section class="lab" id="lab-plan"><div class="lh"><p class="k"><a href="../process.html#exp-05">← EXP–05 평면 구성</a> · LAB 01</p><h3>평면 대안 생성기</h3>
 <p>실 6개를 대지에 나눠 넣는 평면을 수백 개 만들고, 형태 · 채광(남쪽) · 인접 · 현관(북쪽) 점수에 가중치를 곱해 합산한다. 기준 점수를 넘으면서 서로 충분히 다른 안만 위에 남는다.</p></div>
 <div class="lbody"><div class="lctl"></div><div class="lout"><p class="lsum"></p><div class="lhist"></div><div class="lpick"></div><p class="k">점수순 상위 96개 · 흐린 칸은 기준 미달, 테두리는 선택된 안</p><div class="lgrid"></div></div></div></section>'''}
 def process_page():
@@ -572,12 +585,15 @@ def process_page():
             out.append(f'<aside class="pnote"><h3>{E(st["t"])}</h3>{flow}<ul>' + ''.join(f'<li>{E(x)}</li>' for x in st['items']) + '</ul></aside>')
             continue
         ask = f'<pre class="code ask"><span class="f">예시 요청</span>{E(st["ask"])}</pre>' if st.get('ask') else ''
-        out.append(f'''<section class="pstep"><div class="ph"><span class="no">EXP–{st["no"]}</span><span class="st {'on' if st.get('lab') else ''}">{'● 실험 가동' if st.get('lab') else '○ 실험 준비 중'}</span><h2>{E(st["t"])}<small>{E(st["en"])}</small></h2></div>
+        out.append(f'''<section class="pstep" id="exp-{st["no"]}"><div class="ph"><span class="no">EXP–{st["no"]}</span><span class="st {'on' if st.get('lab') else ''}">{'● 실험 가동' if st.get('lab') else '○ 실험 준비 중'}</span><h2>{E(st["t"])}<small>{E(st["en"])}</small></h2></div>
 <div class="pb"><div class="cmp"><div><h4>기존</h4><p>{E(st["before"])}</p></div><div class="ai"><h4>AI와 함께</h4><p>{E(st["ai"])}</p></div></div>
 <p class="hm"><b>사람의 몫</b> {E(st["human"])}</p>{ask}</div></section>''')
         if st.get('lab'):
-            out.append(LABHTML[st['lab']]); js.append(LABJS[st['lab']])
+            L = LABS[st['lab']]
+            out.append(f'''<a class="labcard" href="lab/{st['lab']}.html"><img src="img/lab_{st['lab']}.jpg" alt="" loading="lazy"><div><p class="k">LAB {L['no']} · 직접 돌려보기</p><h3>{E(L['t'])}</h3><p>{E(L['d'])}</p><span class="go">실험 열기 →</span></div></a>''')
+            os.makedirs(f'{OUT}/lab', exist_ok=True)
+            open(f'{OUT}/lab/{st["lab"]}.html', 'w').write(page(f'LAB {L["no"]} {L["t"]} — {SITE["name_ko"]}', LABHTML[st['lab']] + f'<script>{LABJS[st["lab"]]}</script>', '../', dark='dark labpg', on='p', desc=L['d']))
     nlab = sum(1 for x in P['steps'] if x.get('lab')); nexp = sum(1 for x in P['steps'] if not x.get('note'))
-    body = f'''<section class="phd"><p class="k">LAB — 설계 프로세스 실험 노트</p><p class="log">EXP {nexp:02d} · RUNNING {nlab:02d} · UPDATED 2026.11.24</p><h1>{E(P["title"])}<small>{E(P["sub"])}</small></h1><p class="lead">{E(P["lead"])}</p></section>{"".join(out)}<script>{"".join(js)}</script>'''
+    body = f'''<section class="phd"><p class="k">LAB — 설계 프로세스 실험 노트</p><p class="log">EXP {nexp:02d} · RUNNING {nlab:02d} · UPDATED 2026.11.24</p><h1>{E(P["title"])}<small>{E(P["sub"])}</small></h1><p class="lead">{E(P["lead"])}</p></section>{"".join(out)}'''
     open(f'{OUT}/process.html', 'w').write(page(f'Process — {SITE["name_ko"]}', body, '', dark='dark labpg', on='p', desc=P['lead']))
 process_page()
