@@ -270,6 +270,14 @@ main>footer{padding-left:0}
  .stg{display:none}
  .ixl .ms{display:block;grid-column:1/-1;font-size:15px;color:var(--fg);margin-top:8px}
 }
+
+/* contact */
+.contact{max-width:var(--max);margin:0 auto 12vh}
+.contact .sec{margin-bottom:36px}
+.ct .big{display:block;font-size:clamp(28px,4.6vw,60px);font-weight:500;letter-spacing:-.02em;line-height:1.2;width:fit-content;border-bottom:2px solid transparent;transition:border-color .25s,color .25s}
+.ct .big:hover{border-color:currentColor;color:var(--acc)}
+.ct p{color:var(--mute);margin-top:24px;font-size:15px}
+@media (max-width:760px){header.top nav a{margin-left:12px;font-size:13px}}
 """
 
 JS = r"""
@@ -299,7 +307,7 @@ def page(title, body, root, dark=False, on='', desc='', og='img/t_307.jpg'):
 <meta property="og:image" content="https://coin9563-max.github.io/{og}">
 </head><body class="{'dark' if dark else ''}">
 <header class="top"><a class="name" href="{root}index.html">{SITE['name_ko']}<span>{SITE['name_en']}</span></a>
-<nav><a href="{root}index.html#projects" class="{'on' if on=='w' else ''}">Projects</a><a href="{root}index.html#publish">Publish</a><a href="{root}index.html#practice">Practice</a><a href="{root}about.html" class="{'on' if on=='a' else ''}">About</a></nav></header>
+<nav><a href="{root}index.html#projects" class="{'on' if on=='w' else ''}">Projects</a><a href="{root}index.html#publish">Publish</a><a href="{root}index.html#practice">Practice</a><a href="{root}about.html" class="{'on' if on=='a' else ''}">About</a><a href="{root}index.html#contact">Contact</a></nav></header>
 <main>
 {body}
 <footer>© 2026 {SITE['name_ko']} {SITE['name_en']}</footer>
@@ -375,7 +383,8 @@ for k, p in enumerate(PROJECTS):
 body = f'''<section class="ix" id="projects"><div class="ixh"><h1>{SITE["name_ko"]} <span>{SITE["name_en"]}</span></h1><p class="sub">Selected Works 2021–2026 · {SITE["school"]}</p><p class="lead">{E(ABOUT.get("intro") or "")}</p></div>
 <ul class="ixl">{"".join(rows)}</ul><div class="stg">{"".join(pvs)}</div></section>
 <div class="sec" id="publish"><h2>Publish</h2><span>출판 · 책자</span></div>{cardgrid(PUBLISH)}
-<div class="sec" id="practice"><h2>Practice &amp; Activities</h2><span>인턴 · 대외활동</span></div>{practice()}'''
+<div class="sec" id="practice"><h2>Practice &amp; Activities</h2><span>인턴 · 대외활동</span></div>{practice()}
+<section class="contact" id="contact"><div class="sec"><h2>Contact</h2><span>연락처</span></div><div class="ct"><a class="big" href="mailto:{SITE["email"]}">{SITE["email"]}</a><a class="big" href="tel:{SITE["phone"].replace('-','')}">{SITE["phone"]}</a><p>인턴, 협업, 포트폴리오 문의 모두 메일로 연락 주세요.</p></div></section>'''
 open(f'{OUT}/index.html', 'w').write(page(f'{SITE["name_ko"]} — Portfolio', body, '', on='w'))
 
 # ---- projects / practice detail pages
