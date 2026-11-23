@@ -9,6 +9,9 @@ from content import SITE, PROJECTS, ABOUT, PUBLISH, PRACTICE
 SRC, OUT = sys.argv[1], sys.argv[2]
 os.makedirs(OUT + '/img', exist_ok=True)
 os.makedirs(OUT + '/works', exist_ok=True)
+os.makedirs(OUT + '/practice', exist_ok=True)
+os.makedirs(OUT + '/vid', exist_ok=True)
+VID = os.environ.get('VID', os.path.join(os.path.dirname(SRC.rstrip('/')), 'vid'))
 E = html.escape
 sizes = {}
 
@@ -77,6 +80,7 @@ main{padding:0 clamp(16px,4vw,48px)}
 .blk{max-width:var(--max);margin:0 auto 56px}
 .blk.w{max-width:var(--max)}
 figure img{width:100%;cursor:zoom-in}
+figure video{width:100%;display:block;background:#000}
 .fade{opacity:0;transform:translateY(16px);transition:opacity .8s ease,transform .8s ease}
 .fade.in{opacity:1;transform:none}
 #lb button{position:absolute;top:50%;transform:translateY(-50%);background:none;border:0;color:#fff;font-size:34px;padding:20px;cursor:pointer;opacity:.6}
@@ -123,6 +127,9 @@ main>footer{padding-left:0}
 .card .t{font-weight:600;margin-top:12px;font-size:15px;line-height:1.4}
 .card .k{color:var(--mute);font-size:13px}
 .plist{max-width:var(--max);margin:28px auto 14vh;list-style:none}
+.works.pw{margin-bottom:40px}
+.works.pw .work,.works.pw .work:nth-child(n){grid-column:span 3}
+.works.pw .work .cap .k{display:block}
 .plist li{display:grid;grid-template-columns:120px 1fr auto;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);align-items:baseline}
 .plist .y{color:var(--mute);font-variant-numeric:tabular-nums;font-size:14px}
 .plist .t{font-weight:600}
@@ -193,6 +200,12 @@ def block(b, root):
         imgs = ''.join(f'<div>{pic(i, root)}</div>' for i in ids)
         cap = f'<figcaption>{E(b[2])}</figcaption>' if b[2] else ''
         return f'<figure class="blk"><div class="row {"g" if k=="grid" else ""}" style="grid-template-columns:{tmpl}">{imgs}</div>{cap}</figure>'
+    if k == 'video':
+        for ext in ('mp4', 'jpg'):
+            d = f'{OUT}/vid/{b[1]}.{ext}'
+            if not os.path.exists(d): shutil.copy(f'{VID}/{b[1]}.{ext}', d)
+        cap = f'<figcaption>{E(b[2])}</figcaption>' if len(b) > 2 and b[2] else ''
+        return f'<figure class="blk vid"><video src="{root}vid/{b[1]}.mp4" poster="{root}vid/{b[1]}.jpg" muted loop playsinline autoplay preload="metadata" controls></video>{cap}</figure>'
     if k == 'text':
         en = f'<small>{E(b[3])}</small>' if len(b) > 3 and b[3] else ''
         return f'<section class="txt"><h2>{E(b[1])}{en}</h2><div class="b">{para(b[2])}</div></section>'
@@ -214,9 +227,13 @@ def cardgrid(items):
         out.append(f'<div class="card"><div class="im">{im}</div><div class="t">{E(it["title"])}</div><div class="k">{E(it["kind"])} · {it["year"]}</div></div>')
     return '<section class="cards">'+''.join(out)+'</section>'
 def practice():
-    withimg=[i for i in PRACTICE if i.get('img') is not None or i.get('feature')]
-    rows=''.join(f'<li><span class="y">{E(i["year"])}</span><span class="t">{E(i["title"])}</span><span class="k">{E(i["kind"])}{(" · "+E(i["desc"])) if i.get("desc") and i["desc"]!=i["kind"] else ""}</span></li>' for i in PRACTICE)
-    return '<ul class="plist">'+rows+'</ul>'
+    cards=[]
+    for i in PRACTICE:
+        if not i.get('slug'): continue
+        s,w,h=use(i['thumb'],thumb=True)
+        cards.append(f'<a class="work" href="practice/{i["slug"]}.html"><img src="{s}" width="{w}" height="{h}" loading="lazy" alt="{E(i["title"])}"><div class="cap"><span class="t">{E(i["title"])}</span><span class="k">{E(i["kind"])} · {i["year"]}</span></div></a>')
+    rows=''.join(f'<li><span class="y">{E(i["year"])}</span><span class="t">{E(i["org"] if i.get("org") else i["title"])}</span><span class="k">{E(i["role"] if i.get("role") else i["kind"])}</span></li>' for i in PRACTICE if not i.get('hide_in_list'))
+    return ('<section class="works pw">'+''.join(cards)+'</section>' if cards else '')+'<ul class="plist">'+rows+'</ul>'
 # ---- index
 cards = []
 for p in PROJECTS:
@@ -229,24 +246,31 @@ body = f'''<section class="intro"><h1>{SITE["name_ko"]} {SITE["name_en"]}<br>Sel
 <div class="sec" id="practice"><h2>Practice &amp; Activities</h2><span>인턴 · 대외활동</span></div>{practice()}'''
 open(f'{OUT}/index.html', 'w').write(page(f'{SITE["name_ko"]} — Portfolio', body, '', on='w'))
 
-# ---- projects
-for n, p in enumerate(PROJECTS):
+# ---- projects / practice detail pages
+def detail(p, prv, nxt, folder, back):
     r = '../'
     meta = ''.join(f'<dt>{E(a)}</dt><dd>{E(b)}</dd>' for a, b in p['meta'])
     en = f'<p class="en">{E(p["intro_en"])}</p>' if p.get('intro_en') else ''
     sub = f'<small>{E(p["sub"])}</small>' if p.get('sub') else ''
-    head = f'''<div class="hero">{pic(p["hero"], r, alt=p["title"])}</div>
-<section class="phead"><div><div class="no">{p["no"]} — {E(p["kind"])}</div><h1>{E(p["title"])}{sub}</h1><dl>{meta}</dl></div>
+    hero = block(('video', p['hero_video']), r).replace('class="blk vid"', 'class="hero"') if p.get('hero_video') else f'<div class="hero">{pic(p["hero"], r, alt=p["title"])}</div>'
+    no = f'{p["no"]} — ' if p.get('no') else ''
+    head = f'''{hero}
+<section class="phead"><div><div class="no">{no}{E(p["kind"])}</div><h1>{E(p["title"])}{sub}</h1><dl>{meta}</dl></div>
 <div><p class="st">{E(p["statement"])}</p><div class="body">{"".join(f"<p>{E(x)}</p>" for x in p["intro"])}{en}</div></div></section>'''
     blocks = '\n'.join(block(b, r) for b in p['blocks'])
-    prv = PROJECTS[n - 1] if n > 0 else None
-    nxt = PROJECTS[n + 1] if n + 1 < len(PROJECTS) else None
     nav = '<nav class="pnav">'
-    nav += f'<a href="{prv["slug"]}.html"><span>← 이전</span>{E(prv["title"])}</a>' if prv else '<a href="../index.html"><span>←</span>Works</a>'
-    nav += f'<a href="{nxt["slug"]}.html"><span>다음 →</span>{E(nxt["title"])}</a>' if nxt else '<a href="../about.html"><span>→</span>About</a>'
+    nav += f'<a href="{prv["slug"]}.html"><span>← 이전</span>{E(prv["title"])}</a>' if prv else f'<a href="../index.html#{back}"><span>←</span>Index</a>'
+    nav += f'<a href="{nxt["slug"]}.html"><span>다음 →</span>{E(nxt["title"])}</a>' if nxt else f'<a href="../index.html#{back}"><span>→</span>Index</a>'
     nav += '</nav>'
-    open(f'{OUT}/works/{p["slug"]}.html', 'w').write(
-        page(f'{p["title"]} — {SITE["name_ko"]}', head + blocks + nav, r, dark=p.get('dark', False), on='w', desc=p['statement'], og=use(p['hero'], thumb=True)[0]))
+    og = use(p['hero'], thumb=True)[0] if p.get('hero') is not None else 'img/t_307.jpg'
+    open(f'{OUT}/{folder}/{p["slug"]}.html', 'w').write(
+        page(f'{p["title"]} — {SITE["name_ko"]}', head + blocks + nav, r, dark=p.get('dark', False), on='w', desc=p['statement'], og=og))
+
+for n, p in enumerate(PROJECTS):
+    detail(p, PROJECTS[n-1] if n else None, PROJECTS[n+1] if n+1 < len(PROJECTS) else None, 'works', 'projects')
+FEAT = [i for i in PRACTICE if i.get('slug')]
+for n, p in enumerate(FEAT):
+    detail(p, FEAT[n-1] if n else None, FEAT[n+1] if n+1 < len(FEAT) else None, 'practice', 'practice')
 
 # ---- about
 A = ABOUT

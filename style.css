@@ -43,6 +43,7 @@ main{padding:0 clamp(16px,4vw,48px)}
 .blk{max-width:var(--max);margin:0 auto 56px}
 .blk.w{max-width:var(--max)}
 figure img{width:100%;cursor:zoom-in}
+figure video{width:100%;display:block;background:#000}
 .fade{opacity:0;transform:translateY(16px);transition:opacity .8s ease,transform .8s ease}
 .fade.in{opacity:1;transform:none}
 #lb button{position:absolute;top:50%;transform:translateY(-50%);background:none;border:0;color:#fff;font-size:34px;padding:20px;cursor:pointer;opacity:.6}
@@ -89,6 +90,9 @@ main>footer{padding-left:0}
 .card .t{font-weight:600;margin-top:12px;font-size:15px;line-height:1.4}
 .card .k{color:var(--mute);font-size:13px}
 .plist{max-width:var(--max);margin:28px auto 14vh;list-style:none}
+.works.pw{margin-bottom:40px}
+.works.pw .work,.works.pw .work:nth-child(n){grid-column:span 3}
+.works.pw .work .cap .k{display:block}
 .plist li{display:grid;grid-template-columns:120px 1fr auto;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);align-items:baseline}
 .plist .y{color:var(--mute);font-variant-numeric:tabular-nums;font-size:14px}
 .plist .t{font-weight:600}
