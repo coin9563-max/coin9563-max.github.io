@@ -175,7 +175,7 @@ ABOUT = dict(
     ('2024.10–2025.02','정림 디지털 아카데미 유닛','jadu 수료'),
     ('2024.04–2024.09','삶것 건축사사무소','인턴'),
   ],
-  activities=[('2025','정림 디지털 아카데미 유닛 JADU','프로젝트 우수상'),('2025','D5 Render Student Ambassador','공개 강연 · 홍익대학교')],
+  activities=[('2025','정림 디지털 아카데미 유닛 JADU','프로젝트 우수상'),('2025','D5 Render Student Ambassador','3회 세미나 강연 · 홍익대학교')],
   skills=[('Modeling & Scripting','Rhino · Grasshopper · GhPython · SketchUp'),('Visualization','D5 Render · Enscape'),('Drafting & BIM','Revit · AutoCAD')],
 )
 
@@ -251,6 +251,22 @@ PRACTICE = [
     ]),
   dict(title='디어 건축사사무소', org='디어 건축사사무소', role='인턴', kind='인턴', year='2025'),
   dict(title='JAdU', org='정림 디지털 아카데미 유닛 JAdU 2기', role='수료 · 프로젝트 우수상', kind='', year='2025', hide_in_list=True),
-  dict(title='D5 Render Student Ambassador', org='D5 Render Student Ambassador', role='공개 강연 · 홍익대학교', kind='', year='2025'),
+  dict(slug='d5-seminar', title='D5 Render 세미나', sub='D5 Render Student Ambassador', kind='공개 강연 · 홍익대학교', year='2025',
+    org='D5 Render Student Ambassador', role='공개 강연 · 홍익대학교', hero='d5_photo0', thumb='d5_photo0',
+    meta=[('Role','D5 Render Student Ambassador · 강연자'),('Year','2025'),('Place','홍익대학교'),('Format','3회차 세미나 — 실내 · 외부 · 디지털 마켓')],
+    statement='학생들에게 D5 Render로 공간을 그리는 법을 나눴다',
+    intro=['D5 Render Student Ambassador로 홍익대학교에서 세 차례 세미나를 진행했다. 회차마다 하나의 장면을 함께 만들며 재질, 빛, 식재, 분위기를 다루었다. 아래는 세미나에서 시연하고 과제로 함께 만든 장면들이다.'],
+    blocks=[
+      ('img',405,'세미나 진행'),
+      ('text','1회차 — 실내','하나의 실내 모델로 재질과 빛의 방향을 바꾸어 가며 장면을 만든다.',''),
+      ('wide','d5_00',''),
+      ('grid',['d5_01','d5_02','d5_03','d5_04','d5_05'],'',3),
+      ('text','과제 — 외부 장면','같은 매스를 계절과 시간대를 바꾸어 렌더링한다.',''),
+      ('pair',['d5_06','d5_07'],''),
+      ('pair',['d5_08','d5_09'],''),
+      ('text','Digital Maquette','모형 사진처럼 보이는 디지털 마켓 표현.',''),
+      ('pair',['d5_10','d5_11'],''),
+      ('img','d5_photo1','D5 3차 세미나'),
+    ]),
   dict(title='우동우 건축사사무소', org='우동우 건축사사무소', role='프리랜서', kind='', year='2024–'),
 ]
