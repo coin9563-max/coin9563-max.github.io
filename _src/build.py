@@ -778,6 +778,9 @@ LABS = {
   'parking': dict(no='05', cat='OPTIMIZATION', en='PARKING LAYOUT', ko='주차 배치', t='주차 배치', js='lab_parking.js',
     d='대지 꼭짓점을 끌면 주차 모듈을 36개 각도로 깔아 보고 가장 많이 들어가는 배치와 법정 대수 충족 여부가 나온다.',
     long='직각주차 모듈(구획 + 차로 + 구획)을 5° 간격 36개 각도, 오프셋, 세로 연결 차로 위치를 바꿔 가며 깔아 보고 가장 많이 들어가는 안을 고른다. 오른쪽 그래프는 각도별 최대 대수이고, 막대를 누르면 그 각도의 배치를 볼 수 있다. 용도별 시설면적으로 법정 대수와 비교한다.'),
+  'sun': dict(no='06', cat='SIMULATION', en='SOLAR ACCESS', ko='동지 일조 시간', t='동지 일조 시간', js='lab_sun.js',
+    d='건물을 끌어 옮기면 대지 1m 격자마다 동지 09~15시 연속 일조 시간과 시각별 그림자가 다시 계산된다.',
+    long='위도와 날짜로 태양 위치를 구하고, 1m 격자마다 해 쪽으로 광선을 쏘아 건물에 막히는지 10분 간격으로 확인한다. 왼쪽은 09~15시 연속 일조 시간 지도와 2시간 경계선, 오른쪽은 선택 시각의 그림자와 태양 궤적이다. 배치 단계에서 동 간격과 높이를 정할 때 쓴다.'),
 }
 STEPT = {}
 def lab_page(k):
@@ -786,7 +789,7 @@ def lab_page(k):
     body = head + L.get('body', '<div class="app"></div>') + '</section>'
     js = open(os.path.join(SRC, 'lab_ui.js')).read() + open(os.path.join(SRC, L['js'])).read()
     open(f'{OUT}/lab/{k}.html', 'w').write(page(f'LAB {L["no"]} {L["t"]} — {SITE["name_ko"]}', body + f'<script>{js}</script>', '../', dark='dark labpg', on='p', desc=L['d']))
-CARDS = ['northlight', 'frame', 'stair', 'parking']
+CARDS = ['northlight', 'sun', 'parking', 'frame', 'stair']
 def process_page():
     P = PROCESS
     os.makedirs(f'{OUT}/lab', exist_ok=True)

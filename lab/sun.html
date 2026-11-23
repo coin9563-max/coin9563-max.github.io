@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LAB 06 동지 일조 시간 — 한승현</title>
+<meta name="description" content="건물을 끌어 옮기면 대지 1m 격자마다 동지 09~15시 연속 일조 시간과 시각별 그림자가 다시 계산된다.">
+<meta property="og:title" content="LAB 06 동지 일조 시간 — 한승현"><meta property="og:description" content="건물을 끌어 옮기면 대지 1m 격자마다 동지 09~15시 연속 일조 시간과 시각별 그림자가 다시 계산된다.">
+<link rel="stylesheet" href="../style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%231d1c1a%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22%23f6f5f2%22 font-family=%22sans-serif%22%3EH%3C/text%3E%3C/svg%3E">
+<meta property="og:image" content="https://coin9563-max.github.io/img/t_307.jpg">
+</head><body class="dark labpg">
+<header class="top"><a class="name" href="../index.html">한승현<span>Seunghyun Han</span></a>
+<nav><a href="../projects.html" class="">Projects</a><a href="../publish.html" class="">Publish</a><a href="../practice.html" class="">Practice</a><a href="../process.html" class="on">Process</a><a href="../about.html" class="">About</a><a href="../about.html#contact">Contact</a></nav></header>
+<main>
+<section class="lab" id="lab-sun"><div class="lh"><p class="k"><a href="../process.html">← AI와 설계하기</a> · LAB 06 · SIMULATION</p><h3>동지 일조 시간</h3><p>위도와 날짜로 태양 위치를 구하고, 1m 격자마다 해 쪽으로 광선을 쏘아 건물에 막히는지 10분 간격으로 확인한다. 왼쪽은 09~15시 연속 일조 시간 지도와 2시간 경계선, 오른쪽은 선택 시각의 그림자와 태양 궤적이다. 배치 단계에서 동 간격과 높이를 정할 때 쓴다.</p></div><div class="app"></div></section><script>// 실험 앱 공통: 슬라이더 패널 만들기 + 임베드(모달) 모드
+(function(){
+  if(/[?&]embed/.test(location.search)) document.documentElement.classList.add('embed');
+  window.LabUI=function(box,ctl,onChange){
+    const groups={}; ctl.forEach((c,i)=>{c.i=i;(groups[c.g]=groups[c.g]||[]).push(c);});
+    box.innerHTML=Object.entries(groups).map(([g,cs])=>`<fieldset><legend>${g}</legend>${cs.map(c=>c.opts
+      ?`<label><span>${c.k}</span><select data-k="${c.i}">${c.opts.map((o,j)=>`<option value="${j}" ${j==c.get()?'selected':''}>${o}</option>`).join('')}</select><output></output></label>`
+      :`<label><span>${c.k}</span><input type="range" min="${c.min}" max="${c.max}" step="${c.step}" value="${c.get()}" data-k="${c.i}"><output>${c.fmt?c.fmt(c.get()):c.get()}</output></label>`).join('')}</fieldset>`).join('');
+    let tm=null;
+    box.addEventListener('input',e=>{const i=e.target.dataset.k; if(i===undefined) return; const c=ctl[i], v=parseFloat(e.target.value); c.set(v);
+      if(!c.opts) e.target.nextElementSibling.textContent=c.fmt?c.fmt(v):v; clearTimeout(tm); tm=setTimeout(onChange,40);});
+    return function(){box.querySelectorAll('[data-k]').forEach(el=>{const c=ctl[el.dataset.k];el.value=c.get();if(!c.opts)el.nextElementSibling.textContent=c.fmt?c.fmt(c.get()):c.get();});};
+  };
+  window.LabRng=function(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}};
+})();
+// 공통 그리기 도구 (어두운 도면 시트)
+window.LD={INK:'#e6e3da',DIM:'#8a8a80',FAINT:'#3a3a35',BG:'#151513',RED:'#ff6b4a',BLUE:'#4da3ff',GREEN:'#9fd36b',MONO:'"JetBrains Mono",ui-monospace,monospace',
+  fit:function(cv){var r=cv.getBoundingClientRect(),d=devicePixelRatio||1;cv.width=r.width*d;cv.height=r.height*d;var g=cv.getContext('2d');g.setTransform(d,0,0,d,0,0);g.lineJoin='round';g.fillStyle='#151513';g.fillRect(0,0,r.width,r.height);return [g,r.width,r.height];},
+  path:function(g,p,close){g.beginPath();p.forEach(function(v,i){i?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1]);});if(close!==false)g.closePath();},
+  text:function(g,s,x,y,o){o=o||{};g.font=(o.w||'')+' '+(o.size||10)+'px '+LD.MONO;g.fillStyle=o.c||LD.DIM;g.textAlign=o.a||'left';g.fillText(s,x,y);},
+  dim:function(g,x1,y1,x2,y2,label,off,c){c=c||LD.BLUE;var dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy)||1,nx=-dy/L*off,ny=dx/L*off;g.strokeStyle=c;g.lineWidth=.7;g.beginPath();
+    g.moveTo(x1,y1);g.lineTo(x1+nx*1.15,y1+ny*1.15);g.moveTo(x2,y2);g.lineTo(x2+nx*1.15,y2+ny*1.15);g.moveTo(x1+nx,y1+ny);g.lineTo(x2+nx,y2+ny);g.stroke();
+    var mx=(x1+x2)/2+nx*1.6,my=(y1+y2)/2+ny*1.6;g.save();g.translate(mx,my);var a=Math.atan2(dy,dx);if(a>Math.PI/2||a<-Math.PI/2)a+=Math.PI;g.rotate(a);LD.text(g,label,0,3,{c:c,a:'center'});g.restore();},
+  stats:function(el,rows,hi,note){el.innerHTML=rows.map(function(r,i){return '<div class="'+(hi&&hi.indexOf(i)>=0?'hi':'')+(r[2]==='ng'?' ng':'')+'"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>';}).join('')+(note?'<p class="note">'+note+'</p>':'');}
+};
+
+// 실사용 도구줄: 좌표 · DXF 입력, PNG · CSV · DXF 내보내기, 링크로 조건 저장
+window.LabIO=function(app,o){
+  const bar=document.createElement('div'); bar.className='lio';
+  bar.innerHTML=(o.poly?`<details class="lin"><summary>대지 입력</summary><p>꼭짓점 좌표를 한 줄에 하나씩 <code>x, y</code> (m, 북쪽이 +y). 또는 DXF의 닫힌 폴리라인을 올리세요.</p><textarea rows="6"></textarea><div><button type="button" class="ap">좌표 적용</button><label class="up">DXF 열기<input type="file" accept=".dxf"></label><span class="msg"></span></div></details>`:'')+
+    `<button type="button" data-x="png">PNG</button><button type="button" data-x="csv">CSV</button>${o.dxf?'<button type="button" data-x="dxf">DXF</button>':''}<button type="button" data-x="link">링크 복사</button>`;
+  app.appendChild(bar);
+  const name=o.name||'lab', msg=bar.querySelector('.msg');
+  const save=(blob,fn)=>{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);};
+  const flash=(b,t)=>{const o2=b.textContent;b.textContent=t;setTimeout(()=>b.textContent=o2,1400);};
+  // 좌표 ↔ 내부 좌표 (내부는 y가 아래로 = 남쪽)
+  const toText=p=>p.map(q=>`${q[0].toFixed(2)}, ${(-q[1]).toFixed(2)}`).join('\n');
+  function setPoly(pts){ if(pts.length<3){msg.textContent='점이 3개 이상 필요해요';return;}
+    const xs=pts.map(p=>p[0]),ys=pts.map(p=>-p[1]),mx=Math.min(...xs),my=Math.min(...ys);
+    o.poly.set(pts.map(p=>[Math.round((p[0]-mx+3)*100)/100,Math.round((-p[1]-my+3)*100)/100])); msg.textContent=pts.length+'개 점 적용'; o.redraw(); }
+  if(o.poly){
+    const ta=bar.querySelector('textarea'); bar.querySelector('.lin').addEventListener('toggle',()=>{ta.value=toText(o.poly.get());});
+    bar.querySelector('.ap').onclick=()=>{const pts=ta.value.split(/\n/).map(l=>l.split(/[,\s\t]+/).filter(Boolean).map(Number)).filter(a=>a.length>=2&&a.every(isFinite)).map(a=>[a[0],a[1]]);setPoly(pts);};
+    bar.querySelector('input[type=file]').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{
+      const L=t.split(/\r?\n/).map(s=>s.trim()), polys=[]; let cur=null;
+      for(let i=0;i<L.length-1;i+=2){const c=L[i],v=L[i+1];
+        if(c==='0'){ if(cur&&cur.length>2) polys.push(cur); cur=(v==='LWPOLYLINE'||v==='POLYLINE')?[]:(v==='VERTEX'&&cur?cur:null); if(v==='VERTEX'&&polys.length&&!cur){} }
+        else if(cur&&c==='10') cur.push([+v,0]); else if(cur&&c==='20'&&cur.length) cur[cur.length-1][1]=+v; }
+      if(cur&&cur.length>2) polys.push(cur);
+      if(!polys.length){msg.textContent='닫힌 폴리라인을 찾지 못했어요';return;}
+      const ar=p=>Math.abs(p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a[0]*b[1]-b[0]*a[1];},0))/2;
+      let P=polys.sort((a,b)=>ar(b)-ar(a))[0]; const ext=Math.max(...P.map(p=>Math.abs(p[0])),...P.map(p=>Math.abs(p[1])));
+      const xs=P.map(p=>p[0]),ys=P.map(p=>p[1]),span=Math.max(Math.max(...xs)-Math.min(...xs),Math.max(...ys)-Math.min(...ys));
+      if(span>1000) P=P.map(p=>[p[0]/1000,p[1]/1000]); // mm → m
+      setPoly(P); ta.value=toText(o.poly.get());});};
+  }
+  bar.addEventListener('click',e=>{const x=e.target.dataset&&e.target.dataset.x;if(!x)return;
+    if(x==='png'){const cvs=[...app.querySelectorAll('canvas')],h=Math.max(...cvs.map(c=>c.height)),w=cvs.reduce((s,c)=>s+c.width,0);
+      const out=document.createElement('canvas');out.width=w;out.height=h;const g=out.getContext('2d');g.fillStyle='#151513';g.fillRect(0,0,w,h);let ox=0;cvs.forEach(c=>{g.drawImage(c,ox,0);ox+=c.width;});
+      out.toBlob(b=>save(b,name+'.png'));}
+    if(x==='csv'){const rows=[...app.querySelectorAll('.nls div')].map(d=>[d.querySelector('span').textContent,d.querySelector('b').textContent]);
+      const st=o.state();rows.push(['',''],['입력값','']);Object.entries(st.P||{}).forEach(([k,v])=>rows.push([k,v]));
+      if(o.poly) o.poly.get().forEach((p,i)=>rows.push(['대지 점 '+(i+1),p[0].toFixed(2)+' / '+(-p[1]).toFixed(2)]));
+      save(new Blob(['﻿'+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n')],{type:'text/csv'}),name+'.csv');}
+    if(x==='dxf'){const ents=o.dxf();let d='0\nSECTION\n2\nENTITIES\n';
+      ents.forEach(en=>{const p=en.pts,n=p.length,z=en.z||0;for(let i=0;i<(en.closed===false?n-1:n);i++){const a=p[i],b=p[(i+1)%n];
+        d+=`0\nLINE\n8\n${en.layer}\n10\n${a[0].toFixed(3)}\n20\n${(-a[1]).toFixed(3)}\n30\n${(a[2]!==undefined?a[2]:z).toFixed(3)}\n11\n${b[0].toFixed(3)}\n21\n${(-b[1]).toFixed(3)}\n31\n${(b[2]!==undefined?b[2]:z).toFixed(3)}\n`;}});
+      d+='0\nENDSEC\n0\nEOF\n'; save(new Blob([d],{type:'application/dxf'}),name+'.dxf');}
+    if(x==='link'){const u=location.href.split('#')[0]+'#s='+btoa(unescape(encodeURIComponent(JSON.stringify(o.state()))));
+      (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>flash(e.target,'복사됨'),()=>{prompt('이 링크를 복사하세요',u);});}
+  });
+  // 링크로 연 경우 조건 복원
+  const m=location.hash.match(/s=([^&]+)/); if(m){try{o.load(JSON.parse(decodeURIComponent(escape(atob(m[1])))));}catch(e){}}
+};
+// LAB 06 — 일조 시간 (동지 기준)
+// 건물을 끌어 옮기면 대지 위 1m 격자마다 09~15시 동안 해가 드는 시간을 계산한다(광선-상자 교차).
+// 공동주택 일조 기준(동지 09~15시 중 연속 2시간 이상 또는 08~16시 중 총 4시간 이상)을 체크한다.
+(function(){
+  const root=document.getElementById('lab-sun'); if(!root) return;
+  const DAYS=[{n:'동지 (12/22)',d:-23.44},{n:'춘·추분',d:0},{n:'하지 (6/21)',d:23.44}];
+  const P={lat:37.5,day:0,t:12,sel:0,step:10};
+  let B=[{x:8,y:6,w:34,d:11,h:27},{x:12,y:30,w:12,d:10,h:12},{x:34,y:34,w:16,d:12,h:18}];
+  const S=60; // 대지 60×60m
+  const app=root.querySelector('.app');
+  app.innerHTML=`<div class="lctl"></div>
+  <div class="nlv"><div class="cv sheet"><canvas class="map"></canvas><p class="hint">건물 드래그 = 이동 · 파란 모서리 = 크기 · 빈 곳 더블클릭 = 건물 추가</p></div>
+  <div class="cv sheet"><canvas class="sh"></canvas><p class="hint">선택 시각의 그림자 · 태양 궤적</p></div></div><div class="nls"></div>`;
+  const cM=app.querySelector('.map'), cS=app.querySelector('.sh'), out=app.querySelector('.nls');
+  const refresh=LabUI(app.querySelector('.lctl'),[
+    {g:'태양',k:'날짜',opts:DAYS.map(d=>d.n),get:()=>P.day,set:v=>P.day=v},
+    {g:'태양',k:'위도 °',min:33,max:38.5,step:.1,get:()=>P.lat,set:v=>P.lat=v},
+    {g:'태양',k:'그림자 시각',min:8,max:16,step:.25,get:()=>P.t,set:v=>P.t=v,fmt:v=>{const h=Math.floor(v),m=Math.round((v-h)*60);return h+':'+String(m).padStart(2,'0');}},
+    {g:'선택 건물',k:'높이 m',min:3,max:60,step:1,get:()=>B[P.sel]?B[P.sel].h:0,set:v=>{if(B[P.sel])B[P.sel].h=v;}},
+  ],()=>{calc();draw();});
+
+  function sun(t){ // t: 진태양시(시)
+    const f=P.lat*Math.PI/180, d=DAYS[P.day].d*Math.PI/180, H=(t-12)*15*Math.PI/180;
+    const alt=Math.asin(Math.sin(f)*Math.sin(d)+Math.cos(f)*Math.cos(d)*Math.cos(H));
+    const az=Math.atan2(Math.sin(H),Math.cos(H)*Math.sin(f)-Math.tan(d)*Math.cos(f)); // 남쪽 기준, 서쪽 +
+    return {alt,az,dx:-Math.sin(az),dy:Math.cos(az),tz:Math.tan(alt)};
+  }
+  function lit(x,y,s){ // 지면 점 (x,y)에서 해 쪽으로 쏜 광선이 건물에 막히는가
+    if(s.alt<=0) return false;
+    for(const b of B){ let t0=0,t1=1e9;
+      for(const [p,dd,lo,hi] of [[x,s.dx,b.x,b.x+b.w],[y,s.dy,b.y,b.y+b.d]]){
+        if(Math.abs(dd)<1e-9){ if(p<lo||p>hi){t0=1e9;break;} continue; }
+        let a=(lo-p)/dd, c=(hi-p)/dd; if(a>c)[a,c]=[c,a]; t0=Math.max(t0,a); t1=Math.min(t1,c); }
+      if(t0<t1 && t1>0 && Math.max(t0,0)*s.tz<b.h) return false; }
+    return true;
+  }
+  const inB=(x,y)=>B.some(b=>x>b.x&&x<b.x+b.w&&y>b.y&&y<b.y+b.d);
+  let G=null;
+  function calc(){
+    const ts=[]; for(let t=8;t<=16+1e-9;t+=P.step/60) ts.push(t);
+    const suns=ts.map(sun), cont=new Float32Array(S*S), tot=new Float32Array(S*S), dt=P.step/60;
+    for(let j=0;j<S;j++)for(let i=0;i<S;i++){const x=i+.5,y=j+.5,k=j*S+i; if(inB(x,y)){cont[k]=-1;continue;}
+      let run=0,best=0,sum=0; ts.forEach((t,n)=>{const l=lit(x,y,suns[n]); if(l)sum+=dt; if(t>=9-1e-9&&t<=15+1e-9){ if(l){run+=dt;best=Math.max(best,run);} else run=0; }});
+      cont[k]=best; tot[k]=sum; }
+    let open=0,ok2=0,ok4=0; for(let k=0;k<S*S;k++){ if(cont[k]<0) continue; open++; if(cont[k]>=2-1e-6)ok2++; if(tot[k]>=4-1e-6)ok4++; }
+    G={cont,tot,open,ok2,ok4};
+  }
+  const col=v=>{ if(v<0) return null; const t=Math.min(1,v/6); // 0h 어두운 남색 → 6h 따뜻한 노랑
+    const r=Math.round(28+t*(240-28)), g=Math.round(30+t*(196-30)), b=Math.round(48+t*(90-48)); return `rgb(${r},${g},${b})`; };
+  let TM=null;
+  function drawMap(){
+    const [g,W,H]=LD.fit(cM), k=Math.min(W-60,H-70)/S, ox=(W-S*k)/2+10, oy=(H-S*k)/2-6; TM={k,ox,oy};
+    for(let j=0;j<S;j++)for(let i=0;i<S;i++){const v=G.cont[j*S+i]; if(v<0) continue; g.fillStyle=col(v); g.fillRect(ox+i*k,oy+j*k,k+.6,k+.6);}
+    // 2시간 경계선
+    g.strokeStyle=LD.RED;g.lineWidth=1.4;g.beginPath();
+    for(let j=0;j<S;j++)for(let i=0;i<S;i++){const a=G.cont[j*S+i]; if(a<0) continue; const A=a>=2-1e-6;
+      if(i+1<S){const b=G.cont[j*S+i+1]; if(b>=0&&(b>=2-1e-6)!==A){g.moveTo(ox+(i+1)*k,oy+j*k);g.lineTo(ox+(i+1)*k,oy+(j+1)*k);}}
+      if(j+1<S){const b=G.cont[(j+1)*S+i]; if(b>=0&&(b>=2-1e-6)!==A){g.moveTo(ox+i*k,oy+(j+1)*k);g.lineTo(ox+(i+1)*k,oy+(j+1)*k);}}}
+    g.stroke();
+    B.forEach((b,i)=>{g.fillStyle='#1e1e1b';g.fillRect(ox+b.x*k,oy+b.y*k,b.w*k,b.d*k);g.strokeStyle=i===P.sel?LD.BLUE:LD.INK;g.lineWidth=i===P.sel?2:1.2;g.strokeRect(ox+b.x*k,oy+b.y*k,b.w*k,b.d*k);
+      LD.text(g,`${b.h}m`,ox+(b.x+b.w/2)*k,oy+(b.y+b.d/2)*k+4,{c:LD.INK,a:'center',size:11});
+      g.beginPath();g.arc(ox+(b.x+b.w)*k,oy+(b.y+b.d)*k,4.5,0,7);g.fillStyle=LD.BG;g.fill();g.strokeStyle=LD.BLUE;g.lineWidth=2;g.stroke();});
+    g.strokeStyle=LD.FAINT;g.lineWidth=1;g.strokeRect(ox,oy,S*k,S*k);
+    // 범례
+    for(let h=0;h<=6;h++){g.fillStyle=col(h);g.fillRect(ox+h*26,oy+S*k+12,24,8);LD.text(g,h+'h',ox+h*26+12,oy+S*k+32,{a:'center'});}
+    LD.text(g,'— 연속 2시간 경계',ox+S*k,oy+S*k+20,{c:LD.RED,a:'right'});
+    LD.text(g,'N ↑',ox+S*k-4,oy-4,{c:LD.INK,a:'right'}); LD.text(g,`연속 일조 (09–15시) · ${DAYS[P.day].n}`,12,16,{c:LD.INK,size:11});
+  }
+  function drawShadow(){
+    const [g,W,H]=LD.fit(cS), s=sun(P.t), k=Math.min(W-60,H-50)/S, ox=(W-S*k)/2+10, oy=(H-S*k)/2+6;
+    g.fillStyle='#3a3833';g.fillRect(ox,oy,S*k,S*k);
+    if(s.alt>0){ const L=1/s.tz; g.fillStyle='rgba(10,10,12,.78)';
+      B.forEach(b=>{const sx=-s.dx*b.h*L, sy=-s.dy*b.h*L, c=[[b.x,b.y],[b.x+b.w,b.y],[b.x+b.w,b.y+b.d],[b.x,b.y+b.d]];
+        // 상자 그림자 = 바닥 사각형과 옮긴 사각형의 볼록 껍질
+        const pts=c.concat(c.map(p=>[p[0]+sx,p[1]+sy])).sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+        const cr=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]); const lo=[],up=[];
+        pts.forEach(p=>{while(lo.length>1&&cr(lo[lo.length-2],lo[lo.length-1],p)<=0)lo.pop();lo.push(p);});
+        pts.slice().reverse().forEach(p=>{while(up.length>1&&cr(up[up.length-2],up[up.length-1],p)<=0)up.pop();up.push(p);});
+        const hull=lo.slice(0,-1).concat(up.slice(0,-1)); g.save();g.beginPath();g.rect(ox,oy,S*k,S*k);g.clip();LD.path(g,hull.map(p=>[ox+p[0]*k,oy+p[1]*k]));g.fill();g.restore();});
+    } else { g.fillStyle='rgba(0,0,0,.6)';g.fillRect(ox,oy,S*k,S*k); }
+    B.forEach(b=>{g.fillStyle='#55534c';g.fillRect(ox+b.x*k,oy+b.y*k,b.w*k,b.d*k);g.strokeStyle=LD.INK;g.lineWidth=1;g.strokeRect(ox+b.x*k,oy+b.y*k,b.w*k,b.d*k);});
+    g.strokeStyle=LD.FAINT;g.strokeRect(ox,oy,S*k,S*k);
+    // 태양 궤적 (작은 원형 차트, 오른쪽 위)
+    const R=46, cx=W-R-16, cy=R+28; g.strokeStyle=LD.FAINT;g.lineWidth=.8;g.beginPath();g.arc(cx,cy,R,0,7);g.stroke();g.beginPath();g.arc(cx,cy,R*2/3,0,7);g.arc(cx,cy,R/3,0,7);g.stroke();
+    LD.text(g,'S',cx,cy+R+12,{a:'center'});LD.text(g,'N',cx,cy-R-4,{a:'center'});
+    const pp=t=>{const q=sun(t),r=R*(1-Math.max(0,q.alt)/(Math.PI/2));return [cx-Math.sin(q.az)*r,cy+Math.cos(q.az)*r,q.alt];};
+    g.strokeStyle='#e0a15a';g.lineWidth=1.2;g.beginPath();let st=false;for(let t=4;t<=20;t+=.1){const p=pp(t);if(p[2]<0){st=false;continue;}st?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]);st=true;}g.stroke();
+    const p=pp(P.t); if(p[2]>0){g.beginPath();g.arc(p[0],p[1],4,0,7);g.fillStyle=LD.RED;g.fill();}
+    const hh=Math.floor(P.t),mm=Math.round((P.t-hh)*60);
+    LD.text(g,`${hh}:${String(mm).padStart(2,'0')} · 고도 ${(s.alt*180/Math.PI).toFixed(1)}° · 방위 ${(s.az*180/Math.PI).toFixed(0)}°`,12,16,{c:LD.INK,size:11});
+  }
+  function stats(){
+    const pc=v=>(v/G.open*100).toFixed(0)+'%'; const s=sun(12);
+    LD.stats(out,[['날짜 · 위도',DAYS[P.day].n+' · '+P.lat.toFixed(1)+'°'],['남중 고도',(s.alt*180/Math.PI).toFixed(1)+'°'],['빈 땅',G.open+' ㎡'],['건물',B.length+'동'],
+      ['연속 2시간 이상',G.ok2+' ㎡ ('+pc(G.ok2)+')'],['총 4시간 이상 (08–16)',G.ok4+' ㎡ ('+pc(G.ok4)+')'],['연속 2시간 미만',(G.open-G.ok2)+' ㎡',G.open-G.ok2>G.open*.5?'ng':''],['선택 건물',B[P.sel]?`${B[P.sel].w}×${B[P.sel].d}m · ${B[P.sel].h}m`:'-']],[4,5],
+      '1m 격자마다 해 쪽으로 광선을 쏘아 건물 상자에 막히는지 10분 간격으로 본다. 진태양시 기준이며 지형 · 수목 · 인접 대지 밖 건물은 없다. 공동주택 일조 기준(동지 09~15시 연속 2시간 또는 08~16시 총 4시간)은 창 위치에서 판정하므로 여기 지면 값은 배치 스터디용.');
+  }
+  function draw(){drawMap();drawShadow();stats();}
+
+  const W2=e=>{const r=cM.getBoundingClientRect();return [(e.clientX-r.left-TM.ox)/TM.k,(e.clientY-r.top-TM.oy)/TM.k];};
+  let drag=null;
+  cM.addEventListener('pointerdown',e=>{const [x,y]=W2(e);
+    let i=B.findIndex(b=>Math.hypot(b.x+b.w-x,b.y+b.d-y)*TM.k<10); if(i>=0){drag={i,mode:'size'};}
+    else{i=B.findIndex(b=>x>b.x&&x<b.x+b.w&&y>b.y&&y<b.y+b.d); if(i>=0)drag={i,mode:'move',dx:x-B[i].x,dy:y-B[i].y};}
+    if(drag){P.sel=drag.i;refresh();cM.setPointerCapture(e.pointerId);draw();}});
+  cM.addEventListener('pointermove',e=>{if(!drag)return;const [x,y]=W2(e),b=B[drag.i];
+    if(drag.mode==='move'){b.x=Math.max(0,Math.min(S-b.w,Math.round(x-drag.dx)));b.y=Math.max(0,Math.min(S-b.d,Math.round(y-drag.dy)));}
+    else{b.w=Math.max(4,Math.min(S-b.x,Math.round(x-b.x)));b.d=Math.max(4,Math.min(S-b.y,Math.round(y-b.y)));}
+    P.step=30;calc();draw();});
+  cM.addEventListener('pointerup',()=>{if(drag){drag=null;P.step=10;calc();draw();}});
+  cM.addEventListener('dblclick',e=>{const [x,y]=W2(e);if(inB(x,y))return;B.push({x:Math.round(x)-5,y:Math.round(y)-4,w:10,d:8,h:9});P.sel=B.length-1;refresh();calc();draw();});
+  LabIO(app,{name:'sun-hours',state:()=>({P,B}),load:o=>{Object.assign(P,o.P||{});if(o.B)B=o.B;refresh();},redraw:()=>{calc();draw();},
+    dxf:()=>B.map(b=>({layer:'BUILDING',pts:[[b.x,b.y],[b.x+b.w,b.y],[b.x+b.w,b.y+b.d],[b.x,b.y+b.d]],z:b.h}))});
+  addEventListener('resize',draw); calc(); draw();
+})();
+</script>
+<footer>© 2026 한승현 Seunghyun Han</footer>
+</main>
+<div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>
+<script>
+
+// 표지 기본 화면: 흐르는 지형 등고선 (3D value noise + marching squares), 마우스 = 언덕
+(function(){var cv=document.querySelector('.cv0 .topo');if(!cv)return;var g=cv.getContext('2d'),W,H,S=11,nx,ny,F,mx=-1e4,my=-1e4,tx=-1e4,ty=-1e4,t=Math.random()*100,still=matchMedia('(prefers-reduced-motion:reduce)').matches;
+var P=new Uint8Array(512);for(var i=0;i<256;i++)P[i]=i;for(i=255;i>0;i--){var j=Math.floor(Math.random()*(i+1)),x=P[i];P[i]=P[j];P[j]=x;}for(i=0;i<256;i++)P[i+256]=P[i];
+function h(x,y,z){return P[P[P[x&255]+(y&255)]+(z&255)]/255;}function sm(a){return a*a*(3-2*a);}
+function n3(x,y,z){var X=Math.floor(x),Y=Math.floor(y),Z=Math.floor(z),u=sm(x-X),v=sm(y-Y),w=sm(z-Z);function L(a,b,k){return a+(b-a)*k;}
+return L(L(L(h(X,Y,Z),h(X+1,Y,Z),u),L(h(X,Y+1,Z),h(X+1,Y+1,Z),u),v),L(L(h(X,Y,Z+1),h(X+1,Y,Z+1),u),L(h(X,Y+1,Z+1),h(X+1,Y+1,Z+1),u),v),w);}
+function size(){var r=cv.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0);nx=Math.ceil(W/S)+1;ny=Math.ceil(H/S)+1;F=new Float32Array(nx*ny);}
+function field(){var sc=1/260;for(var j=0;j<ny;j++)for(var i=0;i<nx;i++){var x=i*S,y=j*S,e=n3(x*sc,y*sc,t)*.62+n3(x*sc*2.1,y*sc*2.1,t*1.3+7)*.28+n3(x*sc*4.3,y*sc*4.3,t*1.7+3)*.1;
+var dx=x-mx,dy=y-my;e+=.34*Math.exp(-(dx*dx+dy*dy)/(2*170*170));F[j*nx+i]=e;}}
+function draw(){g.clearRect(0,0,W,H);var N=22;for(var k=1;k<N;k++){var lv=.12+k*.045;g.beginPath();
+for(var j=0;j<ny-1;j++)for(var i=0;i<nx-1;i++){var a=F[j*nx+i],b=F[j*nx+i+1],c=F[(j+1)*nx+i+1],d=F[(j+1)*nx+i],cs=(a>lv?8:0)|(b>lv?4:0)|(c>lv?2:0)|(d>lv?1:0);if(cs===0||cs===15)continue;
+var x=i*S,y=j*S,T=[x+S*(lv-a)/(b-a),y],R=[x+S,y+S*(lv-b)/(c-b)],B=[x+S*(lv-d)/(c-d),y+S],Lf=[x,y+S*(lv-a)/(d-a)],sg;
+switch(cs){case 1:case 14:sg=[Lf,B];break;case 2:case 13:sg=[B,R];break;case 3:case 12:sg=[Lf,R];break;case 4:case 11:sg=[T,R];break;case 6:case 9:sg=[T,B];break;case 7:case 8:sg=[Lf,T];break;case 5:sg=[Lf,T,B,R];break;case 10:sg=[Lf,B,T,R];break;}
+for(var q=0;q<sg.length;q+=2){g.moveTo(sg[q][0],sg[q][1]);g.lineTo(sg[q+1][0],sg[q+1][1]);}}
+g.strokeStyle=k%5===0?'rgba(239,237,230,.42)':'rgba(239,237,230,.13)';g.lineWidth=k%5===0?1:.7;g.stroke();}var m=document.querySelector('.cvm');if(m){var cr=cv.getBoundingClientRect();m.querySelectorAll('a').forEach(function(x){var r=x.getBoundingClientRect();g.clearRect(r.left-cr.left-12,r.top-cr.top,r.width+24,r.height);});}}
+var last=0;function loop(ts){requestAnimationFrame(loop);if(ts-last<40)return;last=ts;t+=.0022;mx+=(tx-mx)*.08;my+=(ty-my)*.08;field();draw();}
+addEventListener('resize',function(){size();field();draw();});
+cv.parentNode.addEventListener('mousemove',function(e){var r=cv.getBoundingClientRect();tx=e.clientX-r.left;ty=e.clientY-r.top;if(mx<-1e3){mx=tx;my=ty;}});
+cv.parentNode.addEventListener('mouseleave',function(){tx=ty=-1e4;});
+size();field();draw();if(!still)requestAnimationFrame(loop);})();
+(function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a');
+a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
+m.addEventListener('mouseleave',function(){bg.forEach(function(b){b.classList.remove('on')});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});});})();
+(function(){var pv=document.querySelector('.lpv');if(!pv)return;document.querySelectorAll('.lr.f').forEach(function(r){
+r.addEventListener('mouseenter',function(){pv.src=r.dataset.img;pv.classList.add('on');});r.addEventListener('mouseleave',function(){pv.classList.remove('on');});
+r.addEventListener('mousemove',function(e){pv.style.transform='translate('+(e.clientX+28)+'px,'+(e.clientY-120)+'px)';});});})();
+(function(){var st=document.querySelector('.stg');if(!st)return;var sl=st.querySelectorAll('.sl'),li=document.querySelectorAll('.ixl li');
+li.forEach(function(l){l.addEventListener('mouseenter',function(){var i=+l.dataset.i;sl.forEach(function(x,k){x.classList.toggle('on',k===i)});li.forEach(function(o){o.classList.toggle('on',o===l)});});});})();
+
+const lb=document.getElementById('lb'),li=lb.querySelector('img'),lc=lb.querySelector('.c');let L=[],ix=0;
+function show(i){ix=(i+L.length)%L.length;li.src=L[ix].src;const f=L[ix].closest('figure').querySelector('figcaption');lc.textContent=(f?f.textContent:'')+'  '+(ix+1)+' / '+L.length;}
+document.addEventListener('click',e=>{
+ if(e.target.closest('#lb button')){show(ix+(e.target.classList.contains('n')?1:-1));return}
+ if(e.target.closest('#lb')){lb.classList.remove('on');return}
+ const im=e.target.closest('figure img');if(im){L=[...document.querySelectorAll('figure img')];show(L.indexOf(im));lb.classList.add('on')}});
+document.addEventListener('keydown',e=>{if(!lb.classList.contains('on'))return;if(e.key==='Escape')lb.classList.remove('on');if(e.key==='ArrowRight')show(ix+1);if(e.key==='ArrowLeft')show(ix-1)});
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.blk,.txt,.work').forEach(el=>{el.classList.add('fade');io.observe(el)})}
+</script>
+</body></html>
