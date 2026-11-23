@@ -387,6 +387,18 @@ pre.code.ask .f{color:var(--mute)}
 .labpg .lab{margin-top:40px}
 .lab .k a{color:inherit}
 @media (max-width:760px){.labcard{grid-template-columns:1fr}.labcard img{min-height:0;aspect-ratio:16/9}}
+
+.labs{margin-top:18px;border:1px solid var(--line)}
+.labs summary{cursor:pointer;list-style:none;padding:10px 14px;font-family:var(--mono);font-size:13px;color:#b6d36b;display:flex;justify-content:space-between}
+.labs summary::-webkit-details-marker{display:none}
+.labs summary:after{content:'+'}.labs[open] summary:after{content:'−'}
+.labs ul{list-style:none;border-top:1px solid var(--line)}
+.labs li a{display:grid;grid-template-columns:64px 1fr 20px;gap:4px 12px;padding:12px 14px;color:inherit;text-decoration:none;border-top:1px solid var(--line)}
+.labs li:first-child a{border-top:0}
+.labs li a:hover{background:#1c2117}
+.labs .ln{font-family:var(--mono);font-size:12px;color:#b6d36b;padding-top:3px}
+.labs b{font-weight:500}.labs em{grid-column:2;font-style:normal;font-size:13px;color:var(--mute)}
+.labs i{grid-row:1;grid-column:3;font-style:normal;color:#b6d36b}
 """
 
 JS = r"""
@@ -588,11 +600,16 @@ def process_page():
         out.append(f'''<section class="pstep" id="exp-{st["no"]}"><div class="ph"><span class="no">EXP–{st["no"]}</span><span class="st {'on' if st.get('lab') else ''}">{'● 실험 가동' if st.get('lab') else '○ 실험 준비 중'}</span><h2>{E(st["t"])}<small>{E(st["en"])}</small></h2></div>
 <div class="pb"><div class="cmp"><div><h4>기존</h4><p>{E(st["before"])}</p></div><div class="ai"><h4>AI와 함께</h4><p>{E(st["ai"])}</p></div></div>
 <p class="hm"><b>사람의 몫</b> {E(st["human"])}</p>{ask}</div></section>''')
-        if st.get('lab'):
-            L = LABS[st['lab']]
-            out.append(f'''<a class="labcard" href="lab/{st['lab']}.html"><img src="img/lab_{st['lab']}.jpg" alt="" loading="lazy"><div><p class="k">LAB {L['no']} · 직접 돌려보기</p><h3>{E(L['t'])}</h3><p>{E(L['d'])}</p><span class="go">실험 열기 →</span></div></a>''')
+        labs = st.get('lab') or []
+        if isinstance(labs, str): labs = [labs]
+        if labs:
             os.makedirs(f'{OUT}/lab', exist_ok=True)
-            open(f'{OUT}/lab/{st["lab"]}.html', 'w').write(page(f'LAB {L["no"]} {L["t"]} — {SITE["name_ko"]}', LABHTML[st['lab']] + f'<script>{LABJS[st["lab"]]}</script>', '../', dark='dark labpg', on='p', desc=L['d']))
+            items = ''
+            for k in labs:
+                L = LABS[k]
+                items += f'<li><a href="lab/{k}.html"><span class="ln">LAB {L["no"]}</span><b>{E(L["t"])}</b><em>{E(L["d"])}</em><i>→</i></a></li>'
+                open(f'{OUT}/lab/{k}.html', 'w').write(page(f'LAB {L["no"]} {L["t"]} — {SITE["name_ko"]}', LABHTML[k] + f'<script>{LABJS[k]}</script>', '../', dark='dark labpg', on='p', desc=L['d']))
+            out[-1] = out[-1].replace('</div></section>', f'<details class="labs"><summary>실험 {len(labs)}개 보기</summary><ul>{items}</ul></details></div></section>')
     nlab = sum(1 for x in P['steps'] if x.get('lab')); nexp = sum(1 for x in P['steps'] if not x.get('note'))
     body = f'''<section class="phd"><p class="k">LAB — 설계 프로세스 실험 노트</p><p class="log">EXP {nexp:02d} · RUNNING {nlab:02d} · UPDATED 2026.11.24</p><h1>{E(P["title"])}<small>{E(P["sub"])}</small></h1><p class="lead">{E(P["lead"])}</p></section>{"".join(out)}'''
     open(f'{OUT}/process.html', 'w').write(page(f'Process — {SITE["name_ko"]}', body, '', dark='dark labpg', on='p', desc=P['lead']))
