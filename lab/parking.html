@@ -22,7 +22,8 @@
     let tm=null;
     box.addEventListener('input',e=>{const i=e.target.dataset.k; if(i===undefined) return; const c=ctl[i], v=parseFloat(e.target.value); c.set(v);
       if(!c.opts) e.target.nextElementSibling.textContent=c.fmt?c.fmt(v):v; clearTimeout(tm); tm=setTimeout(onChange,40);});
-    return function(){box.querySelectorAll('[data-k]').forEach(el=>{const c=ctl[el.dataset.k];el.value=c.get();if(!c.opts)el.nextElementSibling.textContent=c.fmt?c.fmt(c.get()):c.get();});};
+    const dec=c=>{const s=String(c.step||1).split('.')[1];return s?s.length:0;};
+    return function(){box.querySelectorAll('[data-k]').forEach(el=>{const c=ctl[el.dataset.k];let v=c.get();if(!c.opts){v=+(+v).toFixed(dec(c));c.set(v);}el.value=v;if(!c.opts)el.nextElementSibling.textContent=c.fmt?c.fmt(v):v;});};
   };
   window.LabRng=function(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}};
 })();
@@ -204,6 +205,9 @@ window.LabIO=function(app,o){
   cT.addEventListener('dblclick',e=>{const [x,y]=W2(e);const vi=poly.findIndex(p=>Math.hypot(p[0]-x,p[1]-y)*T.k<12);
     if(vi>=0){if(poly.length>3)poly.splice(vi,1);} else {let bi=-1,bd=1e9;poly.forEach((a,i)=>{const d=segD(x,y,a,poly[(i+1)%poly.length]);if(d<bd){bd=d;bi=i;}}); if(bd*T.k<14) poly.splice(bi+1,0,[Math.round(x*2)/2,Math.round(y*2)/2]);} search();draw();});
   cG.addEventListener('click',e=>{const r=cG.getBoundingClientRect(),i=Math.floor((e.clientX-r.left-GB.l)/GB.bw);if(i>=0&&i<best.res.length){curTh=best.res[i].th;draw();}});
+  // 자동 시연 (배치 탐색이 무거우니 값이 바뀔 때만 다시 계산)
+  const wave=(t,a,b,sp,ph)=>a+(b-a)*(1-Math.cos(t*sp+(ph||0)))/2, q=(v,st)=>Math.round(v/st)*st;
+  let dk='';app.demo={step:t=>{const k=Math.floor(t/2.4),aw=[6,5,5.5,6.5,7,6][k%6],sb=[1,0,.5,1.5,2,1][Math.floor(k/6)%6];const key=aw+'/'+sb;if(key===dk)return;dk=key;P.aw=aw;P.sb=sb;search();draw();},stop:()=>refresh()};
   LabIO(app,{name:'parking',poly:{get:()=>poly,set:v=>poly=v},state:()=>({P,poly}),load:o=>{Object.assign(P,o.P||{});if(o.poly)poly=o.poly;refresh();},redraw:()=>{search();draw();},
     dxf:()=>{const L=current(),c=Math.cos(L.th),s=Math.sin(L.th),G=(x,y)=>[x*c-y*s,x*s+y*c],E=[{layer:'SITE',pts:poly}];
       L.stalls.forEach(q=>E.push({layer:'STALL',pts:[G(q[0],q[1]),G(q[0]+q[2],q[1]),G(q[0]+q[2],q[1]+q[3]),G(q[0],q[1]+q[3])]}));
@@ -217,6 +221,12 @@ window.LabIO=function(app,o){
 <div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>
 <script>
 
+// 표지 → About: 메뉴 자리에서 명함이 화면 가득 펼쳐진 뒤 이동
+(function(){var a=document.querySelector('.cvm a[href="about.html"]');if(!a||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+a.addEventListener('click',function(e){if(e.metaKey||e.ctrlKey||e.shiftKey)return;e.preventDefault();var r=a.getBoundingClientRect(),h=r.width*5/9,d=document.createElement('div');d.className='bfly';
+ d.style.cssText='left:'+r.left+'px;top:'+(r.top+r.height/2-h/2)+'px;width:'+r.width+'px;height:'+h+'px;transform:rotate(-6deg)';document.body.appendChild(d);
+ requestAnimationFrame(function(){requestAnimationFrame(function(){d.style.cssText='left:0;top:0;width:100vw;height:100vh;transform:none;box-shadow:none';});});
+ try{sessionStorage.setItem('bcfly','1');}catch(x){}setTimeout(function(){location.href=a.href;},620);});})();
 // 표지 기본 화면: 실시간 그림자. 기둥 필드가 서울의 지금 해 위치대로 그림자를 드리운다. 마우스 가로 = 하루의 시각.
 (function(){var cv=document.querySelector('.cv0 .topo');if(!cv)return;var g=cv.getContext('2d'),W,H,SP=34,poles=[],still=matchMedia('(prefers-reduced-motion:reduce)').matches,info=document.querySelector('.sunr');
 var LAT=37.57*Math.PI/180,LON=126.98,hov=null,cur=null;

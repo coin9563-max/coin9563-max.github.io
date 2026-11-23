@@ -129,6 +129,9 @@
   let rx=null; cI.addEventListener('pointerdown',e=>{rx=e.clientX;cI.setPointerCapture(e.pointerId);});
   cI.addEventListener('pointermove',e=>{if(rx===null)return;P.yaw+=(e.clientX-rx)*.01;rx=e.clientX;drawIso(compute());});
   cI.addEventListener('pointerup',()=>rx=null);
+  // 자동 시연
+  const wave=(t,a,b,sp,ph)=>a+(b-a)*(1-Math.cos(t*sp+(ph||0)))/2, q=(v,st)=>Math.round(v/st)*st;
+  app.demo={step:t=>{P.ex=wave(t,0,5,.8);P.nf=Math.round(wave(t,2,5,.27,2));P.yaw=-0.7+0.4*Math.sin(t*.25);draw();},stop:()=>refresh()};
   LabIO(app,{name:'structural-frame',state:()=>({P,sx,sy}),load:o=>{Object.assign(P,o.P||{});if(o.sx)sx=o.sx;if(o.sy)sy=o.sy;refresh();},redraw:draw,
     dxf:()=>{const R=compute(),E=[],c=R.c/1000;
       R.X.forEach(x=>E.push({layer:'GRID',closed:false,pts:[[x,-2],[x,R.Ly+2]]}));R.Y.forEach(y=>E.push({layer:'GRID',closed:false,pts:[[-2,y],[R.Lx+2,y]]}));

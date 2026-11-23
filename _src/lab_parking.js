@@ -117,6 +117,9 @@
   cT.addEventListener('dblclick',e=>{const [x,y]=W2(e);const vi=poly.findIndex(p=>Math.hypot(p[0]-x,p[1]-y)*T.k<12);
     if(vi>=0){if(poly.length>3)poly.splice(vi,1);} else {let bi=-1,bd=1e9;poly.forEach((a,i)=>{const d=segD(x,y,a,poly[(i+1)%poly.length]);if(d<bd){bd=d;bi=i;}}); if(bd*T.k<14) poly.splice(bi+1,0,[Math.round(x*2)/2,Math.round(y*2)/2]);} search();draw();});
   cG.addEventListener('click',e=>{const r=cG.getBoundingClientRect(),i=Math.floor((e.clientX-r.left-GB.l)/GB.bw);if(i>=0&&i<best.res.length){curTh=best.res[i].th;draw();}});
+  // 자동 시연 (배치 탐색이 무거우니 값이 바뀔 때만 다시 계산)
+  const wave=(t,a,b,sp,ph)=>a+(b-a)*(1-Math.cos(t*sp+(ph||0)))/2, q=(v,st)=>Math.round(v/st)*st;
+  let dk='';app.demo={step:t=>{const k=Math.floor(t/2.4),aw=[6,5,5.5,6.5,7,6][k%6],sb=[1,0,.5,1.5,2,1][Math.floor(k/6)%6];const key=aw+'/'+sb;if(key===dk)return;dk=key;P.aw=aw;P.sb=sb;search();draw();},stop:()=>refresh()};
   LabIO(app,{name:'parking',poly:{get:()=>poly,set:v=>poly=v},state:()=>({P,poly}),load:o=>{Object.assign(P,o.P||{});if(o.poly)poly=o.poly;refresh();},redraw:()=>{search();draw();},
     dxf:()=>{const L=current(),c=Math.cos(L.th),s=Math.sin(L.th),G=(x,y)=>[x*c-y*s,x*s+y*c],E=[{layer:'SITE',pts:poly}];
       L.stalls.forEach(q=>E.push({layer:'STALL',pts:[G(q[0],q[1]),G(q[0]+q[2],q[1]),G(q[0]+q[2],q[1]+q[3]),G(q[0],q[1]+q[3])]}));

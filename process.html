@@ -2,8 +2,8 @@
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Process — 한승현</title>
-<meta name="description" content="법규, 구조, 배치처럼 설계에서 반복되는 판단을 하나씩 떼어 AI와 함께 작은 도구로 만든다. 카드마다 직접 끌어서 조작할 수 있고, ↗를 누르면 조건을 바꿔 볼 수 있는 큰 화면이 열린다.">
-<meta property="og:title" content="Process — 한승현"><meta property="og:description" content="법규, 구조, 배치처럼 설계에서 반복되는 판단을 하나씩 떼어 AI와 함께 작은 도구로 만든다. 카드마다 직접 끌어서 조작할 수 있고, ↗를 누르면 조건을 바꿔 볼 수 있는 큰 화면이 열린다.">
+<meta name="description" content="법규, 구조, 배치처럼 설계에서 반복되는 판단을 하나씩 떼어 AI와 함께 작은 도구로 만든다. 카드는 스스로 조건을 바꿔 가며 돌아가고, 누르면 멈춰서 직접 끌고 조절할 수 있다. ↗는 큰 화면.">
+<meta property="og:title" content="Process — 한승현"><meta property="og:description" content="법규, 구조, 배치처럼 설계에서 반복되는 판단을 하나씩 떼어 AI와 함께 작은 도구로 만든다. 카드는 스스로 조건을 바꿔 가며 돌아가고, 누르면 멈춰서 직접 끌고 조절할 수 있다. ↗는 큰 화면.">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%231d1c1a%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22%23f6f5f2%22 font-family=%22sans-serif%22%3EH%3C/text%3E%3C/svg%3E">
 <meta property="og:image" content="https://coin9563-max.github.io/img/t_307.jpg">
@@ -11,7 +11,7 @@
 <header class="top"><a class="name" href="index.html">한승현<span>Seunghyun Han</span></a>
 <nav><a href="projects.html" class="">Projects</a><a href="publish.html" class="">Publish</a><a href="practice.html" class="">Practice</a><a href="process.html" class="on">Process</a><a href="about.html" class="">About</a><a href="about.html#contact">Contact</a></nav></header>
 <main>
-<section class="phd"><p class="k">LAB — 설계를 스킬로</p><h1>AI와 설계하기<small>Architecture as skills — 설계 판단을 작은 도구로</small></h1><p class="lead">법규, 구조, 배치처럼 설계에서 반복되는 판단을 하나씩 떼어 AI와 함께 작은 도구로 만든다. 카드마다 직접 끌어서 조작할 수 있고, ↗를 누르면 조건을 바꿔 볼 수 있는 큰 화면이 열린다.</p></section>
+<section class="phd"><p class="k">LAB — 설계를 스킬로</p><h1>AI와 설계하기<small>Architecture as skills — 설계 판단을 작은 도구로</small></h1><p class="lead">법규, 구조, 배치처럼 설계에서 반복되는 판단을 하나씩 떼어 AI와 함께 작은 도구로 만든다. 카드는 스스로 조건을 바꿔 가며 돌아가고, 누르면 멈춰서 직접 끌고 조절할 수 있다. ↗는 큰 화면.</p></section>
 <section class="agrid"><article class="acard lab" id="lab-northlight"><header><b>NORTH SETBACK ENVELOPE</b><span>정북 일조사선 매스</span><a href="lab/northlight.html" title="크게 열기 · 조절하기">↗</a></header><div class="app"></div></article><article class="acard lab" id="lab-sun"><header><b>SOLAR ACCESS</b><span>동지 일조 시간</span><a href="lab/sun.html" title="크게 열기 · 조절하기">↗</a></header><div class="app"></div></article><article class="acard lab" id="lab-parking"><header><b>PARKING LAYOUT</b><span>주차 배치</span><a href="lab/parking.html" title="크게 열기 · 조절하기">↗</a></header><div class="app"></div></article><article class="acard lab" id="lab-frame"><header><b>STRUCTURAL GRID → FRAME</b><span>구조 그리드 · 골조</span><a href="lab/frame.html" title="크게 열기 · 조절하기">↗</a></header><div class="app"></div></article><article class="acard lab" id="lab-stair"><header><b>STAIR DESIGN</b><span>계단 설계</span><a href="lab/stair.html" title="크게 열기 · 조절하기">↗</a></header><div class="app"></div></article></section><script>// 실험 앱 공통: 슬라이더 패널 만들기 + 임베드(모달) 모드
 (function(){
   if(/[?&]embed/.test(location.search)) document.documentElement.classList.add('embed');
@@ -23,7 +23,8 @@
     let tm=null;
     box.addEventListener('input',e=>{const i=e.target.dataset.k; if(i===undefined) return; const c=ctl[i], v=parseFloat(e.target.value); c.set(v);
       if(!c.opts) e.target.nextElementSibling.textContent=c.fmt?c.fmt(v):v; clearTimeout(tm); tm=setTimeout(onChange,40);});
-    return function(){box.querySelectorAll('[data-k]').forEach(el=>{const c=ctl[el.dataset.k];el.value=c.get();if(!c.opts)el.nextElementSibling.textContent=c.fmt?c.fmt(c.get()):c.get();});};
+    const dec=c=>{const s=String(c.step||1).split('.')[1];return s?s.length:0;};
+    return function(){box.querySelectorAll('[data-k]').forEach(el=>{const c=ctl[el.dataset.k];let v=c.get();if(!c.opts){v=+(+v).toFixed(dec(c));c.set(v);}el.value=v;if(!c.opts)el.nextElementSibling.textContent=c.fmt?c.fmt(v):v;});};
   };
   window.LabRng=function(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}};
 })();
@@ -220,6 +221,9 @@ window.LabIO=function(app,o){
   let rx=null; cI.addEventListener('pointerdown',e=>{rx=e.clientX;cI.setPointerCapture(e.pointerId);});
   cI.addEventListener('pointermove',e=>{if(rx===null)return;P.yaw+=(e.clientX-rx)*.01;rx=e.clientX;drawIso(compute());});
   cI.addEventListener('pointerup',()=>rx=null);
+  // 자동 시연
+  const wave=(t,a,b,sp,ph)=>a+(b-a)*(1-Math.cos(t*sp+(ph||0)))/2, q=(v,st)=>Math.round(v/st)*st;
+  app.demo={step:t=>{P.maxF=Math.round(wave(t,4,22,.5));P.sb=q(wave(t,0,3,.23,1),.5);P.yaw=-0.62+0.35*Math.sin(t*.18);draw();},stop:()=>refresh()};
   LabIO(app,{name:'northlight-envelope',poly:{get:()=>poly,set:v=>poly=v},state:()=>({P,poly}),load:o=>{Object.assign(P,o.P||{});if(o.poly)poly=o.poly;refresh();},redraw:draw,
     dxf:()=>{const R=compute(),E=[{layer:'SITE',pts:poly},{layer:'FOOTPRINT',pts:R.foot}];
       R.env.forEach((pl,i)=>E.push({layer:'ENVELOPE',pts:pl,z:(i+1)*P.fh}));
@@ -337,6 +341,9 @@ window.LabIO=function(app,o){
     P.step=30;calc();draw();});
   cM.addEventListener('pointerup',()=>{if(drag){drag=null;P.step=10;calc();draw();}});
   cM.addEventListener('dblclick',e=>{const [x,y]=W2(e);if(inB(x,y))return;B.push({x:Math.round(x)-5,y:Math.round(y)-4,w:10,d:8,h:9});P.sel=B.length-1;refresh();calc();draw();});
+  // 자동 시연: 하루를 훑고, 몇 초마다 한 건물 높이가 바뀐다
+  const wave=(t,a,b,sp,ph)=>a+(b-a)*(1-Math.cos(t*sp+(ph||0)))/2, q=(v,st)=>Math.round(v/st)*st;
+  let dk=-1;const h0=B.map(b=>b.h);app.demo={step:t=>{P.t=8+8*((t*.11)%1);const k=Math.floor(t/5);if(k!==dk){dk=k;B.forEach((b,i)=>b.h=h0[i]);const b=B[k%B.length];if(b&&k%2)b.h=Math.min(60,Math.round(b.h*1.8));P.sel=k%B.length;calc();}draw();},stop:()=>refresh()};
   LabIO(app,{name:'sun-hours',state:()=>({P,B}),load:o=>{Object.assign(P,o.P||{});if(o.B)B=o.B;refresh();},redraw:()=>{calc();draw();},
     dxf:()=>B.map(b=>({layer:'BUILDING',pts:[[b.x,b.y],[b.x+b.w,b.y],[b.x+b.w,b.y+b.d],[b.x,b.y+b.d]],z:b.h}))});
   addEventListener('resize',draw); calc(); draw();
@@ -460,6 +467,9 @@ window.LabIO=function(app,o){
   cT.addEventListener('dblclick',e=>{const [x,y]=W2(e);const vi=poly.findIndex(p=>Math.hypot(p[0]-x,p[1]-y)*T.k<12);
     if(vi>=0){if(poly.length>3)poly.splice(vi,1);} else {let bi=-1,bd=1e9;poly.forEach((a,i)=>{const d=segD(x,y,a,poly[(i+1)%poly.length]);if(d<bd){bd=d;bi=i;}}); if(bd*T.k<14) poly.splice(bi+1,0,[Math.round(x*2)/2,Math.round(y*2)/2]);} search();draw();});
   cG.addEventListener('click',e=>{const r=cG.getBoundingClientRect(),i=Math.floor((e.clientX-r.left-GB.l)/GB.bw);if(i>=0&&i<best.res.length){curTh=best.res[i].th;draw();}});
+  // 자동 시연 (배치 탐색이 무거우니 값이 바뀔 때만 다시 계산)
+  const wave=(t,a,b,sp,ph)=>a+(b-a)*(1-Math.cos(t*sp+(ph||0)))/2, q=(v,st)=>Math.round(v/st)*st;
+  let dk='';app.demo={step:t=>{const k=Math.floor(t/2.4),aw=[6,5,5.5,6.5,7,6][k%6],sb=[1,0,.5,1.5,2,1][Math.floor(k/6)%6];const key=aw+'/'+sb;if(key===dk)return;dk=key;P.aw=aw;P.sb=sb;search();draw();},stop:()=>refresh()};
   LabIO(app,{name:'parking',poly:{get:()=>poly,set:v=>poly=v},state:()=>({P,poly}),load:o=>{Object.assign(P,o.P||{});if(o.poly)poly=o.poly;refresh();},redraw:()=>{search();draw();},
     dxf:()=>{const L=current(),c=Math.cos(L.th),s=Math.sin(L.th),G=(x,y)=>[x*c-y*s,x*s+y*c],E=[{layer:'SITE',pts:poly}];
       L.stalls.forEach(q=>E.push({layer:'STALL',pts:[G(q[0],q[1]),G(q[0]+q[2],q[1]),G(q[0]+q[2],q[1]+q[3]),G(q[0],q[1]+q[3])]}));
@@ -598,6 +608,9 @@ window.LabIO=function(app,o){
   let rx=null; cI.addEventListener('pointerdown',e=>{rx=e.clientX;cI.setPointerCapture(e.pointerId);});
   cI.addEventListener('pointermove',e=>{if(rx===null)return;P.yaw+=(e.clientX-rx)*.01;rx=e.clientX;drawIso(compute());});
   cI.addEventListener('pointerup',()=>rx=null);
+  // 자동 시연
+  const wave=(t,a,b,sp,ph)=>a+(b-a)*(1-Math.cos(t*sp+(ph||0)))/2, q=(v,st)=>Math.round(v/st)*st;
+  app.demo={step:t=>{P.ex=wave(t,0,5,.8);P.nf=Math.round(wave(t,2,5,.27,2));P.yaw=-0.7+0.4*Math.sin(t*.25);draw();},stop:()=>refresh()};
   LabIO(app,{name:'structural-frame',state:()=>({P,sx,sy}),load:o=>{Object.assign(P,o.P||{});if(o.sx)sx=o.sx;if(o.sy)sy=o.sy;refresh();},redraw:draw,
     dxf:()=>{const R=compute(),E=[],c=R.c/1000;
       R.X.forEach(x=>E.push({layer:'GRID',closed:false,pts:[[x,-2],[x,R.Ly+2]]}));R.Y.forEach(y=>E.push({layer:'GRID',closed:false,pts:[[-2,y],[R.Lx+2,y]]}));
@@ -731,15 +744,36 @@ window.LabIO=function(app,o){
   cP.addEventListener('pointermove',e=>{const [x,y]=loc(cP,e);if(!dP){cP.style.cursor=Math.hypot(x-SP.hx,y-SP.hy)<14?'ns-resize':'default';return;}
     const yy=(y-SP.oy)/SP.k; P.W=Math.max(60,Math.min(240,Math.round((P.type?(yy-10)/2:yy)/5)*5));draw();});
   cP.addEventListener('pointerup',()=>dP=false);
+  // 자동 시연
+  const wave=(t,a,b,sp,ph)=>a+(b-a)*(1-Math.cos(t*sp+(ph||0)))/2, q=(v,st)=>Math.round(v/st)*st;
+  app.demo={step:t=>{P.H=q(wave(t,2.7,5.2,.55),.05);P.W=q(wave(t,90,180,.21,1),5);P.type=Math.floor(t/9)%2;draw();},stop:()=>refresh()};
   LabIO(app,{name:'stair',state:()=>({P}),load:o=>{Object.assign(P,o.P||{});refresh();},redraw:draw});
   addEventListener('resize',draw); draw();
 })();
+
+// 카드 자동 시연: 보이는 카드만 매개변수가 혼자 움직이고, 누르면 멈추고 직접 조절
+(function(){var still=matchMedia('(prefers-reduced-motion:reduce)').matches,vis=new Set(),cards=[].slice.call(document.querySelectorAll('.acard.lab'));
+var io=new IntersectionObserver(function(es){es.forEach(function(e){e.isIntersecting?vis.add(e.target):vis.delete(e.target);});},{rootMargin:'80px'});
+cards.forEach(function(c){io.observe(c);var app=c.querySelector('.app'),h=c.querySelector('header'),b=document.createElement('button');b.type='button';b.className='dmo';h.insertBefore(b,h.querySelector('a'));c._t=0;
+ function set(m){c.dataset.mode=m;c.classList.toggle('live',m==='live');b.innerHTML=m==='live'?'<i>▶</i> 자동 재생':'<i></i> 자동 재생 중 · 눌러서 직접 조절';if(m==='live'&&app.demo)app.demo.stop();}
+ set(still||!app.demo?'live':'auto');
+ app.addEventListener('pointerdown',function(){if(c.dataset.mode==='auto')set('live');},true);
+ b.addEventListener('click',function(){set(c.dataset.mode==='live'?'auto':'live');});});
+if(still)return;var last=0;function loop(ts){requestAnimationFrame(loop);var dt=ts-last;if(dt<40)return;last=ts;dt=Math.min(dt,100)/1000;
+ cards.forEach(function(c){var a=c.querySelector('.app');if(c.dataset.mode!=='auto'||!vis.has(c)||!a.demo)return;c._t+=dt;a.demo.step(c._t);});}
+requestAnimationFrame(loop);})();
 </script>
 <footer>© 2026 한승현 Seunghyun Han</footer>
 </main>
 <div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>
 <script>
 
+// 표지 → About: 메뉴 자리에서 명함이 화면 가득 펼쳐진 뒤 이동
+(function(){var a=document.querySelector('.cvm a[href="about.html"]');if(!a||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+a.addEventListener('click',function(e){if(e.metaKey||e.ctrlKey||e.shiftKey)return;e.preventDefault();var r=a.getBoundingClientRect(),h=r.width*5/9,d=document.createElement('div');d.className='bfly';
+ d.style.cssText='left:'+r.left+'px;top:'+(r.top+r.height/2-h/2)+'px;width:'+r.width+'px;height:'+h+'px;transform:rotate(-6deg)';document.body.appendChild(d);
+ requestAnimationFrame(function(){requestAnimationFrame(function(){d.style.cssText='left:0;top:0;width:100vw;height:100vh;transform:none;box-shadow:none';});});
+ try{sessionStorage.setItem('bcfly','1');}catch(x){}setTimeout(function(){location.href=a.href;},620);});})();
 // 표지 기본 화면: 실시간 그림자. 기둥 필드가 서울의 지금 해 위치대로 그림자를 드리운다. 마우스 가로 = 하루의 시각.
 (function(){var cv=document.querySelector('.cv0 .topo');if(!cv)return;var g=cv.getContext('2d'),W,H,SP=34,poles=[],still=matchMedia('(prefers-reduced-motion:reduce)').matches,info=document.querySelector('.sunr');
 var LAT=37.57*Math.PI/180,LON=126.98,hov=null,cur=null;

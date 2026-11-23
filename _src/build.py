@@ -511,12 +511,59 @@ pre.code.ask .f{color:var(--mute)}
 .lin p{font-size:12px;color:var(--mute);padding:0 12px}.lin code{color:#e6e3da}
 .lin textarea{width:calc(100% - 24px);margin:8px 12px;background:#0c0d0b;color:#e6e3da;border:1px solid var(--line);font:12px/1.5 var(--mono);padding:8px}
 .lin div{display:flex;gap:8px;align-items:center;padding:0 12px 12px}.lin .up input{display:none}.lin .msg{font-size:12px;color:var(--mute)}
+@media (max-width:600px){header.top .name span,header.top nav a[href$="#contact"]{display:none}header.top nav a{margin-left:12px;font-size:13px}}
+/* About: 명함 */
+.cardpg{--bg:#1c1b19;--fg:#ece9e1;--mute:#8d887e;--line:#34322e;--paper:#f1efe8;--ink:#1d1c1a;--pm:#8a857b;--mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.cardpg header.top{background:var(--paper);backdrop-filter:none;color:var(--ink)}.cardpg header.top nav a{color:var(--pm)}.cardpg header.top nav a.on,.cardpg header.top nav a:hover{color:var(--ink)}.cardpg header.top .name span{color:var(--pm)}
+.cardpg main{padding:0}
+.cm{position:absolute;inset:14px;pointer-events:none;--c:var(--pm);background:linear-gradient(var(--c),var(--c)) 0 0/14px 1px,linear-gradient(var(--c),var(--c)) 0 0/1px 14px,linear-gradient(var(--c),var(--c)) 100% 0/14px 1px,linear-gradient(var(--c),var(--c)) 100% 0/1px 14px,linear-gradient(var(--c),var(--c)) 0 100%/14px 1px,linear-gradient(var(--c),var(--c)) 0 100%/1px 14px,linear-gradient(var(--c),var(--c)) 100% 100%/14px 1px,linear-gradient(var(--c),var(--c)) 100% 100%/1px 14px;background-repeat:no-repeat;opacity:.7}
+.bc{height:calc(100svh - 64px);min-height:520px;perspective:2200px;background:var(--bg)}
+.bcf{position:relative;height:100%;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.6,.05,.25,1);cursor:pointer;outline:none}
+.bcf.flip{transform:rotateY(180deg)}
+.bcs{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--paper);color:var(--ink);padding:clamp(32px,6vw,88px) clamp(28px,6vw,96px);display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 1fr auto;gap:20px}
+.bcs.back{transform:rotateY(180deg);grid-template-columns:1fr;grid-template-rows:auto;align-content:center;background:#e9e6dd}
+.bcs .t1{font:11px var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--pm)}
+.bcs .t2{text-align:right;font-size:14px;line-height:1.6;color:#4a4740}
+.bcs h1{grid-column:1/-1;align-self:center;font-size:clamp(72px,14vw,220px);font-weight:600;letter-spacing:-.05em;line-height:.9}
+.bcs h1 span{display:block;font-size:.2em;font-weight:400;letter-spacing:-.01em;color:#5d5951;margin:.6em 0 0 .3em}
+.bcs .seal{position:absolute;right:clamp(28px,6vw,96px);top:46%;width:64px;height:64px;border:2px solid #c8462e;color:#c8462e;display:grid;place-items:center;font:600 34px 'Noto Serif KR',serif;font-style:normal;border-radius:4px;transform:rotate(-4deg);opacity:.85}
+.bcs .ct{display:grid;grid-template-columns:auto 1fr;gap:2px 14px;font:13px var(--mono);align-self:end}.bcs .ct dt{color:var(--pm)}
+.bcs .sz{align-self:end;justify-self:end;font:10px var(--mono);letter-spacing:.12em;color:var(--pm)}
+.bcs.back .lead{font-size:clamp(20px,2.4vw,32px);line-height:1.6;max-width:30em;letter-spacing:-.01em}
+.bcs.back .int{font-size:15px;color:#4a4740}.bcs.back .int b{display:block;font:11px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--pm);font-weight:400;margin-bottom:6px}
+.bcs.back .sz{justify-self:start}
+.bcf>.cm{transform:translateZ(1px)}
+.flyin .bcs.front>*{animation:bcin .7s .05s both}@keyframes bcin{from{opacity:0;transform:translateY(10px)}}
+.bcg{max-width:1240px;margin:0 auto;padding:12vh clamp(16px,4vw,48px) 16vh;display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(18px,3vw,40px);align-items:start}
+.bct{position:relative;background:var(--paper);color:var(--ink);aspect-ratio:9/5;padding:clamp(22px,2.6vw,36px);display:flex;flex-direction:column;box-shadow:0 1px 0 #0000000d,0 24px 50px -24px #000c;transition:transform .4s}
+.bct:hover{transform:translateY(-4px) rotate(-.4deg)}
+.bct.tall{grid-row:span 2;aspect-ratio:auto;align-self:stretch}
+.bct header{display:flex;justify-content:space-between;gap:12px;font:10px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--pm);padding-bottom:22px}
+.bct .bci{font-size:14px;line-height:1.55}.bct table{border-collapse:collapse;width:100%}.bct td{padding:6px 0;vertical-align:top;border-top:1px solid #d9d5cc}.bct tr:first-child td{border-top:0}
+.bct td:first-child{font:12px var(--mono);color:var(--pm);width:36%;padding-right:12px}.bct td .r{color:var(--pm)}.bct a{color:inherit}
+.bct dl{display:grid;grid-template-columns:28px 1fr;gap:4px 10px;font:14px var(--mono)}.bct dt{color:var(--pm)}
+.bct.ph{padding:0;overflow:hidden}.bct.ph img{width:100%;height:100%;object-fit:cover;filter:grayscale(.3)}.bct.ph span{position:absolute;left:22px;bottom:18px;font:10px var(--mono);letter-spacing:.12em;color:#fff;text-shadow:0 1px 4px #000}
+.bct.ph .cm{--c:#fff}
+.bfly{position:fixed;z-index:99;background:#f1efe8;transition:all .65s cubic-bezier(.7,0,.2,1);box-shadow:0 30px 80px #000a}
+@media (max-width:860px){.bcg{grid-template-columns:1fr}.bct{aspect-ratio:auto;min-height:56vw}.bct.tall{grid-row:auto}.bcs{grid-template-columns:1fr}.bcs .t2{text-align:left}.bcs .seal{top:auto;bottom:42%;width:48px;height:48px;font-size:26px}}
 .acard .lio{display:none}
+.acard .dmo{margin-left:auto;background:none;border:0;padding:0;font:11px var(--mono);color:var(--mute);cursor:pointer;display:flex;align-items:center;gap:6px}.acard .dmo:hover{color:#e6e3da}
+.acard .dmo i{font-style:normal}.acard[data-mode=auto] .dmo i{width:6px;height:6px;border-radius:50%;background:#e0a15a;animation:dmo 1.4s ease-in-out infinite}
+@keyframes dmo{50%{opacity:.25}}.acard header .dmo+a{margin-left:14px}.acard[data-mode=auto] .app{cursor:pointer}
+.acard.live .lctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0 22px;margin:0 0 10px;padding:10px 0 0;border-top:1px solid #2c2e2a}
+.acard.live .lctl fieldset{margin:0 0 6px}.acard.live .lctl label{font-size:12px;grid-template-columns:96px 1fr 44px}.acard.live .lio{display:flex}
+
 @media (max-width:900px){.app .lio{grid-column:1}}
 """
 
 JS = r"""
 
+// 표지 → About: 메뉴 자리에서 명함이 화면 가득 펼쳐진 뒤 이동
+(function(){var a=document.querySelector('.cvm a[href="about.html"]');if(!a||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+a.addEventListener('click',function(e){if(e.metaKey||e.ctrlKey||e.shiftKey)return;e.preventDefault();var r=a.getBoundingClientRect(),h=r.width*5/9,d=document.createElement('div');d.className='bfly';
+ d.style.cssText='left:'+r.left+'px;top:'+(r.top+r.height/2-h/2)+'px;width:'+r.width+'px;height:'+h+'px;transform:rotate(-6deg)';document.body.appendChild(d);
+ requestAnimationFrame(function(){requestAnimationFrame(function(){d.style.cssText='left:0;top:0;width:100vw;height:100vh;transform:none;box-shadow:none';});});
+ try{sessionStorage.setItem('bcfly','1');}catch(x){}setTimeout(function(){location.href=a.href;},620);});})();
 // 표지 기본 화면: 실시간 그림자. 기둥 필드가 서울의 지금 해 위치대로 그림자를 드리운다. 마우스 가로 = 하루의 시각.
 (function(){var cv=document.querySelector('.cv0 .topo');if(!cv)return;var g=cv.getContext('2d'),W,H,SP=34,poles=[],still=matchMedia('(prefers-reduced-motion:reduce)').matches,info=document.querySelector('.sunr');
 var LAT=37.57*Math.PI/180,LON=126.98,hov=null,cur=null;
@@ -729,15 +776,26 @@ def tbl(rows):
 LINKS={'D5 Render Student Ambassador':'https://www.d5render.com/ko/d5-campus-ambassador'}
 lead = f'<p class="lead">{E(A["intro"])}</p>' if A.get('intro') else ''
 src, w, h = use(405)
-body = f'''<section class="about"><div><img src="{src}" width="{w}" height="{h}" alt="D5 Render 공개 강연"></div>
-<div><h1>{SITE["name_ko"]}<small>{SITE["name_en"]} · {SITE["school"]}</small></h1>{lead}
-{f'<h3>Areas of Interest</h3><p>{E(A["interests"])}</p>' if A.get("interests") else ''}<h3 id="contact">Contact</h3><table><tr><td>E-mail</td><td><a href="mailto:{SITE["email"]}">{SITE["email"]}</a></td></tr><tr><td>Phone</td><td><a href="tel:{SITE["phone"].replace('-','')}">{SITE["phone"]}</a></td></tr></table>
-<h3>Education</h3>{tbl(A["education"])}
-<h3>Experience</h3>{tbl(A["experience"])}
-<h3>Awards &amp; Activities</h3>{tbl(A["activities"])}
-<h3>Skills</h3><table>{"".join(f"<tr><td>{E(a)}</td><td>{E(b)}</td></tr>" for a,b in A["skills"])}</table>
-</div></section>'''
-open(f'{OUT}/about.html', 'w').write(page(f'About — {SITE["name_ko"]}', body, '', on='a'))
+def bc_tile(no, label, inner, extra='', idattr=''):
+    return f'<article class="bct{extra}"{idattr}><header><span>{no} / {label}</span><span>{SITE["name_ko"]} {SITE["name_en"]}</span></header><div class="bci">{inner}</div><i class="cm" aria-hidden="true"></i></article>'
+tiles = ''.join([
+  bc_tile('01','Contact',f'<dl><dt>E</dt><dd><a href="mailto:{SITE["email"]}">{SITE["email"]}</a></dd><dt>T</dt><dd><a href="tel:{SITE["phone"].replace("-","")}">{SITE["phone"]}</a></dd><dt>W</dt><dd><a href="index.html">coin9563-max.github.io</a></dd><dt>A</dt><dd>{SITE["school"]}</dd></dl>',idattr=' id="contact"'),
+  bc_tile('02','Education',tbl(A["education"])),
+  bc_tile('03','Experience',tbl(A["experience"])),
+  bc_tile('04','Awards &amp; Activities',tbl(A["activities"])),
+  bc_tile('05','Skills','<table>'+"".join(f"<tr><td>{E(a)}</td><td>{E(b)}</td></tr>" for a,b in A["skills"])+'</table>'),
+  f'<article class="bct ph"><img src="{src}" width="{w}" height="{h}" alt="D5 Render 공개 강연" loading="lazy"><i class="cm" aria-hidden="true"></i><span>D5 Render Student Ambassador · 공개 강연</span></article>',
+])
+body = f'''<section class="bc" aria-label="명함"><div class="bcf" tabindex="0" role="button" aria-label="명함 뒤집기">
+<div class="bcs front"><p class="t1">Portfolio 2021–2026</p><p class="t2">Architectural Designer<br>{SITE["school"]}</p>
+<h1>{SITE["name_ko"]}<span>{SITE["name_en"]}</span></h1><i class="seal" aria-hidden="true">韓</i>
+<dl class="ct"><dt>E</dt><dd>{SITE["email"]}</dd><dt>T</dt><dd>{SITE["phone"]}</dd><dt>W</dt><dd>coin9563-max.github.io</dd></dl><p class="sz">90 × 50 mm · 눌러서 뒤집기</p></div>
+<div class="bcs back"><p class="t1">About</p><p class="lead">{E(A.get("intro",""))}</p><p class="int"><b>Areas of Interest</b>{E(A.get("interests",""))}</p><p class="sz">↓ 아래로 이력 보기</p></div>
+<i class="cm" aria-hidden="true"></i></div></section>
+<section class="bcg">{tiles}</section>
+<script>(function(){{var f=document.querySelector('.bcf');function t(){{f.classList.toggle('flip');}}f.addEventListener('click',function(e){{if(e.target.closest('a'))return;t();}});f.addEventListener('keydown',function(e){{if(e.key==='Enter'||e.key===' '){{e.preventDefault();t();}}}});
+try{{if(sessionStorage.getItem('bcfly')){{sessionStorage.removeItem('bcfly');document.body.classList.add('flyin');}}}}catch(x){{}}}})();</script>'''
+open(f'{OUT}/about.html', 'w').write(page(f'About — {SITE["name_ko"]}', body, '', dark='cardpg', on='a', desc=A.get('intro','')))
 print('ok', len(os.listdir(OUT + '/img')), 'images')
 
 # ---- PUBLISH 플립북
@@ -804,7 +862,8 @@ def process_page():
         L.setdefault('stage', '00'); lab_page(k)
     cards = ''.join(f'''<article class="acard lab" id="lab-{k}"><header><b>{E(LABS[k]["en"])}</b><span>{E(LABS[k]["ko"])}</span><a href="lab/{k}.html" title="크게 열기 · 조절하기">↗</a></header><div class="app"></div></article>''' for k in CARDS)
     js = open(os.path.join(SRC, 'lab_ui.js')).read() + ''.join(open(os.path.join(SRC, LABS[k]['js'])).read() for k in CARDS)
+    DEMO = "\n// 카드 자동 시연: 보이는 카드만 매개변수가 혼자 움직이고, 누르면 멈추고 직접 조절\n(function(){var still=matchMedia('(prefers-reduced-motion:reduce)').matches,vis=new Set(),cards=[].slice.call(document.querySelectorAll('.acard.lab'));\nvar io=new IntersectionObserver(function(es){es.forEach(function(e){e.isIntersecting?vis.add(e.target):vis.delete(e.target);});},{rootMargin:'80px'});\ncards.forEach(function(c){io.observe(c);var app=c.querySelector('.app'),h=c.querySelector('header'),b=document.createElement('button');b.type='button';b.className='dmo';h.insertBefore(b,h.querySelector('a'));c._t=0;\n function set(m){c.dataset.mode=m;c.classList.toggle('live',m==='live');b.innerHTML=m==='live'?'<i>▶</i> 자동 재생':'<i></i> 자동 재생 중 · 눌러서 직접 조절';if(m==='live'&&app.demo)app.demo.stop();}\n set(still||!app.demo?'live':'auto');\n app.addEventListener('pointerdown',function(){if(c.dataset.mode==='auto')set('live');},true);\n b.addEventListener('click',function(){set(c.dataset.mode==='live'?'auto':'live');});});\nif(still)return;var last=0;function loop(ts){requestAnimationFrame(loop);var dt=ts-last;if(dt<40)return;last=ts;dt=Math.min(dt,100)/1000;\n cards.forEach(function(c){var a=c.querySelector('.app');if(c.dataset.mode!=='auto'||!vis.has(c)||!a.demo)return;c._t+=dt;a.demo.step(c._t);});}\nrequestAnimationFrame(loop);})();\n"
     body = f'''<section class="phd"><p class="k">LAB — 설계를 스킬로</p><h1>{E(P["title"])}<small>{E(P["sub"])}</small></h1><p class="lead">{E(P["lead"])}</p></section>
-<section class="agrid">{cards}</section><script>{js}</script>'''
+<section class="agrid">{cards}</section><script>{js}{DEMO}</script>'''
     open(f'{OUT}/process.html', 'w').write(page(f'Process — {SITE["name_ko"]}', body, '', dark='dark labpg', on='p', desc=P['lead']))
 process_page()

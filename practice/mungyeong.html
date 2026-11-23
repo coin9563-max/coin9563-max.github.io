@@ -21,6 +21,12 @@
 <div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>
 <script>
 
+// 표지 → About: 메뉴 자리에서 명함이 화면 가득 펼쳐진 뒤 이동
+(function(){var a=document.querySelector('.cvm a[href="about.html"]');if(!a||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+a.addEventListener('click',function(e){if(e.metaKey||e.ctrlKey||e.shiftKey)return;e.preventDefault();var r=a.getBoundingClientRect(),h=r.width*5/9,d=document.createElement('div');d.className='bfly';
+ d.style.cssText='left:'+r.left+'px;top:'+(r.top+r.height/2-h/2)+'px;width:'+r.width+'px;height:'+h+'px;transform:rotate(-6deg)';document.body.appendChild(d);
+ requestAnimationFrame(function(){requestAnimationFrame(function(){d.style.cssText='left:0;top:0;width:100vw;height:100vh;transform:none;box-shadow:none';});});
+ try{sessionStorage.setItem('bcfly','1');}catch(x){}setTimeout(function(){location.href=a.href;},620);});})();
 // 표지 기본 화면: 실시간 그림자. 기둥 필드가 서울의 지금 해 위치대로 그림자를 드리운다. 마우스 가로 = 하루의 시각.
 (function(){var cv=document.querySelector('.cv0 .topo');if(!cv)return;var g=cv.getContext('2d'),W,H,SP=34,poles=[],still=matchMedia('(prefers-reduced-motion:reduce)').matches,info=document.querySelector('.sunr');
 var LAT=37.57*Math.PI/180,LON=126.98,hov=null,cur=null;

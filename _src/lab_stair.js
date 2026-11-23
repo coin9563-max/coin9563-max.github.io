@@ -123,6 +123,9 @@
   cP.addEventListener('pointermove',e=>{const [x,y]=loc(cP,e);if(!dP){cP.style.cursor=Math.hypot(x-SP.hx,y-SP.hy)<14?'ns-resize':'default';return;}
     const yy=(y-SP.oy)/SP.k; P.W=Math.max(60,Math.min(240,Math.round((P.type?(yy-10)/2:yy)/5)*5));draw();});
   cP.addEventListener('pointerup',()=>dP=false);
+  // 자동 시연
+  const wave=(t,a,b,sp,ph)=>a+(b-a)*(1-Math.cos(t*sp+(ph||0)))/2, q=(v,st)=>Math.round(v/st)*st;
+  app.demo={step:t=>{P.H=q(wave(t,2.7,5.2,.55),.05);P.W=q(wave(t,90,180,.21,1),5);P.type=Math.floor(t/9)%2;draw();},stop:()=>refresh()};
   LabIO(app,{name:'stair',state:()=>({P}),load:o=>{Object.assign(P,o.P||{});refresh();},redraw:draw});
   addEventListener('resize',draw); draw();
 })();

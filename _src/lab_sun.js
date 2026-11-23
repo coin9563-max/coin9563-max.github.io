@@ -109,6 +109,9 @@
     P.step=30;calc();draw();});
   cM.addEventListener('pointerup',()=>{if(drag){drag=null;P.step=10;calc();draw();}});
   cM.addEventListener('dblclick',e=>{const [x,y]=W2(e);if(inB(x,y))return;B.push({x:Math.round(x)-5,y:Math.round(y)-4,w:10,d:8,h:9});P.sel=B.length-1;refresh();calc();draw();});
+  // 자동 시연: 하루를 훑고, 몇 초마다 한 건물 높이가 바뀐다
+  const wave=(t,a,b,sp,ph)=>a+(b-a)*(1-Math.cos(t*sp+(ph||0)))/2, q=(v,st)=>Math.round(v/st)*st;
+  let dk=-1;const h0=B.map(b=>b.h);app.demo={step:t=>{P.t=8+8*((t*.11)%1);const k=Math.floor(t/5);if(k!==dk){dk=k;B.forEach((b,i)=>b.h=h0[i]);const b=B[k%B.length];if(b&&k%2)b.h=Math.min(60,Math.round(b.h*1.8));P.sel=k%B.length;calc();}draw();},stop:()=>refresh()};
   LabIO(app,{name:'sun-hours',state:()=>({P,B}),load:o=>{Object.assign(P,o.P||{});if(o.B)B=o.B;refresh();},redraw:()=>{calc();draw();},
     dxf:()=>B.map(b=>({layer:'BUILDING',pts:[[b.x,b.y],[b.x+b.w,b.y],[b.x+b.w,b.y+b.d],[b.x,b.y+b.d]],z:b.h}))});
   addEventListener('resize',draw); calc(); draw();

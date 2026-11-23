@@ -9,7 +9,8 @@
     let tm=null;
     box.addEventListener('input',e=>{const i=e.target.dataset.k; if(i===undefined) return; const c=ctl[i], v=parseFloat(e.target.value); c.set(v);
       if(!c.opts) e.target.nextElementSibling.textContent=c.fmt?c.fmt(v):v; clearTimeout(tm); tm=setTimeout(onChange,40);});
-    return function(){box.querySelectorAll('[data-k]').forEach(el=>{const c=ctl[el.dataset.k];el.value=c.get();if(!c.opts)el.nextElementSibling.textContent=c.fmt?c.fmt(c.get()):c.get();});};
+    const dec=c=>{const s=String(c.step||1).split('.')[1];return s?s.length:0;};
+    return function(){box.querySelectorAll('[data-k]').forEach(el=>{const c=ctl[el.dataset.k];let v=c.get();if(!c.opts){v=+(+v).toFixed(dec(c));c.set(v);}el.value=v;if(!c.opts)el.nextElementSibling.textContent=c.fmt?c.fmt(v):v;});};
   };
   window.LabRng=function(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}};
 })();

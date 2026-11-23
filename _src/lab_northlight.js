@@ -132,6 +132,9 @@
   let rx=null; cI.addEventListener('pointerdown',e=>{rx=e.clientX;cI.setPointerCapture(e.pointerId);});
   cI.addEventListener('pointermove',e=>{if(rx===null)return;P.yaw+=(e.clientX-rx)*.01;rx=e.clientX;drawIso(compute());});
   cI.addEventListener('pointerup',()=>rx=null);
+  // 자동 시연
+  const wave=(t,a,b,sp,ph)=>a+(b-a)*(1-Math.cos(t*sp+(ph||0)))/2, q=(v,st)=>Math.round(v/st)*st;
+  app.demo={step:t=>{P.maxF=Math.round(wave(t,4,22,.5));P.sb=q(wave(t,0,3,.23,1),.5);P.yaw=-0.62+0.35*Math.sin(t*.18);draw();},stop:()=>refresh()};
   LabIO(app,{name:'northlight-envelope',poly:{get:()=>poly,set:v=>poly=v},state:()=>({P,poly}),load:o=>{Object.assign(P,o.P||{});if(o.poly)poly=o.poly;refresh();},redraw:draw,
     dxf:()=>{const R=compute(),E=[{layer:'SITE',pts:poly},{layer:'FOOTPRINT',pts:R.foot}];
       R.env.forEach((pl,i)=>E.push({layer:'ENVELOPE',pts:pl,z:(i+1)*P.fh}));
