@@ -763,6 +763,9 @@ LABS = {
   'stair': dict(no='04', cat='CIRCULATION', en='STAIR DESIGN', ko='계단 설계', t='계단 설계', js='lab_stair.js',
     d='층고를 끌면 단 수 · 단높이 · 디딤판 · 계단참이 다시 잡히고 용도별 법규 OK/NG가 나온다.',
     long='층고와 용도를 정하면 단높이를 목표값 이하로 맞춰 단 수를 정하고, 보행 공식(2R+T ≈ 63cm)으로 단너비를 잡는다. 3m마다 계단참, 용도별 단높이 · 단너비 · 폭 기준(피난·방화구조 규칙 제15조 등)을 함께 판정하고 계단실 크기를 낸다.'),
+  'parking': dict(no='05', cat='OPTIMIZATION', en='PARKING LAYOUT', ko='주차 배치', t='주차 배치', js='lab_parking.js',
+    d='대지 꼭짓점을 끌면 주차 모듈을 36개 각도로 깔아 보고 가장 많이 들어가는 배치와 법정 대수 충족 여부가 나온다.',
+    long='직각주차 모듈(구획 + 차로 + 구획)을 5° 간격 36개 각도, 오프셋, 세로 연결 차로 위치를 바꿔 가며 깔아 보고 가장 많이 들어가는 안을 고른다. 오른쪽 그래프는 각도별 최대 대수이고, 막대를 누르면 그 각도의 배치를 볼 수 있다. 용도별 시설면적으로 법정 대수와 비교한다.'),
 }
 STEPT = {}
 def lab_page(k):
@@ -771,7 +774,7 @@ def lab_page(k):
     body = head + L.get('body', '<div class="app"></div>') + '</section>'
     js = open(os.path.join(SRC, 'lab_ui.js')).read() + open(os.path.join(SRC, L['js'])).read()
     open(f'{OUT}/lab/{k}.html', 'w').write(page(f'LAB {L["no"]} {L["t"]} — {SITE["name_ko"]}', body + f'<script>{js}</script>', '../', dark='dark labpg', on='p', desc=L['d']))
-CARDS = ['northlight', 'frame', 'stair']
+CARDS = ['northlight', 'frame', 'stair', 'parking']
 def process_page():
     P = PROCESS
     os.makedirs(f'{OUT}/lab', exist_ok=True)

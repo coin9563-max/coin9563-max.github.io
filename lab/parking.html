@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LAB 05 주차 배치 — 한승현</title>
+<meta name="description" content="대지 꼭짓점을 끌면 주차 모듈을 36개 각도로 깔아 보고 가장 많이 들어가는 배치와 법정 대수 충족 여부가 나온다.">
+<meta property="og:title" content="LAB 05 주차 배치 — 한승현"><meta property="og:description" content="대지 꼭짓점을 끌면 주차 모듈을 36개 각도로 깔아 보고 가장 많이 들어가는 배치와 법정 대수 충족 여부가 나온다.">
+<link rel="stylesheet" href="../style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%231d1c1a%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22%23f6f5f2%22 font-family=%22sans-serif%22%3EH%3C/text%3E%3C/svg%3E">
+<meta property="og:image" content="https://coin9563-max.github.io/img/t_307.jpg">
+</head><body class="dark labpg">
+<header class="top"><a class="name" href="../index.html">한승현<span>Seunghyun Han</span></a>
+<nav><a href="../projects.html" class="">Projects</a><a href="../publish.html" class="">Publish</a><a href="../practice.html" class="">Practice</a><a href="../process.html" class="on">Process</a><a href="../about.html" class="">About</a><a href="../about.html#contact">Contact</a></nav></header>
+<main>
+<section class="lab" id="lab-parking"><div class="lh"><p class="k"><a href="../process.html">← AI와 설계하기</a> · LAB 05 · OPTIMIZATION</p><h3>주차 배치</h3><p>직각주차 모듈(구획 + 차로 + 구획)을 5° 간격 36개 각도, 오프셋, 세로 연결 차로 위치를 바꿔 가며 깔아 보고 가장 많이 들어가는 안을 고른다. 오른쪽 그래프는 각도별 최대 대수이고, 막대를 누르면 그 각도의 배치를 볼 수 있다. 용도별 시설면적으로 법정 대수와 비교한다.</p></div><div class="app"></div></section><script>// 실험 앱 공통: 슬라이더 패널 만들기 + 임베드(모달) 모드
+(function(){
+  if(/[?&]embed/.test(location.search)) document.documentElement.classList.add('embed');
+  window.LabUI=function(box,ctl,onChange){
+    const groups={}; ctl.forEach((c,i)=>{c.i=i;(groups[c.g]=groups[c.g]||[]).push(c);});
+    box.innerHTML=Object.entries(groups).map(([g,cs])=>`<fieldset><legend>${g}</legend>${cs.map(c=>c.opts
+      ?`<label><span>${c.k}</span><select data-k="${c.i}">${c.opts.map((o,j)=>`<option value="${j}" ${j==c.get()?'selected':''}>${o}</option>`).join('')}</select><output></output></label>`
+      :`<label><span>${c.k}</span><input type="range" min="${c.min}" max="${c.max}" step="${c.step}" value="${c.get()}" data-k="${c.i}"><output>${c.fmt?c.fmt(c.get()):c.get()}</output></label>`).join('')}</fieldset>`).join('');
+    let tm=null;
+    box.addEventListener('input',e=>{const i=e.target.dataset.k; if(i===undefined) return; const c=ctl[i], v=parseFloat(e.target.value); c.set(v);
+      if(!c.opts) e.target.nextElementSibling.textContent=c.fmt?c.fmt(v):v; clearTimeout(tm); tm=setTimeout(onChange,40);});
+  };
+  window.LabRng=function(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}};
+})();
+// 공통 그리기 도구 (어두운 도면 시트)
+window.LD={INK:'#e6e3da',DIM:'#8a8a80',FAINT:'#3a3a35',BG:'#151513',RED:'#ff6b4a',BLUE:'#4da3ff',GREEN:'#9fd36b',MONO:'"JetBrains Mono",ui-monospace,monospace',
+  fit:function(cv){var r=cv.getBoundingClientRect(),d=devicePixelRatio||1;cv.width=r.width*d;cv.height=r.height*d;var g=cv.getContext('2d');g.setTransform(d,0,0,d,0,0);g.lineJoin='round';g.fillStyle='#151513';g.fillRect(0,0,r.width,r.height);return [g,r.width,r.height];},
+  path:function(g,p,close){g.beginPath();p.forEach(function(v,i){i?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1]);});if(close!==false)g.closePath();},
+  text:function(g,s,x,y,o){o=o||{};g.font=(o.w||'')+' '+(o.size||10)+'px '+LD.MONO;g.fillStyle=o.c||LD.DIM;g.textAlign=o.a||'left';g.fillText(s,x,y);},
+  dim:function(g,x1,y1,x2,y2,label,off,c){c=c||LD.BLUE;var dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy)||1,nx=-dy/L*off,ny=dx/L*off;g.strokeStyle=c;g.lineWidth=.7;g.beginPath();
+    g.moveTo(x1,y1);g.lineTo(x1+nx*1.15,y1+ny*1.15);g.moveTo(x2,y2);g.lineTo(x2+nx*1.15,y2+ny*1.15);g.moveTo(x1+nx,y1+ny);g.lineTo(x2+nx,y2+ny);g.stroke();
+    var mx=(x1+x2)/2+nx*1.6,my=(y1+y2)/2+ny*1.6;g.save();g.translate(mx,my);var a=Math.atan2(dy,dx);if(a>Math.PI/2||a<-Math.PI/2)a+=Math.PI;g.rotate(a);LD.text(g,label,0,3,{c:c,a:'center'});g.restore();},
+  stats:function(el,rows,hi,note){el.innerHTML=rows.map(function(r,i){return '<div class="'+(hi&&hi.indexOf(i)>=0?'hi':'')+(r[2]==='ng'?' ng':'')+'"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>';}).join('')+(note?'<p class="note">'+note+'</p>':'');}
+};
+// LAB 05 — 주차 배치
+// 대지 꼭짓점을 끌면, 주차 모듈(구획 5.0 + 차로 6.0 + 구획 5.0)을 여러 각도 · 오프셋 · 연결 차로 위치로 깔아 보고
+// 가장 많이 들어가는 안을 고른다. 법정 주차대수(용도별 시설면적당 1대)와 비교한다.
+(function(){
+  const root=document.getElementById('lab-parking'); if(!root) return;
+  const USE=[{n:'업무시설',a:150},{n:'근린생활시설',a:134},{n:'판매시설',a:150},{n:'숙박시설',a:200}];
+  const P={sw:2.5,sl:5.0,aw:6.0,use:0,gfa:4000,sb:1.0};
+  let poly=[[4,6],[52,2],[57,34],[30,44],[6,36]];
+  let best=null;
+  const app=root.querySelector('.app');
+  app.innerHTML=`<div class="lctl"></div>
+  <div class="nlv"><div class="cv sheet"><canvas class="top"></canvas><p class="hint">꼭짓점 드래그 · 변 더블클릭 = 점 추가 · 점 더블클릭 = 삭제</p></div>
+  <div class="cv sheet"><canvas class="gr"></canvas><p class="hint">각도별 최대 대수 (탐색 결과) · 막대를 누르면 그 각도로</p></div></div><div class="nls"></div>`;
+  const cT=app.querySelector('.top'), cG=app.querySelector('.gr'), out=app.querySelector('.nls');
+  LabUI(app.querySelector('.lctl'),[
+    {g:'주차',k:'구획 폭 m',min:2.3,max:2.6,step:.1,get:()=>P.sw,set:v=>P.sw=v},
+    {g:'주차',k:'구획 길이 m',min:5,max:5.2,step:.1,get:()=>P.sl,set:v=>P.sl=v},
+    {g:'주차',k:'차로 폭 m',min:5,max:7,step:.5,get:()=>P.aw,set:v=>P.aw=v},
+    {g:'주차',k:'경계 이격 m',min:0,max:3,step:.5,get:()=>P.sb,set:v=>P.sb=v},
+    {g:'법정 대수',k:'용도',opts:USE.map(u=>u.n),get:()=>P.use,set:v=>P.use=v},
+    {g:'법정 대수',k:'시설면적 ㎡',min:500,max:20000,step:100,get:()=>P.gfa,set:v=>P.gfa=v},
+  ],()=>{search();draw();});
+
+  const area=p=>Math.abs(p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a[0]*b[1]-b[0]*a[1];},0))/2;
+  function inside(x,y,p){let c=false;for(let i=0,j=p.length-1;i<p.length;j=i++){const[a,b]=p[i],[d,e]=p[j];if((b>y)!==(e>y)&&x<(d-a)*(y-b)/(e-b)+a)c=!c;}return c;}
+  const segD=(x,y,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy)));return Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy);};
+  const edgeD=(x,y,p)=>{let m=1e9;for(let i=0;i<p.length;i++)m=Math.min(m,segD(x,y,p[i],p[(i+1)%p.length]));return m;};
+  const ok=(x,y,p)=>inside(x,y,p)&&edgeD(x,y,p)>=P.sb-1e-9;
+
+  // 한 각도 · 오프셋 · 연결 차로 위치에서 배치
+  function layout(th,oy,cx){
+    const c=Math.cos(th),s=Math.sin(th);
+    const lp=poly.map(([x,y])=>[x*c+y*s,-x*s+y*c]); // 지역 좌표 (차로가 가로)
+    const xs=lp.map(p=>p[0]),ys=lp.map(p=>p[1]),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+    const M=P.sl*2+P.aw, stalls=[], aisles=[];
+    const rectOK=(a,b,w,h)=>ok(a,b,lp)&&ok(a+w,b,lp)&&ok(a,b+h,lp)&&ok(a+w,b+h,lp)&&ok(a+w/2,b+h/2,lp);
+    const conX=x0+cx;
+    for(let y=y0+oy-M;y<y1;y+=M){
+      const ay=y+P.sl; // 차로 시작
+      // 차로: 지나갈 수 있는 구간
+      let segs=[],cur=null;
+      for(let x=x0;x<=x1;x+=1){const g=rectOK(x,ay,1,P.aw);if(g){if(!cur)cur=[x,x+1];else cur[1]=x+1;}else if(cur){segs.push(cur);cur=null;}}
+      if(cur)segs.push(cur);
+      segs=segs.filter(s=>s[1]-s[0]>=P.sw*3);
+      segs.forEach(sg=>{aisles.push([sg[0],ay,sg[1]-sg[0],P.aw]);
+        for(const row of [[y,0],[ay+P.aw,1]]){
+          for(let x=sg[0];x+P.sw<=sg[1]+1e-9;x+=P.sw){
+            if(x+P.sw>conX&&x<conX+P.aw) continue; // 연결 차로 자리
+            if(rectOK(x,row[0],P.sw,P.sl)) stalls.push([x,row[0],P.sw,P.sl,row[1]]);
+          }}});
+    }
+    // 연결 차로 (세로)
+    let con=null; {const ys2=aisles.map(a=>a[1]);if(ys2.length>1){const ya=Math.min(...ys2),yb=Math.max(...ys2)+P.aw;con=[conX,ya,P.aw,yb-ya];}}
+    return {th,stalls,aisles,con,n:stalls.length};
+  }
+  let curTh=null;
+  function search(){
+    const res=[]; let top=null;
+    for(let d=0;d<180;d+=5){const th=d*Math.PI/180; let bt=null;
+      for(let oy=0;oy<P.sl*2+P.aw;oy+=2) for(let cx=2;cx<62;cx+=10){const r=layout(th,oy,cx); if(!bt||r.n>bt.n) bt=r;}
+      res.push(bt); if(!top||bt.n>top.n) top=bt;}
+    best={res,top}; curTh=top.th;
+  }
+  function current(){ return best.res.find(r=>Math.abs(r.th-curTh)<1e-6)||best.top; }
+
+  let T=null;
+  function drawTop(){
+    const [g,W,H]=LD.fit(cT), L=current();
+    const xs=poly.map(p=>p[0]),ys=poly.map(p=>p[1]),x0=Math.min(...xs)-4,y0=Math.min(...ys)-4,w=Math.max(...xs)-x0+4,h=Math.max(...ys)-y0+4;
+    const k=Math.min(W/w,(H-24)/h); T={k,ox:(W-w*k)/2-x0*k,oy:(H-24-h*k)/2-y0*k};
+    const c=Math.cos(L.th),s=Math.sin(L.th), G=(x,y)=>{const wx=x*c-y*s,wy=x*s+y*c;return [T.ox+wx*k,T.oy+wy*k];};
+    const R=(x,y,w2,h2)=>[G(x,y),G(x+w2,y),G(x+w2,y+h2),G(x,y+h2)];
+    LD.path(g,poly.map(p=>[T.ox+p[0]*k,T.oy+p[1]*k]));g.fillStyle='rgba(255,255,255,.025)';g.fill();
+    // 차로
+    g.fillStyle='rgba(224,161,90,.10)';
+    L.aisles.concat(L.con?[L.con]:[]).forEach(a=>{LD.path(g,R(...a));g.fill();});
+    g.strokeStyle='rgba(224,161,90,.75)';g.setLineDash([6,4]);g.lineWidth=.8;
+    L.aisles.forEach(a=>{LD.path(g,[G(a[0],a[1]+a[3]/2),G(a[0]+a[2],a[1]+a[3]/2)],false);g.stroke();});
+    if(L.con){const a=L.con;LD.path(g,[G(a[0]+a[2]/2,a[1]),G(a[0]+a[2]/2,a[1]+a[3])],false);g.stroke();} g.setLineDash([]);
+    // 구획 (장애인 구획: 연결 차로에 가까운 앞쪽 몇 칸)
+    const need=Math.max(1,Math.ceil(L.n*0.03));
+    const acc=new Set(L.con?L.stalls.map((q,i)=>[i,Math.abs(q[0]+q[2]/2-(L.con[0]+L.con[2]/2))+Math.abs(q[1]-L.con[1])*0.2]).sort((a,b)=>a[1]-b[1]).slice(0,need).map(a=>a[0]):[]);
+    L.stalls.forEach((q,i)=>{LD.path(g,R(...q.slice(0,4)));if(acc.has(i)){g.fillStyle='rgba(77,163,255,.25)';g.fill();g.strokeStyle=LD.BLUE;}else g.strokeStyle=LD.INK;g.lineWidth=.8;g.stroke();});
+    LD.path(g,poly.map(p=>[T.ox+p[0]*k,T.oy+p[1]*k]));g.strokeStyle=LD.INK;g.lineWidth=1.6;g.stroke();
+    poly.forEach((a,i)=>{const b=poly[(i+1)%poly.length];LD.text(g,Math.hypot(b[0]-a[0],b[1]-a[1]).toFixed(1)+'m',T.ox+(a[0]+b[0])/2*k,T.oy+(a[1]+b[1])/2*k-6,{a:'center'});});
+    poly.forEach(p=>{g.beginPath();g.arc(T.ox+p[0]*k,T.oy+p[1]*k,5,0,7);g.fillStyle=LD.BG;g.fill();g.strokeStyle=LD.BLUE;g.lineWidth=2;g.stroke();});
+    LD.text(g,`${L.n}대 · 장애인 ${need}대 · 각도 ${Math.round(L.th*180/Math.PI)}°`,12,18,{c:LD.INK,size:11});
+    LD.text(g,'□ 일반  ■ 장애인  --- 차로',12,H-8);
+  }
+  let GB=null;
+  function drawGraph(){
+    const [g,W,H]=LD.fit(cG), res=best.res, mx=Math.max(1,...res.map(r=>r.n));
+    const l=40,r=14,t=34,b=34, bw=(W-l-r)/res.length; GB={l,bw,t,b,H};
+    g.strokeStyle=LD.FAINT;g.lineWidth=.6;for(let i=0;i<=4;i++){const y=t+(H-t-b)*i/4;g.beginPath();g.moveTo(l,y);g.lineTo(W-r,y);g.stroke();LD.text(g,Math.round(mx*(1-i/4)),l-6,y+3,{a:'right'});}
+    res.forEach((q,i)=>{const h=(H-t-b)*q.n/mx, on=Math.abs(q.th-curTh)<1e-6, top=q===best.top;
+      g.fillStyle=on?LD.RED:top?LD.GREEN:'#4a4a44';g.fillRect(l+i*bw+1,H-b-h,bw-2,h);
+      if(i%6===0)LD.text(g,(i*5)+'°',l+i*bw+bw/2,H-b+14,{a:'center'});});
+    LD.text(g,`최대 ${best.top.n}대 @ ${Math.round(best.top.th*180/Math.PI)}° · 각도 36 × 오프셋 × 연결 차로 위치 탐색`,12,18,{c:LD.INK,size:11});
+    LD.text(g,'■ 선택  ■ 최대',W-120,H-8);
+  }
+  function stats(){
+    const L=current(), U=USE[P.use], need=Math.ceil(P.gfa/U.a), site=area(poly), pa=L.n?site/L.n:0;
+    LD.stats(out,[['대지면적',Math.round(site).toLocaleString()+' ㎡'],['배치 대수',L.n+'대'],['장애인 구획 (3%)',Math.max(1,Math.ceil(L.n*0.03))+'대'],['대당 면적',pa.toFixed(1)+' ㎡'],
+      ['법정 대수',`${need}대 (${U.n} ${U.a}㎡당 1대)`],['충족',L.n>=need?'OK':'부족 '+(need-L.n)+'대',L.n>=need?'':'ng'],['탐색 최대',best.top.n+'대 @ '+Math.round(best.top.th*180/Math.PI)+'°'],['구획 · 차로',`${P.sw}×${P.sl} · ${P.aw}m`]],
+      [1,5],'직각주차 모듈(구획+차로+구획)을 5° 간격 36개 각도, 오프셋, 세로 연결 차로 위치를 바꿔 가며 깔고 가장 많이 들어가는 안을 고른다. 법정 대수는 지자체 조례마다 달라 대표값을 썼고, 램프 · 기계식 · 출입구 위치는 반영하지 않았다.');
+  }
+  function draw(){drawTop();drawGraph();stats();}
+
+  const W2=e=>{const r=cT.getBoundingClientRect();return [(e.clientX-r.left-T.ox)/T.k,(e.clientY-r.top-T.oy)/T.k];};
+  let drag=-1;
+  cT.addEventListener('pointerdown',e=>{const [x,y]=W2(e);drag=poly.findIndex(p=>Math.hypot(p[0]-x,p[1]-y)*T.k<12);if(drag>=0)cT.setPointerCapture(e.pointerId);});
+  cT.addEventListener('pointermove',e=>{if(drag<0)return;const [x,y]=W2(e);poly[drag]=[Math.round(x*2)/2,Math.round(y*2)/2];
+    // 드래그 중에는 현재 각도만 다시 계산
+    let bt=null;for(let oy=0;oy<P.sl*2+P.aw;oy+=2)for(let cx=2;cx<62;cx+=10){const r=layout(curTh,oy,cx);if(!bt||r.n>bt.n)bt=r;}
+    const i=best.res.findIndex(r=>Math.abs(r.th-curTh)<1e-6); best.res[i]=bt; drawTop(); stats();});
+  cT.addEventListener('pointerup',()=>{if(drag>=0){drag=-1;search();draw();}});
+  cT.addEventListener('dblclick',e=>{const [x,y]=W2(e);const vi=poly.findIndex(p=>Math.hypot(p[0]-x,p[1]-y)*T.k<12);
+    if(vi>=0){if(poly.length>3)poly.splice(vi,1);} else {let bi=-1,bd=1e9;poly.forEach((a,i)=>{const d=segD(x,y,a,poly[(i+1)%poly.length]);if(d<bd){bd=d;bi=i;}}); if(bd*T.k<14) poly.splice(bi+1,0,[Math.round(x*2)/2,Math.round(y*2)/2]);} search();draw();});
+  cG.addEventListener('click',e=>{const r=cG.getBoundingClientRect(),i=Math.floor((e.clientX-r.left-GB.l)/GB.bw);if(i>=0&&i<best.res.length){curTh=best.res[i].th;draw();}});
+  addEventListener('resize',draw); search(); draw();
+})();
+</script>
+<footer>© 2026 한승현 Seunghyun Han</footer>
+</main>
+<div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>
+<script>
+
+// 표지 기본 화면: 흐르는 지형 등고선 (3D value noise + marching squares), 마우스 = 언덕
+(function(){var cv=document.querySelector('.cv0 .topo');if(!cv)return;var g=cv.getContext('2d'),W,H,S=11,nx,ny,F,mx=-1e4,my=-1e4,tx=-1e4,ty=-1e4,t=Math.random()*100,still=matchMedia('(prefers-reduced-motion:reduce)').matches;
+var P=new Uint8Array(512);for(var i=0;i<256;i++)P[i]=i;for(i=255;i>0;i--){var j=Math.floor(Math.random()*(i+1)),x=P[i];P[i]=P[j];P[j]=x;}for(i=0;i<256;i++)P[i+256]=P[i];
+function h(x,y,z){return P[P[P[x&255]+(y&255)]+(z&255)]/255;}function sm(a){return a*a*(3-2*a);}
+function n3(x,y,z){var X=Math.floor(x),Y=Math.floor(y),Z=Math.floor(z),u=sm(x-X),v=sm(y-Y),w=sm(z-Z);function L(a,b,k){return a+(b-a)*k;}
+return L(L(L(h(X,Y,Z),h(X+1,Y,Z),u),L(h(X,Y+1,Z),h(X+1,Y+1,Z),u),v),L(L(h(X,Y,Z+1),h(X+1,Y,Z+1),u),L(h(X,Y+1,Z+1),h(X+1,Y+1,Z+1),u),v),w);}
+function size(){var r=cv.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0);nx=Math.ceil(W/S)+1;ny=Math.ceil(H/S)+1;F=new Float32Array(nx*ny);}
+function field(){var sc=1/260;for(var j=0;j<ny;j++)for(var i=0;i<nx;i++){var x=i*S,y=j*S,e=n3(x*sc,y*sc,t)*.62+n3(x*sc*2.1,y*sc*2.1,t*1.3+7)*.28+n3(x*sc*4.3,y*sc*4.3,t*1.7+3)*.1;
+var dx=x-mx,dy=y-my;e+=.34*Math.exp(-(dx*dx+dy*dy)/(2*170*170));F[j*nx+i]=e;}}
+function draw(){g.clearRect(0,0,W,H);var N=22;for(var k=1;k<N;k++){var lv=.12+k*.045;g.beginPath();
+for(var j=0;j<ny-1;j++)for(var i=0;i<nx-1;i++){var a=F[j*nx+i],b=F[j*nx+i+1],c=F[(j+1)*nx+i+1],d=F[(j+1)*nx+i],cs=(a>lv?8:0)|(b>lv?4:0)|(c>lv?2:0)|(d>lv?1:0);if(cs===0||cs===15)continue;
+var x=i*S,y=j*S,T=[x+S*(lv-a)/(b-a),y],R=[x+S,y+S*(lv-b)/(c-b)],B=[x+S*(lv-d)/(c-d),y+S],Lf=[x,y+S*(lv-a)/(d-a)],sg;
+switch(cs){case 1:case 14:sg=[Lf,B];break;case 2:case 13:sg=[B,R];break;case 3:case 12:sg=[Lf,R];break;case 4:case 11:sg=[T,R];break;case 6:case 9:sg=[T,B];break;case 7:case 8:sg=[Lf,T];break;case 5:sg=[Lf,T,B,R];break;case 10:sg=[Lf,B,T,R];break;}
+for(var q=0;q<sg.length;q+=2){g.moveTo(sg[q][0],sg[q][1]);g.lineTo(sg[q+1][0],sg[q+1][1]);}}
+g.strokeStyle=k%5===0?'rgba(239,237,230,.42)':'rgba(239,237,230,.13)';g.lineWidth=k%5===0?1:.7;g.stroke();}}
+var last=0;function loop(ts){requestAnimationFrame(loop);if(ts-last<40)return;last=ts;t+=.0022;mx+=(tx-mx)*.08;my+=(ty-my)*.08;field();draw();}
+addEventListener('resize',function(){size();field();draw();});
+cv.parentNode.addEventListener('mousemove',function(e){var r=cv.getBoundingClientRect();tx=e.clientX-r.left;ty=e.clientY-r.top;if(mx<-1e3){mx=tx;my=ty;}});
+cv.parentNode.addEventListener('mouseleave',function(){tx=ty=-1e4;});
+size();field();draw();if(!still)requestAnimationFrame(loop);})();
+(function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a');
+a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
+m.addEventListener('mouseleave',function(){bg.forEach(function(b){b.classList.remove('on')});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});});})();
+(function(){var pv=document.querySelector('.lpv');if(!pv)return;document.querySelectorAll('.lr.f').forEach(function(r){
+r.addEventListener('mouseenter',function(){pv.src=r.dataset.img;pv.classList.add('on');});r.addEventListener('mouseleave',function(){pv.classList.remove('on');});
+r.addEventListener('mousemove',function(e){pv.style.transform='translate('+(e.clientX+28)+'px,'+(e.clientY-120)+'px)';});});})();
+(function(){var st=document.querySelector('.stg');if(!st)return;var sl=st.querySelectorAll('.sl'),li=document.querySelectorAll('.ixl li');
+li.forEach(function(l){l.addEventListener('mouseenter',function(){var i=+l.dataset.i;sl.forEach(function(x,k){x.classList.toggle('on',k===i)});li.forEach(function(o){o.classList.toggle('on',o===l)});});});})();
+
+const lb=document.getElementById('lb'),li=lb.querySelector('img'),lc=lb.querySelector('.c');let L=[],ix=0;
+function show(i){ix=(i+L.length)%L.length;li.src=L[ix].src;const f=L[ix].closest('figure').querySelector('figcaption');lc.textContent=(f?f.textContent:'')+'  '+(ix+1)+' / '+L.length;}
+document.addEventListener('click',e=>{
+ if(e.target.closest('#lb button')){show(ix+(e.target.classList.contains('n')?1:-1));return}
+ if(e.target.closest('#lb')){lb.classList.remove('on');return}
+ const im=e.target.closest('figure img');if(im){L=[...document.querySelectorAll('figure img')];show(L.indexOf(im));lb.classList.add('on')}});
+document.addEventListener('keydown',e=>{if(!lb.classList.contains('on'))return;if(e.key==='Escape')lb.classList.remove('on');if(e.key==='ArrowRight')show(ix+1);if(e.key==='ArrowLeft')show(ix-1)});
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.blk,.txt,.work').forEach(el=>{el.classList.add('fade');io.observe(el)})}
+</script>
+</body></html>
