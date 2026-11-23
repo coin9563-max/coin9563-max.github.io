@@ -137,6 +137,7 @@ main>footer{padding-left:0}
 .plist .t{font-weight:600}
 .plist .k{color:var(--mute);font-size:14px}
 .card .im img{transition:transform .5s ease}a.card:hover .im img{transform:scale(1.03)}
+.phead dd a,.about td a{text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}.phead dd a:hover,.about td a:hover{color:var(--acc)}
 .bookpg{height:100vh;height:100dvh;overflow:hidden;background:#141412;user-select:none;-webkit-user-select:none}
 .bookpg header.top{background:transparent;backdrop-filter:none;align-items:center}
 .bookpg .bt{font-size:14px;font-weight:600}.bookpg .bt em{font-style:normal;font-weight:400;color:var(--mute);margin-left:.6em}
@@ -280,7 +281,7 @@ open(f'{OUT}/index.html', 'w').write(page(f'{SITE["name_ko"]} — Portfolio', bo
 # ---- projects / practice detail pages
 def detail(p, prv, nxt, folder, back):
     r = '../'
-    meta = ''.join(f'<dt>{E(a)}</dt><dd>{E(b)}</dd>' for a, b in p['meta'])
+    meta = ''.join(f'<dt>{E(a)}</dt><dd>' + (f'<a href="{E(b)}" target="_blank" rel="noopener">{E(b.split("//")[-1].rstrip("/"))} ↗</a>' if b.startswith('http') else E(b)) + '</dd>' for a, b in p['meta'])
     en = f'<p class="en">{E(p["intro_en"])}</p>' if p.get('intro_en') else ''
     sub = f'<small>{E(p["sub"])}</small>' if p.get('sub') else ''
     hero = block(('video', p['hero_video']), r).replace('class="blk vid"', 'class="hero"') if p.get('hero_video') else f'<div class="hero">{pic(p["hero"], r, alt=p["title"])}</div>'
@@ -306,7 +307,9 @@ for n, p in enumerate(FEAT):
 # ---- about
 A = ABOUT
 def tbl(rows):
-    return '<table>' + ''.join(f'<tr><td>{E(a)}</td><td>{E(b)}' + (f' <span class="r">· {E(c)}</span>' if c else '') + '</td></tr>' for a, b, c in rows) + '</table>'
+    def nm(b): return f'<a href="{E(LINKS[b])}" target="_blank" rel="noopener">{E(b)} ↗</a>' if b in LINKS else E(b)
+    return '<table>' + ''.join(f'<tr><td>{E(a)}</td><td>{nm(b)}' + (f' <span class="r">· {E(c)}</span>' if c else '') + '</td></tr>' for a, b, c in rows) + '</table>'
+LINKS={'D5 Render Student Ambassador':'https://www.d5render.com/ko/d5-campus-ambassador'}
 lead = f'<p class="lead">{E(A["intro"])}</p>' if A.get('intro') else ''
 src, w, h = use(405)
 body = f'''<section class="about"><div><img src="{src}" width="{w}" height="{h}" alt="D5 Render 공개 강연"></div>

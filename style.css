@@ -98,6 +98,7 @@ main>footer{padding-left:0}
 .plist .t{font-weight:600}
 .plist .k{color:var(--mute);font-size:14px}
 .card .im img{transition:transform .5s ease}a.card:hover .im img{transform:scale(1.03)}
+.phead dd a,.about td a{text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}.phead dd a:hover,.about td a:hover{color:var(--acc)}
 .bookpg{height:100vh;height:100dvh;overflow:hidden;background:#141412;user-select:none;-webkit-user-select:none}
 .bookpg header.top{background:transparent;backdrop-filter:none;align-items:center}
 .bookpg .bt{font-size:14px;font-weight:600}.bookpg .bt em{font-style:normal;font-weight:400;color:var(--mute);margin-left:.6em}

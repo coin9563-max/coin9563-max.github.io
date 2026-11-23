@@ -249,7 +249,7 @@ PRACTICE = [
   dict(title='JAdU', org='정림 디지털 아카데미 유닛 JAdU 2기', role='수료 · 프로젝트 우수상', kind='', year='2025', hide_in_list=True),
   dict(slug='d5-seminar', title='D5 Render 세미나', sub='D5 Render Student Ambassador', kind='공개 강연 · 홍익대학교', year='2025',
     org='D5 Render Student Ambassador', role='공개 강연 · 홍익대학교', hero='d5_photo0', thumb='d5_photo0',
-    meta=[('Role','D5 Render Student Ambassador · 강연자'),('Year','2025'),('Place','홍익대학교'),('Format','3회차 세미나 + 보강 강의(Advanced Brush)')],
+    meta=[('Role','D5 Render Student Ambassador · 강연자'),('Year','2025'),('Place','홍익대학교'),('Format','3회차 세미나 + 보강 강의(Advanced Brush)'),('Link','https://www.d5render.com/ko/d5-campus-ambassador')],
     statement='학생들에게 D5 Render로 공간을 그리는 법을 나눴다',
     intro=['D5 Render Student Ambassador로 홍익대학교에서 세 차례 세미나를 진행했다. 회차마다 하나의 장면을 함께 만들며 재질, 빛, 식재, 분위기를 다루었다. 아래는 세미나에서 시연하고 과제로 함께 만든 장면들이다.'],
     blocks=[
