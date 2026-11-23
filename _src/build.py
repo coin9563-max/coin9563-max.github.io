@@ -399,6 +399,19 @@ pre.code.ask .f{color:var(--mute)}
 .labs .ln{font-family:var(--mono);font-size:12px;color:#b6d36b;padding-top:3px}
 .labs b{font-weight:500}.labs em{grid-column:2;font-style:normal;font-size:13px;color:var(--mute)}
 .labs i{grid-row:1;grid-column:3;font-style:normal;color:#b6d36b}
+
+.embed header.top,.embed footer{display:none}.embed .labpg,.embed body{background:#0c0d0b}.embed .lab{margin:0;border:0;box-shadow:none}.embed main{padding:0}
+.app{display:grid;grid-template-columns:240px 1fr;gap:28px;margin-top:26px}
+.app .lctl select{width:100%;background:#1c2117;color:inherit;border:1px solid var(--line);padding:3px}
+.nlv{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cv canvas{width:100%;height:420px;display:block;background:#121311;border:1px solid var(--line);touch-action:none}
+.cv .iso{cursor:grab}.cv .top{cursor:crosshair}
+.hint{font-family:var(--mono);font-size:11px;color:var(--mute);margin-top:6px}
+.nls{grid-column:2;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.nls div{background:#0c0d0b;padding:10px 12px}.nls span{display:block;font-size:12px;color:var(--mute)}.nls b{font-family:var(--mono);font-weight:500;font-size:15px}
+.nls .hi b{color:#b6d36b}
+.nls .note{grid-column:1/-1;background:#0c0d0b;padding:10px 12px;font-size:13px;color:var(--mute)}
+@media (max-width:900px){.app{grid-template-columns:1fr}.nlv{grid-template-columns:1fr}.nls{grid-column:1;grid-template-columns:1fr 1fr}.cv canvas{height:320px}}
 """
 
 JS = r"""
@@ -583,14 +596,30 @@ for it in PUBLISH:
 </body></html>""")
 
 # ---- Process page
-LABS = {'plan': dict(no='01', t='평면 대안 생성기', d='실 6개의 면적 · 채광 · 인접 조건에 가중치를 주고, 평면 대안 수백 개 중 기준을 넘으면서 서로 다른 안만 골라낸다.')}
-LABJS = {'plan': open(os.path.join(os.path.dirname(__file__), 'lab_plan.js')).read()}
-LABHTML = {'plan': '''<section class="lab" id="lab-plan"><div class="lh"><p class="k"><a href="../process.html#exp-05">← EXP–05 평면 구성</a> · LAB 01</p><h3>평면 대안 생성기</h3>
-<p>실 6개를 대지에 나눠 넣는 평면을 수백 개 만들고, 형태 · 채광(남쪽) · 인접 · 현관(북쪽) 점수에 가중치를 곱해 합산한다. 기준 점수를 넘으면서 서로 충분히 다른 안만 위에 남는다.</p></div>
-<div class="lbody"><div class="lctl"></div><div class="lout"><p class="lsum"></p><div class="lhist"></div><div class="lpick"></div><p class="k">점수순 상위 96개 · 흐린 칸은 기준 미달, 테두리는 선택된 안</p><div class="lgrid"></div></div></div></section>'''}
+SRC = os.path.dirname(__file__)
+LABS = {
+  'plan': dict(no='01', cat='PLANNING', t='평면 대안 생성기', js='lab_plan.js',
+    d='실 6개의 면적 · 채광 · 인접 조건에 가중치를 주고, 평면 대안 수백 개 중 기준을 넘으면서 서로 다른 안만 골라낸다.',
+    long='실 6개를 대지에 나눠 넣는 평면을 수백 개 만들고, 형태 · 채광(남쪽) · 인접 · 현관(북쪽) 점수에 가중치를 곱해 합산한다. 기준 점수를 넘으면서 서로 충분히 다른 안만 위에 남는다.',
+    body='<div class="lbody"><div class="lctl"></div><div class="lout"><p class="lsum"></p><div class="lhist"></div><div class="lpick"></div><p class="k">점수순 상위 96개 · 흐린 칸은 기준 미달, 테두리는 선택된 안</p><div class="lgrid"></div></div></div>'),
+  'northlight': dict(no='02', cat='REGULATION', t='정북 일조사선 매스', js='lab_northlight.js',
+    d='대지 꼭짓점을 끌면 정북 일조사선 · 대지안의 공지 · 건폐율 · 용적률로 허용 볼륨과 실제 가능한 연면적이 바로 나온다.',
+    long='전용 · 일반주거지역에서는 정북 방향 경계로부터 높이 10m까지는 1.5m, 그 위로는 높이의 절반만큼 떨어져야 한다(건축법 시행령 제86조). 대지 모양을 직접 그리면 이 사선과 건폐율 · 용적률을 함께 걸어, 어느 법규가 연면적을 결정하는지 보여 준다. 도로 사선 · 높이 제한 완화 등은 반영하지 않은 스터디용 계산이다.'),
+}
+STEPT = {}
+def lab_page(k):
+    L = LABS[k]; st = L['stage']
+    head = f'<section class="lab" id="lab-{k}"><div class="lh"><p class="k"><a href="../process.html#exp-{st}">← EXP–{st} {E(STEPT.get(st, ""))}</a> · LAB {L["no"]} · {L["cat"]}</p><h3>{E(L["t"])}</h3><p>{E(L["long"])}</p></div>'
+    body = head + L.get('body', '<div class="app"></div>') + '</section>'
+    js = open(os.path.join(SRC, 'lab_ui.js')).read() + open(os.path.join(SRC, L['js'])).read()
+    open(f'{OUT}/lab/{k}.html', 'w').write(page(f'LAB {L["no"]} {L["t"]} — {SITE["name_ko"]}', body + f'<script>{js}</script>', '../', dark='dark labpg', on='p', desc=L['d']))
 def process_page():
     P = PROCESS
     out, js = [], []
+    for st in P['steps']:
+        if not st.get('note'):
+            STEPT[st['no']] = st['t']
+            for k in ([st['lab']] if isinstance(st.get('lab'), str) else st.get('lab') or []): LABS[k]['stage'] = st['no']
     for st in P['steps']:
         if st.get('note'):
             flow = '<ol class="flow">' + ''.join(f'<li><b>{E(a)}</b><span>{E(b)}</span></li>' for a, b in st['flow']) + '</ol>' if st.get('flow') else ''
@@ -608,7 +637,7 @@ def process_page():
             for k in labs:
                 L = LABS[k]
                 items += f'<li><a href="lab/{k}.html"><span class="ln">LAB {L["no"]}</span><b>{E(L["t"])}</b><em>{E(L["d"])}</em><i>→</i></a></li>'
-                open(f'{OUT}/lab/{k}.html', 'w').write(page(f'LAB {L["no"]} {L["t"]} — {SITE["name_ko"]}', LABHTML[k] + f'<script>{LABJS[k]}</script>', '../', dark='dark labpg', on='p', desc=L['d']))
+                lab_page(k)
             out[-1] = out[-1].replace('</div></section>', f'<details class="labs"><summary>실험 {len(labs)}개 보기</summary><ul>{items}</ul></details></div></section>')
     nlab = sum(1 for x in P['steps'] if x.get('lab')); nexp = sum(1 for x in P['steps'] if not x.get('note'))
     body = f'''<section class="phd"><p class="k">LAB — 설계 프로세스 실험 노트</p><p class="log">EXP {nexp:02d} · RUNNING {nlab:02d} · UPDATED 2026.11.24</p><h1>{E(P["title"])}<small>{E(P["sub"])}</small></h1><p class="lead">{E(P["lead"])}</p></section>{"".join(out)}'''
