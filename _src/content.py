@@ -253,7 +253,7 @@ PRACTICE = [
   dict(title='JAdU', org='정림 디지털 아카데미 유닛 JAdU 2기', role='수료 · 프로젝트 우수상', kind='', year='2025', hide_in_list=True),
   dict(slug='d5-seminar', title='D5 Render 세미나', sub='D5 Render Student Ambassador', kind='공개 강연 · 홍익대학교', year='2025',
     org='D5 Render Student Ambassador', role='공개 강연 · 홍익대학교', hero='d5_photo0', thumb='d5_photo0',
-    meta=[('Role','D5 Render Student Ambassador · 강연자'),('Year','2025'),('Place','홍익대학교'),('Format','3회차 세미나 — 실내 · 외부 · 디지털 마켓')],
+    meta=[('Role','D5 Render Student Ambassador · 강연자'),('Year','2025'),('Place','홍익대학교'),('Format','3회차 세미나 — 실내 · 외부 · Digital Maquette')],
     statement='학생들에게 D5 Render로 공간을 그리는 법을 나눴다',
     intro=['D5 Render Student Ambassador로 홍익대학교에서 세 차례 세미나를 진행했다. 회차마다 하나의 장면을 함께 만들며 재질, 빛, 식재, 분위기를 다루었다. 아래는 세미나에서 시연하고 과제로 함께 만든 장면들이다.'],
     blocks=[
@@ -264,7 +264,7 @@ PRACTICE = [
       ('text','과제 — 외부 장면','같은 매스를 계절과 시간대를 바꾸어 렌더링한다.',''),
       ('pair',['d5_06','d5_07'],''),
       ('pair',['d5_08','d5_09'],''),
-      ('text','Digital Maquette','모형 사진처럼 보이는 디지털 마켓 표현.',''),
+      ('text','Digital Maquette','실제 모형을 찍은 사진처럼 보이게 만드는 디지털 마케트 표현.',''),
       ('pair',['d5_10','d5_11'],''),
       ('img','d5_photo1','D5 3차 세미나'),
     ]),
