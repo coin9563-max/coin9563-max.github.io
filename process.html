@@ -2,8 +2,8 @@
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Process — 한승현</title>
-<meta name="description" content="설계는 조사에서 시작해 매스, 평면, 구조, 도면, 발표로 이어진다. 단계마다 반복과 계산은 AI에 맡기고, 판단에 쓰는 시간을 늘리는 방법을 정리했다. 기존 방식과 AI를 넣은 방식을 나란히 놓고, 일부 단계는 직접 조절해 볼 수 있는 실험을 붙였다.">
-<meta property="og:title" content="Process — 한승현"><meta property="og:description" content="설계는 조사에서 시작해 매스, 평면, 구조, 도면, 발표로 이어진다. 단계마다 반복과 계산은 AI에 맡기고, 판단에 쓰는 시간을 늘리는 방법을 정리했다. 기존 방식과 AI를 넣은 방식을 나란히 놓고, 일부 단계는 직접 조절해 볼 수 있는 실험을 붙였다.">
+<meta name="description" content="법규, 구조, 배치처럼 설계에서 반복되는 판단을 하나씩 떼어 AI와 함께 작은 도구로 만든다. 카드마다 직접 끌어서 조작할 수 있고, ↗를 누르면 조건을 바꿔 볼 수 있는 큰 화면이 열린다.">
+<meta property="og:title" content="Process — 한승현"><meta property="og:description" content="법규, 구조, 배치처럼 설계에서 반복되는 판단을 하나씩 떼어 AI와 함께 작은 도구로 만든다. 카드마다 직접 끌어서 조작할 수 있고, ↗를 누르면 조건을 바꿔 볼 수 있는 큰 화면이 열린다.">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%231d1c1a%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22%23f6f5f2%22 font-family=%22sans-serif%22%3EH%3C/text%3E%3C/svg%3E">
 <meta property="og:image" content="https://coin9563-max.github.io/img/t_307.jpg">
@@ -11,38 +11,291 @@
 <header class="top"><a class="name" href="index.html">한승현<span>Seunghyun Han</span></a>
 <nav><a href="index.html#projects" class="">Projects</a><a href="index.html#publish">Publish</a><a href="index.html#practice">Practice</a><a href="process.html" class="on">Process</a><a href="about.html" class="">About</a><a href="index.html#contact">Contact</a></nav></header>
 <main>
-<section class="phd"><p class="k">LAB — 설계 프로세스 실험 노트</p><p class="log">EXP 08 · RUNNING 02 · UPDATED 2026.11.24</p><h1>AI와 설계하기<small>Design Process × AI — 단계마다 무엇을 맡기고, 무엇을 붙잡는가</small></h1><p class="lead">설계는 조사에서 시작해 매스, 평면, 구조, 도면, 발표로 이어진다. 단계마다 반복과 계산은 AI에 맡기고, 판단에 쓰는 시간을 늘리는 방법을 정리했다. 기존 방식과 AI를 넣은 방식을 나란히 놓고, 일부 단계는 직접 조절해 볼 수 있는 실험을 붙였다.</p></section><section class="pstep" id="exp-01"><div class="ph"><span class="no">EXP–01</span><span class="st ">○ 실험 준비 중</span><h2>권역 · 자료 조사<small>Research</small></h2></div>
-<div class="pb"><div class="cmp"><div><h4>기존</h4><p>검색과 답사로 자료를 모으고, 기사와 논문을 하나씩 읽어 엑셀로 정리한다. 공공데이터는 내려받아 손으로 가공한다.</p></div><div class="ai"><h4>AI와 함께</h4><p>조사 질문부터 나눈다(인구, 교통, 용도지역, 역사, 사례). AI에게 출처가 달린 요약을 받고, 공공데이터 CSV는 AI가 짜 준 코드로 바로 차트와 지도로 만든다. 폴더나 브라우저를 MCP로 연결하면 AI가 자료를 직접 읽어 표로 정리한다.</p></div></div>
-<p class="hm"><b>사람의 몫</b> 출처를 확인하는 일, 그리고 조사에서 무엇이 문제인지 정의하는 일.</p><pre class="code ask"><span class="f">예시 요청</span>대상지 반경 1km의 연령별 인구, 대중교통 노선, 용도지역을 조사해 줘.
-항목마다 출처 링크를 달고, 확실하지 않은 건 따로 표시해.
-마지막에 이 지역의 문제 세 가지를 근거와 함께 정리해 줘.</pre></div></section><section class="pstep" id="exp-02"><div class="ph"><span class="no">EXP–02</span><span class="st ">○ 실험 준비 중</span><h2>대지 분석<small>Site analysis</small></h2></div>
-<div class="pb"><div class="cmp"><div><h4>기존</h4><p>지형도를 캐드로 따고 등고선을 올려 모형을 만든다. 일조와 조망은 손으로 그려 본다.</p></div><div class="ai"><h4>AI와 함께</h4><p>수치지형도나 DEM을 Grasshopper 지형 메시로 바꾸고, 경사 · 일조 시간 · 조망 분석 컴포넌트를 AI에게 받아 히트맵으로 본다. 조건이 바뀌어도 다시 돌리면 된다.</p></div></div>
-<p class="hm"><b>사람의 몫</b> 어떤 조건을 볼지, 분석 결과 중 무엇을 설계 근거로 삼을지.</p><pre class="code ask"><span class="f">예시 요청</span>Grasshopper Python 3 컴포넌트를 만들어 줘.
-입력: 지형 Mesh, 태양 벡터 리스트, 격자 간격(m)
-출력: 격자점, 점별 일조 시간, 색 입힌 Mesh
-코드 맨 위에 입력 · 출력 설명과 버전을 적어 줘.</pre></div></section><section class="pstep" id="exp-03"><div class="ph"><span class="no">EXP–03</span><span class="st ">○ 실험 준비 중</span><h2>프로그램 · 면적<small>Program</small></h2></div>
-<div class="pb"><div class="cmp"><div><h4>기존</h4><p>사례를 찾아 면적표를 엑셀로 만들고, 버블 다이어그램을 손으로 여러 번 그린다.</p></div><div class="ai"><h4>AI와 함께</h4><p>사례 면적 비율로 면적표 초안을 받고, 실 사이 인접 관계를 표로 적으면 버블 다이어그램이 자동으로 배치된다. 면적이나 관계를 바꾸면 다이어그램이 바로 다시 그려진다.</p></div></div>
-<p class="hm"><b>사람의 몫</b> 어떤 실이 붙어야 하는지에 대한 판단. 표의 숫자는 그 판단의 기록이다.</p><pre class="code ask"><span class="f">예시 요청</span>주민센터 연면적 1,200㎡ 기준으로 실별 면적표 초안을 만들어 줘.
-비슷한 사례 2~3개의 비율을 근거로 들고,
-실 사이 인접 필요도(필수 · 권장 · 무관)를 표로 같이 줘.</pre></div></section><section class="pstep" id="exp-04"><div class="ph"><span class="no">EXP–04</span><span class="st on">● 실험 가동</span><h2>기초 매스<small>Massing</small></h2></div>
-<div class="pb"><div class="cmp"><div><h4>기존</h4><p>대안 서너 개를 모델링해 크리틱에서 고른다.</p></div><div class="ai"><h4>AI와 함께</h4><p>용적률, 높이 제한, 일조 사선 같은 규칙을 파라미터로 만들고, 시드를 바꿔 매스 수십~수백 개를 뽑는다. 각 매스에 면적 · 일조 · 외피 면적 같은 지표 점수를 매겨 정렬한다.</p></div></div>
-<p class="hm"><b>사람의 몫</b> 점수 기준을 정하는 일, 그리고 점수가 놓친 좋은 안을 알아보는 눈.</p><pre class="code ask"><span class="f">예시 요청</span>대지 경계 Curve, 용적률, 최고 높이, 층고를 입력으로
-매스 대안을 seed별로 만드는 컴포넌트를 짜 줘.
-대안마다 연면적, 외피 면적, 남향 입면 비율을 출력해서 점수로 비교할 수 있게.</pre><details class="labs"><summary>실험 1개 보기</summary><ul><li><a href="lab/northlight.html"><span class="ln">LAB 02</span><b>정북 일조사선 매스</b><em>대지 꼭짓점을 끌면 정북 일조사선 · 대지안의 공지 · 건폐율 · 용적률로 허용 볼륨과 실제 가능한 연면적이 바로 나온다.</em><i>→</i></a></li></ul></details></div></section><aside class="pnote"><h3>도구 노트 — 코드를 받아 Grasshopper로</h3><ol class="flow"><li><b>말로 정의</b><span>입력 · 출력 · 규칙</span></li><li><b>AI</b><span>Python 3 코드</span></li><li><b>Grasshopper</b><span>붙여넣고 슬라이더 연결</span></li><li><b>확인</b><span>캡처 · 출력값</span></li><li><b>다시 요청</b><span>버전 올려 수정</span></li></ol><ul><li>입력과 출력을 먼저 적는다. 이름, 자료형, 단위, 기본값까지.</li><li>한 컴포넌트는 한 가지 일만 한다. 커지면 합치는 컴포넌트를 따로 만든다.</li><li>결과가 이상하면 화면 캡처와 출력값을 그대로 붙여 고쳐 달라고 한다. 버전과 변경점은 코드 맨 위에 남긴다.</li><li>Rhino 8 Script 에디터의 Python 3 컴포넌트에 붙여넣으면 플러그인 없이 바로 쓸 수 있다.</li></ul></aside><section class="pstep" id="exp-05"><div class="ph"><span class="no">EXP–05</span><span class="st on">● 실험 가동</span><h2>평면 구성<small>Plan layouts</small></h2></div>
-<div class="pb"><div class="cmp"><div><h4>기존</h4><p>동선과 실 배치를 스케치로 여러 번 바꿔 보고, 마음에 드는 안을 고른다.</p></div><div class="ai"><h4>AI와 함께</h4><p>실별 면적, 채광 요구, 인접 관계를 데이터로 넣고 가중치를 준다. 평면 대안을 수백 개 뽑아 점수를 매기고, 기준 점수를 넘으면서 서로 충분히 다른 안만 골라낸다. 아래 실험 목록에서 직접 돌려볼 수 있다.</p></div></div>
-<p class="hm"><b>사람의 몫</b> 가중치를 정하는 일. 채광을 얼마나 중요하게 볼지는 설계자의 태도다.</p><pre class="code ask"><span class="f">예시 요청</span>실 6개(이름, 면적, 채광 요구도)와 필수 인접 쌍을 입력으로
-평면 대안 N개를 만들고 형태 · 채광 · 인접 점수를 매겨 줘.
-기준 점수 이상이면서 서로 다른 안만 골라 보여 줘.</pre><details class="labs"><summary>실험 1개 보기</summary><ul><li><a href="lab/plan.html"><span class="ln">LAB 01</span><b>평면 대안 생성기</b><em>실 6개의 면적 · 채광 · 인접 조건에 가중치를 주고, 평면 대안 수백 개 중 기준을 넘으면서 서로 다른 안만 골라낸다.</em><i>→</i></a></li></ul></details></div></section><section class="pstep" id="exp-06"><div class="ph"><span class="no">EXP–06</span><span class="st ">○ 실험 준비 중</span><h2>구조 · 재료<small>Structure &amp; material</small></h2></div>
-<div class="pb"><div class="cmp"><div><h4>기존</h4><p>부재를 하나씩 그리고, 물량은 따로 세어 표로 만든다.</p></div><div class="ai"><h4>AI와 함께</h4><p>그리드, 기둥, 보, 패널을 규칙으로 생성하는 컴포넌트를 받는다. 부재 길이와 개수 같은 물량은 같은 정의에서 자동으로 뽑는다. 셸이나 막처럼 형태를 찾아야 하는 구조는 간단한 시뮬레이션 코드로 실험한다.</p></div></div>
-<p class="hm"><b>사람의 몫</b> 재료가 실제로 어떻게 만들어지고 쌓이는지에 대한 이해.</p><pre class="code ask"><span class="f">예시 요청</span>곡면 Surface를 입력으로 u, v 분할 수에 따라 격자 부재를 만들고
-부재 길이별 개수표를 출력하는 컴포넌트를 짜 줘.
-길이는 50mm 단위로 묶어서.</pre></div></section><aside class="pnote"><h3>도구 노트 — MCP로 AI와 프로그램 잇기</h3><ul><li>MCP는 AI가 다른 프로그램을 직접 다루게 해 주는 연결 방식이다. 코드를 복사해 붙여넣는 대신 AI가 도구를 직접 실행한다.</li><li>폴더 연결: 도면, 면적표, 조사 자료를 AI가 직접 읽고 정리한다.</li><li>브라우저 연결: 자료 조사와 사이트 확인을 AI가 직접 한다.</li><li>Rhino 연결: 오브젝트 생성, 레이어 정리, 반복 모델링을 말로 지시한다.</li></ul></aside><section class="pstep" id="exp-07"><div class="ph"><span class="no">EXP–07</span><span class="st ">○ 실험 준비 중</span><h2>도면 · 표현<small>Drawings</small></h2></div>
-<div class="pb"><div class="cmp"><div><h4>기존</h4><p>캐드 도면을 일러스트레이터에서 하나씩 꾸민다. 피드백이 오면 처음부터 다시 한다.</p></div><div class="ai"><h4>AI와 함께</h4><p>선 두께, 해치, 레이어 규칙을 스크립트로 만들어 도면 전체에 한 번에 적용한다. 피드백이 오면 규칙만 고쳐 다시 그린다. 렌더 전에는 이미지 생성으로 분위기를 빠르게 스터디한다.</p></div></div>
-<p class="hm"><b>사람의 몫</b> &quot;이 선이 너무 강하다&quot; 같은 눈의 판단. 규칙은 그 판단을 반복하는 도구다.</p><pre class="code ask"><span class="f">예시 요청</span>이 DWG에서 레이어 이름별로 선 두께와 색을 정리하는 규칙표를 만들고,
-절단된 벽 레이어만 골라 포셰로 채우는 스크립트를 짜 줘.</pre></div></section><section class="pstep" id="exp-08"><div class="ph"><span class="no">EXP–08</span><span class="st ">○ 실험 준비 중</span><h2>정리 · 발표<small>Presentation</small></h2></div>
-<div class="pb"><div class="cmp"><div><h4>기존</h4><p>패널과 PPT를 손으로 배치하고, 설명글은 마감 직전에 쓴다.</p></div><div class="ai"><h4>AI와 함께</h4><p>설명글을 다듬고, 다이어그램을 코드로 그리고, 포트폴리오와 웹사이트를 만든다. 이 웹사이트도 같은 방식으로 만들었다.</p></div></div>
-<p class="hm"><b>사람의 몫</b> 무엇을 보여 주고 무엇을 뺄지.</p><pre class="code ask"><span class="f">예시 요청</span>이 프로젝트 설명을 300자로 줄여 줘.
-과장된 표현은 빼고, 대지 · 문제 · 해법 순서로.</pre></div></section>
+<section class="phd"><p class="k">LAB — 설계를 스킬로</p><h1>AI와 설계하기<small>Architecture as skills — 설계 판단을 작은 도구로</small></h1><p class="lead">법규, 구조, 배치처럼 설계에서 반복되는 판단을 하나씩 떼어 AI와 함께 작은 도구로 만든다. 카드마다 직접 끌어서 조작할 수 있고, ↗를 누르면 조건을 바꿔 볼 수 있는 큰 화면이 열린다.</p></section>
+<section class="agrid"><article class="acard lab" id="lab-northlight"><header><b>NORTH SETBACK ENVELOPE</b><span>정북 일조사선 매스</span><a href="lab/northlight.html" title="크게 열기 · 조절하기">↗</a></header><div class="app"></div></article><article class="acard lab" id="lab-frame"><header><b>STRUCTURAL GRID → FRAME</b><span>구조 그리드 · 골조</span><a href="lab/frame.html" title="크게 열기 · 조절하기">↗</a></header><div class="app"></div></article></section><script>// 실험 앱 공통: 슬라이더 패널 만들기 + 임베드(모달) 모드
+(function(){
+  if(/[?&]embed/.test(location.search)) document.documentElement.classList.add('embed');
+  window.LabUI=function(box,ctl,onChange){
+    const groups={}; ctl.forEach((c,i)=>{c.i=i;(groups[c.g]=groups[c.g]||[]).push(c);});
+    box.innerHTML=Object.entries(groups).map(([g,cs])=>`<fieldset><legend>${g}</legend>${cs.map(c=>c.opts
+      ?`<label><span>${c.k}</span><select data-k="${c.i}">${c.opts.map((o,j)=>`<option value="${j}" ${j==c.get()?'selected':''}>${o}</option>`).join('')}</select><output></output></label>`
+      :`<label><span>${c.k}</span><input type="range" min="${c.min}" max="${c.max}" step="${c.step}" value="${c.get()}" data-k="${c.i}"><output>${c.fmt?c.fmt(c.get()):c.get()}</output></label>`).join('')}</fieldset>`).join('');
+    let tm=null;
+    box.addEventListener('input',e=>{const i=e.target.dataset.k; if(i===undefined) return; const c=ctl[i], v=parseFloat(e.target.value); c.set(v);
+      if(!c.opts) e.target.nextElementSibling.textContent=c.fmt?c.fmt(v):v; clearTimeout(tm); tm=setTimeout(onChange,40);});
+  };
+  window.LabRng=function(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}};
+})();
+// LAB 02 — 정북 일조사선 매스
+// 대지 꼭짓점을 끌면 정북 일조사선(건축법 시행령 제86조, 전용·일반주거지역) · 대지안의 공지 · 건폐율 · 용적률을
+// 함께 걸어 층별 바닥판을 다각형으로 계산한다.
+//   높이 10m 이하 부분: 정북 경계에서 1.5m 이상 / 10m 초과 부분: 그 높이의 1/2 이상
+// 층 f의 허용 영역 = 대지 ∩ (대지를 남쪽으로 r만큼 민 것) ∩ (대지를 공지만큼 안으로 줄인 것)
+(function(){
+  const root=document.getElementById('lab-northlight'); if(!root) return;
+  const P={fh:3.3, maxF:15, bcr:60, far:250, sb:1.0, yaw:-0.62};
+  let poly=[[3,8],[31,2],[36,26],[8,31]];
+  const app=root.querySelector('.app');
+  app.innerHTML=`<div class="lctl"></div>
+  <div class="nlv"><div class="cv sheet"><canvas class="top"></canvas><p class="hint">꼭짓점 드래그 · 변 더블클릭 = 점 추가 · 점 더블클릭 = 삭제</p></div>
+  <div class="cv sheet"><canvas class="iso"></canvas><p class="hint">드래그 = 회전</p></div></div>
+  <div class="nls"></div>`;
+  const cT=app.querySelector('.top'), cI=app.querySelector('.iso'), out=app.querySelector('.nls');
+  LabUI(app.querySelector('.lctl'),[
+    {g:'법규',k:'건폐율 %',min:20,max:80,step:5,get:()=>P.bcr,set:v=>P.bcr=v},
+    {g:'법규',k:'용적률 %',min:100,max:500,step:10,get:()=>P.far,set:v=>P.far=v},
+    {g:'법규',k:'대지안의 공지 m',min:0,max:3,step:.5,get:()=>P.sb,set:v=>P.sb=v},
+    {g:'건물',k:'층고 m',min:2.8,max:4.5,step:.1,get:()=>P.fh,set:v=>P.fh=v},
+    {g:'건물',k:'최고 층수',min:3,max:25,step:1,get:()=>P.maxF,set:v=>P.maxF=v},
+  ],draw);
+
+  // ---------- 다각형 연산
+  const area=p=>p.length<3?0:Math.abs(p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a[0]*b[1]-b[0]*a[1];},0))/2;
+  const sgn=p=>p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a[0]*b[1]-b[0]*a[1];},0)>0?1:-1;
+  function clipHalf(sub,a,b,off,s){ // 변 a→b의 안쪽 반평면, off만큼 더 안으로
+    const dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy);
+    const nx=-dy/L*s, ny=dx/L*s;
+    const f=p=>(p[0]-a[0])*nx+(p[1]-a[1])*ny-off, out=[];
+    for(let i=0;i<sub.length;i++){const P1=sub[i],P2=sub[(i+1)%sub.length],f1=f(P1),f2=f(P2);
+      if(f1>=0) out.push(P1); if((f1>=0)!==(f2>=0)){const t=f1/(f1-f2); out.push([P1[0]+t*(P2[0]-P1[0]),P1[1]+t*(P2[1]-P1[1])]);}}
+    return out;
+  }
+  function clipPoly(sub,clip,off){const s=sgn(clip);for(let i=0;i<clip.length&&sub.length;i++) sub=clipHalf(sub,clip[i],clip[(i+1)%clip.length],off,s); return sub;}
+  function clipY(sub,yc){const out=[];for(let i=0;i<sub.length;i++){const a=sub[i],b=sub[(i+1)%sub.length],fa=a[1]-yc,fb=b[1]-yc;
+    if(fa>=0)out.push(a); if((fa>=0)!==(fb>=0)){const t=fa/(fa-fb);out.push([a[0]+t*(b[0]-a[0]),yc]);}} return out;}
+  const req=h=>h<=10?1.5:h/2;
+  function plate(f){ // f층 윗면 높이(f*fh)에서의 허용 바닥판
+    const r=req(f*P.fh), sh=poly.map(p=>[p[0],p[1]+r]);
+    return clipPoly(clipPoly(poly.map(p=>p.slice()),sh,0),poly,P.sb);
+  }
+
+  // ---------- 계산
+  function compute(){
+    const site=area(poly), legalFoot=site*P.bcr/100, legalGFA=site*P.far/100, env=[];
+    for(let f=1;f<=P.maxF;f++){const pl=plate(f); if(area(pl)<4) break; env.push(pl);}
+    const envGFA=env.reduce((s,p)=>s+area(p),0), topF=env.length;
+    // 건폐율: 1층 영역의 북쪽을 잘라 법정 건축면적에 맞춘다 (북쪽이 사선에 가장 불리하므로)
+    let foot=env[0]||[], yc=null;
+    if(area(foot)>legalFoot){const ys=foot.map(p=>p[1]);let lo=Math.min(...ys),hi=Math.max(...ys);
+      for(let i=0;i<40;i++){const m=(lo+hi)/2; if(area(clipY(foot,m))>legalFoot) lo=m; else hi=m;} yc=hi; foot=clipY(foot,yc);}
+    // 용적률: 아래층부터 쌓아 법정 연면적을 넘기 직전까지
+    const mass=[]; let gfa=0;
+    for(const pl of env){const p=yc===null?pl:clipY(pl,yc), a=area(p); if(a<4||gfa+a>legalGFA+0.01) break; mass.push(p); gfa+=a;}
+    const lim = mass.length<env.length && envGFA>legalGFA ? (yc!==null?'용적률 + 건폐율':'용적률') : (yc!==null?'건폐율 + 일조사선':'일조사선 · 대지안의 공지');
+    return {site,legalFoot,legalGFA,env,envGFA,topF,foot,mass,gfa,lim,F:mass.length};
+  }
+
+  // ---------- 그리기 (흰 도면 시트)
+  const INK='#e6e3da', RED='#ff6b4a', BLUE='#4da3ff', MONO='"JetBrains Mono",ui-monospace,monospace';
+  function fit(cv){const r=cv.getBoundingClientRect(),dpr=devicePixelRatio||1;cv.width=r.width*dpr;cv.height=r.height*dpr;const g=cv.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.lineJoin='round';return [g,r.width,r.height];}
+  const path=(g,pts)=>{g.beginPath();pts.forEach((v,i)=>i?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1]));g.closePath();};
+  let T=null;
+  function drawTop(R){
+    const [g,W,H]=fit(cT); g.fillStyle='#151513'; g.fillRect(0,0,W,H);
+    const xs=poly.map(p=>p[0]), ys=poly.map(p=>p[1]), x0=Math.min(...xs)-5, y0=Math.min(...ys)-6, w=Math.max(...xs)-x0+5, h=Math.max(...ys)-y0+5;
+    const k=Math.min(W/w,(H-30)/h); T={k,ox:(W-w*k)/2-x0*k,oy:(H-30-h*k)/2-y0*k};
+    const M=p=>[T.ox+p[0]*k,T.oy+p[1]*k];
+    if(R.foot.length){path(g,R.foot.map(M));g.fillStyle='rgba(255,107,74,.12)';g.fill();g.strokeStyle=RED;g.lineWidth=1.4;g.stroke();}
+    g.lineWidth=.6; R.env.forEach((pl,i)=>{path(g,pl.map(M));g.strokeStyle=i%5===4?'#8a8a80':'#3a3a35';g.stroke();});
+    g.font=`10px ${MONO}`;g.fillStyle='#888';g.textAlign='left';
+    R.env.forEach((pl,i)=>{if(i%5!==4&&i!==R.env.length-1)return;const top=pl.reduce((a,b)=>b[1]<a[1]?b:a);const q=M(top);g.fillText((i+1)+'F',q[0]+3,q[1]-3);});
+    path(g,poly.map(M));g.strokeStyle=INK;g.lineWidth=1.6;g.stroke();
+    const inset=clipPoly(poly.map(p=>p.slice()),poly,P.sb); if(P.sb>0&&inset.length){g.setLineDash([4,3]);path(g,inset.map(M));g.strokeStyle='#6a6a63';g.lineWidth=.8;g.stroke();g.setLineDash([]);}
+    g.fillStyle=INK;g.textAlign='center';g.font=`11px ${MONO}`;
+    const s=sgn(poly);
+    poly.forEach((a,i)=>{const b=poly[(i+1)%poly.length],m=M([(a[0]+b[0])/2,(a[1]+b[1])/2]);const dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy);
+      const nx=dy/L*s, ny=-dx/L*s; // 바깥 법선
+      g.fillText(L.toFixed(1),m[0]+nx*14,m[1]+ny*14+4);});
+    poly.forEach(p=>{const q=M(p);g.beginPath();g.arc(q[0],q[1],5,0,7);g.fillStyle='#151513';g.fill();g.strokeStyle=BLUE;g.lineWidth=2;g.stroke();});
+    g.strokeStyle=INK;g.lineWidth=1;g.beginPath();g.moveTo(W-26,44);g.lineTo(W-26,16);g.moveTo(W-31,22);g.lineTo(W-26,16);g.lineTo(W-21,22);g.stroke();
+    g.fillStyle=INK;g.font=`600 11px ${MONO}`;g.fillText('N',W-26,58);
+    g.textAlign='left';g.font=`10px ${MONO}`;g.fillStyle='#8a8a80';
+    g.fillText('— 대지  ··· 공지선  — 층별 허용선',12,H-12); g.fillStyle=RED; g.fillText('■ 계획 건축면적',12,H-26);
+  }
+  function drawIso(R){
+    const [g,W,H]=fit(cI); g.fillStyle='#151513'; g.fillRect(0,0,W,H);
+    const xs=poly.map(p=>p[0]), ys=poly.map(p=>p[1]), cx=(Math.min(...xs)+Math.max(...xs))/2, cy=(Math.min(...ys)+Math.max(...ys))/2;
+    const span=Math.max(Math.max(...xs)-Math.min(...xs),Math.max(...ys)-Math.min(...ys)), hz=R.topF*P.fh;
+    const k=Math.min(W/(span*1.35),(H-40)/(span*.8+hz*.82));
+    const co=Math.cos(P.yaw), si=Math.sin(P.yaw);
+    const pr=(x,y,z)=>{x-=cx;y-=cy;const xr=x*co-y*si, yr=x*si+y*co;return [W/2+xr*k, H-34-span*.4*k+yr*k*.55-z*k*.82, yr];};
+    path(g,poly.map(p=>pr(p[0],p[1],0)));g.fillStyle='#1c1c19';g.fill();g.strokeStyle=INK;g.lineWidth=1.2;g.stroke();
+    g.setLineDash([3,3]);g.strokeStyle='rgba(77,163,255,.55)';g.lineWidth=.7;
+    R.env.forEach((pl,i)=>{path(g,pl.map(p=>pr(p[0],p[1],(i+1)*P.fh)));g.stroke();}); g.setLineDash([]);
+    R.mass.forEach((pl,i)=>{
+      const z0=i*P.fh, z1=(i+1)*P.fh, s=sgn(pl), walls=[];
+      for(let j=0;j<pl.length;j++){const a=pl[j],b=pl[(j+1)%pl.length],dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy); if(L<1e-6) continue;
+        const nx=dy/L*s, ny=-dx/L*s; const facing=nx*si+ny*co; if(facing<=1e-6) continue;
+        walls.push({a,b,d:pr((a[0]+b[0])/2,(a[1]+b[1])/2,0)[2],v:Math.round(212+40*Math.abs(nx*co-ny*si))});}
+      walls.sort((p,q)=>p.d-q.d).forEach(w=>{path(g,[pr(w.a[0],w.a[1],z0),pr(w.b[0],w.b[1],z0),pr(w.b[0],w.b[1],z1),pr(w.a[0],w.a[1],z1)]);
+        g.fillStyle=`rgb(${w.v-195},${w.v-195},${w.v-198})`;g.fill();g.strokeStyle=INK;g.lineWidth=.9;g.stroke();});
+      path(g,pl.map(p=>pr(p[0],p[1],z1)));g.fillStyle='#1e1e1b';g.fill();g.strokeStyle=INK;g.lineWidth=1;g.stroke();
+    });
+    if(R.mass.length){const pl=R.mass[R.mass.length-1],q=pl.reduce((a,b)=>pr(b[0],b[1],0)[0]>pr(a[0],a[1],0)[0]?b:a),t=pr(q[0],q[1],R.F*P.fh);
+      const lab=`▼ +${(R.F*P.fh).toFixed(1)}  ${R.F}F`; g.font=`11px ${MONO}`; const tw=g.measureText(lab).width, L=t[0]+40+tw>W-8;
+      const x1=L?t[0]-6:t[0]+6, x2=L?t[0]-36:t[0]+36;
+      g.strokeStyle=RED;g.lineWidth=.8;g.beginPath();g.moveTo(x1,t[1]);g.lineTo(x2,t[1]);g.stroke();
+      g.fillStyle=RED;g.textAlign=L?'right':'left';g.fillText(lab,L?x2-4:x2+4,t[1]+4);}
+    g.fillStyle='#8a8a80';g.font=`10px ${MONO}`;g.textAlign='left';g.fillText('--- 사선 허용 볼륨   □ 계획 매스',12,H-12);
+  }
+  function stats(R){
+    const f=v=>v.toLocaleString('ko-KR',{maximumFractionDigits:0});
+    const rows=[['대지면적',f(R.site)+' ㎡'],['법정 최대 건축면적',f(R.legalFoot)+' ㎡ ('+P.bcr+'%)'],['법정 최대 연면적',f(R.legalGFA)+' ㎡ ('+P.far+'%)'],
+      ['사선 허용 볼륨',f(R.envGFA)+' ㎡ · '+R.topF+'층'],['계획 건축면적',f(area(R.foot))+' ㎡'],['계획 매스',R.F+'층 · '+(R.F*P.fh).toFixed(1)+' m'],
+      ['실제 가능한 연면적',f(R.gfa)+' ㎡ ('+(R.gfa/R.site*100).toFixed(0)+'%)'],['결정 요인',R.lim]];
+    out.innerHTML=rows.map(([a,b],i)=>`<div class="${i>=6?'hi':''}"><span>${a}</span><b>${b}</b></div>`).join('')+
+      `<p class="note">정북 경계에서 높이 10m까지는 1.5m, 그 위는 높이의 절반만큼 떨어져야 한다. 회색 선이 층별 허용선(사선), 붉은 면은 건폐율 안에서 쓰는 바닥, 매스는 용적률을 넘기 직전 층까지 쌓은 것. 볼록한 대지 기준이며 도로사선 · 완화 규정은 넣지 않았다.</p>`;
+  }
+  function draw(){const R=compute();drawTop(R);drawIso(R);stats(R);}
+
+  // ---------- 조작
+  const W2=e=>{const r=cT.getBoundingClientRect();return [(e.clientX-r.left-T.ox)/T.k,(e.clientY-r.top-T.oy)/T.k];};
+  const segD=(x,y,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy)));return Math.hypot(x-a[0]-t*dx,y-a[1]-t*dy);};
+  let drag=-1;
+  cT.addEventListener('pointerdown',e=>{const [x,y]=W2(e);drag=poly.findIndex(p=>Math.hypot(p[0]-x,p[1]-y)*T.k<12);if(drag>=0)cT.setPointerCapture(e.pointerId);});
+  cT.addEventListener('pointermove',e=>{if(drag<0)return;const [x,y]=W2(e);poly[drag]=[Math.round(x*2)/2,Math.round(y*2)/2];draw();});
+  cT.addEventListener('pointerup',()=>drag=-1);
+  cT.addEventListener('dblclick',e=>{const [x,y]=W2(e);const vi=poly.findIndex(p=>Math.hypot(p[0]-x,p[1]-y)*T.k<12);
+    if(vi>=0){if(poly.length>3)poly.splice(vi,1);} else {let bi=-1,bd=1e9;poly.forEach((a,i)=>{const d=segD(x,y,a,poly[(i+1)%poly.length]);if(d<bd){bd=d;bi=i;}}); if(bd*T.k<14) poly.splice(bi+1,0,[Math.round(x*2)/2,Math.round(y*2)/2]);} draw();});
+  let rx=null; cI.addEventListener('pointerdown',e=>{rx=e.clientX;cI.setPointerCapture(e.pointerId);});
+  cI.addEventListener('pointermove',e=>{if(rx===null)return;P.yaw+=(e.clientX-rx)*.01;rx=e.clientX;drawIso(compute());});
+  cI.addEventListener('pointerup',()=>rx=null);
+  addEventListener('resize',draw); draw();
+})();
+// LAB 03 — 구조 그리드 → 골조
+// 평면에서 그리드 축을 끌어 스팬을 바꾸면 기둥 · 보 · 슬래브가 생기고, 개략 부재 크기와 물량이 나온다.
+// 부재 크기는 계획 단계의 경험식(스팬비)이다. 실제 설계는 구조 계산으로 정한다.
+(function(){
+  const root=document.getElementById('lab-frame'); if(!root) return;
+  const SYS=[
+    {n:'철근콘크리트 라멘',beam:12,bw:.5,slab:'t=max(150, L/28)',col:N=>Math.max(400,Math.ceil(Math.sqrt(N*1000/(0.3*24))/50)*50),sl:L=>Math.max(150,Math.ceil(L*1000/28/10)*10),dens:'RC'},
+    {n:'철골 (H형강)',beam:20,bw:.4,slab:'데크 t=150',col:N=>Math.max(300,Math.ceil(Math.sqrt(N*1000/(0.6*235))*1.6/50)*50),sl:()=>150,dens:'S'},
+    {n:'목구조 (집성재)',beam:15,bw:.45,slab:'CLT t=150~210',col:N=>Math.max(240,Math.ceil(Math.sqrt(N*1000/(0.5*20))/30)*30),sl:L=>L>5?210:150,dens:'W'},
+  ];
+  const P={sys:0, nf:3, fh:3.6, ex:2.2, load:12, yaw:-0.7};
+  let sx=[7.2,7.2,7.2], sy=[6,6];
+  const app=root.querySelector('.app');
+  app.innerHTML=`<div class="lctl"></div>
+  <div class="nlv"><div class="cv sheet"><canvas class="top"></canvas><p class="hint">축선 드래그 = 스팬 변경 · 칸 안 더블클릭 = 축 추가 · 축 더블클릭 = 삭제</p></div>
+  <div class="cv sheet"><canvas class="iso"></canvas><p class="hint">드래그 = 회전</p></div></div>
+  <div class="nls"></div>`;
+  const cT=app.querySelector('.top'), cI=app.querySelector('.iso'), out=app.querySelector('.nls');
+  LabUI(app.querySelector('.lctl'),[
+    {g:'구조',k:'구조 방식',opts:SYS.map(s=>s.n),get:()=>P.sys,set:v=>P.sys=v},
+    {g:'구조',k:'층 하중 kN/㎡',min:6,max:20,step:1,get:()=>P.load,set:v=>P.load=v},
+    {g:'건물',k:'층수',min:1,max:8,step:1,get:()=>P.nf,set:v=>P.nf=v},
+    {g:'건물',k:'층고 m',min:3,max:5,step:.1,get:()=>P.fh,set:v=>P.fh=v},
+    {g:'보기',k:'분해 간격 m',min:0,max:6,step:.2,get:()=>P.ex,set:v=>P.ex=v},
+  ],draw);
+
+  const cum=a=>a.reduce((r,v)=>(r.push(r[r.length-1]+v),r),[0]);
+  function compute(){
+    const S=SYS[P.sys], X=cum(sx), Y=cum(sy), Lx=X[X.length-1], Ly=Y[Y.length-1];
+    const Lmax=Math.max(...sx,...sy), d=Math.ceil(Lmax*1000/S.beam/50)*50, b=Math.max(S.dens==='W'?150:200,Math.ceil(d*S.bw/50)*50);
+    // 가장 불리한 내부 기둥: 부담 면적 × 하중 × 층수
+    let trib=0; for(let i=0;i<X.length;i++)for(let j=0;j<Y.length;j++){const ax=((sx[i-1]||0)+(sx[i]||0))/2, ay=((sy[j-1]||0)+(sy[j]||0))/2; trib=Math.max(trib,ax*ay);}
+    const N=trib*P.load*P.nf, c=S.col(N), t=S.sl(Math.min(Math.max(...sx),Math.max(...sy)));
+    const nc=X.length*Y.length*P.nf, nb=((X.length)*(Y.length-1)+(Y.length)*(X.length-1))*P.nf;
+    const bl=(Lx*Y.length+Ly*X.length)*P.nf, A=Lx*Ly*P.nf;
+    const vol=nc*(c/1000)**2*P.fh + bl*(b/1000)*(d/1000) + A*t/1000;
+    const q = S.dens==='RC' ? `콘크리트 ${vol.toFixed(0)} ㎥` : S.dens==='S' ? `강재 약 ${((nc*P.fh*(c*1.2/1000*60)+bl*(d/1000*120))/1000).toFixed(0)} t` : `목재 ${(nc*(c/1000)**2*P.fh+bl*(b/1000)*(d/1000)+A*t/1000).toFixed(0)} ㎥`;
+    return {S,X,Y,Lx,Ly,d,b,c,t,N,trib,nc,nb,bl,A,q};
+  }
+
+  const INK='#e6e3da', RED='#ff6b4a', BLUE='#4da3ff', MONO='"JetBrains Mono",ui-monospace,monospace';
+  function fit(cv){const r=cv.getBoundingClientRect(),dpr=devicePixelRatio||1;cv.width=r.width*dpr;cv.height=r.height*dpr;const g=cv.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.lineJoin='round';return [g,r.width,r.height];}
+  const path=(g,pts)=>{g.beginPath();pts.forEach((v,i)=>i?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1]));g.closePath();};
+  let T=null;
+  function drawTop(R){
+    const [g,W,H]=fit(cT); g.fillStyle='#151513'; g.fillRect(0,0,W,H);
+    const pad=46, k=Math.min((W-pad*2)/R.Lx,(H-pad*2-14)/R.Ly); T={k,ox:(W-R.Lx*k)/2,oy:(H-14-R.Ly*k)/2};
+    const X=x=>T.ox+x*k, Y=y=>T.oy+y*k;
+    g.fillStyle='rgba(255,255,255,.03)';g.fillRect(X(0),Y(0),R.Lx*k,R.Ly*k);
+    // 보
+    const bw=Math.max(2,R.b/1000*k);
+    g.fillStyle='#3a3a35';R.X.forEach(x=>g.fillRect(X(x)-bw/2,Y(0),bw,R.Ly*k));R.Y.forEach(y=>g.fillRect(X(0),Y(y)-bw/2,R.Lx*k,bw));
+    // 축선 (일점쇄선)
+    g.setLineDash([10,3,2,3]);g.strokeStyle='#5a5a54';g.lineWidth=.7;
+    R.X.forEach(x=>{g.beginPath();g.moveTo(X(x),Y(0)-26);g.lineTo(X(x),Y(R.Ly)+8);g.stroke();});
+    R.Y.forEach(y=>{g.beginPath();g.moveTo(X(0)-26,Y(y));g.lineTo(X(R.Lx)+8,Y(y));g.stroke();}); g.setLineDash([]);
+    // 기둥
+    const cw=Math.max(4,R.c/1000*k);
+    R.X.forEach(x=>R.Y.forEach(y=>{g.fillStyle=INK;g.fillRect(X(x)-cw/2,Y(y)-cw/2,cw,cw);}));
+    // 축 기호 + 치수
+    g.font=`11px ${MONO}`;g.textAlign='center';
+    R.X.forEach((x,i)=>{g.beginPath();g.arc(X(x),Y(0)-34,9,0,7);g.fillStyle='#151513';g.fill();g.strokeStyle=INK;g.lineWidth=1;g.stroke();g.fillStyle=INK;g.fillText('X'+(i+1),X(x),Y(0)-30);});
+    R.Y.forEach((y,i)=>{g.beginPath();g.arc(X(0)-34,Y(y),9,0,7);g.fillStyle='#151513';g.fill();g.strokeStyle=INK;g.stroke();g.fillStyle=INK;g.fillText(String.fromCharCode(65+i),X(0)-34,Y(y)+4);});
+    g.fillStyle=BLUE;
+    sx.forEach((v,i)=>g.fillText(v.toFixed(1),X((R.X[i]+R.X[i+1])/2),Y(R.Ly)+22));
+    sy.forEach((v,i)=>{g.save();g.translate(X(R.Lx)+22,Y((R.Y[i]+R.Y[i+1])/2));g.rotate(-Math.PI/2);g.fillText(v.toFixed(1),0,4);g.restore();});
+    g.fillStyle=INK;g.fillText(`${R.Lx.toFixed(1)} × ${R.Ly.toFixed(1)} m`,W/2,H-10);
+    // 대표 부재 태그
+    if(R.X.length>1&&R.Y.length>1){const bx=X((R.X[0]+R.X[1])/2), by=Y(R.Y[0]);g.strokeStyle=RED;g.lineWidth=2;g.beginPath();g.moveTo(X(R.X[0]),by);g.lineTo(X(R.X[1]),by);g.stroke();
+      g.fillStyle=RED;g.textAlign='left';g.fillText(`B1 ${R.b}×${R.d}`,bx+6,by-8);
+      const cx=X(R.X[1]),cy=Y(R.Y[1]);g.strokeRect(cx-cw/2-3,cy-cw/2-3,cw+6,cw+6);g.fillText(`C1 ${R.c}×${R.c}`,cx+cw/2+6,cy+cw/2+12);}
+  }
+  function drawIso(R){
+    const [g,W,H]=fit(cI); g.fillStyle='#151513'; g.fillRect(0,0,W,H);
+    const span=Math.max(R.Lx,R.Ly), Ht=P.nf*(P.fh+P.ex);
+    const k=Math.min(W/(span*1.5),(H-50)/(span*.75+Ht*.85));
+    const co=Math.cos(P.yaw), si=Math.sin(P.yaw);
+    const pr=(x,y,z)=>{x-=R.Lx/2;y-=R.Ly/2;const xr=x*co-y*si, yr=x*si+y*co;return [W/2+xr*k, H-30-span*.38*k+yr*k*.55-z*k*.85, yr];};
+    function box(x0,y0,z0,x1,y1,z1,top,side,stroke){
+      const F=[[[x0,y0],[x1,y0],0,-1],[[x1,y1],[x0,y1],0,1],[[x1,y0],[x1,y1],1,0],[[x0,y1],[x0,y0],-1,0]];
+      for(const [a,b,nx,ny] of F){const f=nx*si+ny*co; if(f<=0) continue; path(g,[pr(a[0],a[1],z0),pr(b[0],b[1],z0),pr(b[0],b[1],z1),pr(a[0],a[1],z1)]);
+        const v=Math.round(side-28*Math.abs(nx*co-ny*si));g.fillStyle=`rgb(${v-200},${v-200},${v-203})`;g.fill();g.strokeStyle=stroke||INK;g.lineWidth=.7;g.stroke();}
+      path(g,[pr(x0,y0,z1),pr(x1,y0,z1),pr(x1,y1,z1),pr(x0,y1,z1)]);g.fillStyle=top;g.fill();g.strokeStyle=stroke||INK;g.lineWidth=.7;g.stroke();
+    }
+    const dep=(x,y)=>x*si+y*co;
+    const c=R.c/1000, b=R.b/1000, d=R.d/1000, t=R.t/1000;
+    for(let f=0;f<P.nf;f++){
+      const z0=f*(P.fh+P.ex), zt=z0+P.fh; // 층 바닥 ~ 슬래브 윗면
+      const cols=[];R.X.forEach(x=>R.Y.forEach(y=>cols.push([x,y])));
+      cols.sort((p,q)=>dep(p[0],p[1])-dep(q[0],q[1])).forEach(([x,y],i)=>{const hl=f===0&&x===R.X[1]&&y===R.Y[1];box(x-c/2,y-c/2,z0,x+c/2,y+c/2,zt-t-d,hl?'#4a2620':'#151513',hl?240:250,hl?RED:INK);});
+      const beams=[];
+      R.Y.forEach(y=>{for(let i=0;i<R.X.length-1;i++)beams.push([R.X[i],y-b/2,R.X[i+1],y+b/2,i===0&&y===R.Y[0]]);});
+      R.X.forEach(x=>{for(let j=0;j<R.Y.length-1;j++)beams.push([x-b/2,R.Y[j],x+b/2,R.Y[j+1],false]);});
+      beams.sort((p,q)=>dep((p[0]+p[2])/2,(p[1]+p[3])/2)-dep((q[0]+q[2])/2,(q[1]+q[3])/2)).forEach(([a,bb,cc,dd,hl])=>box(a,bb,zt-t-d,cc,dd,zt-t,hl&&f===P.nf-1?'#4a2620':'#262622',hl&&f===P.nf-1?240:246,hl&&f===P.nf-1?RED:INK));
+      const lift=Math.min(P.ex*.45,1.4); box(-c/2-.15,-c/2-.15,zt-t+lift,R.Lx+c/2+.15,R.Ly+c/2+.15,zt+lift,'#1e1e1b',250);
+      // 층 표기
+      const q=pr(R.Lx+c/2+.15,-c/2-.15,zt+lift); g.fillStyle='#8a8a80';g.font=`10px ${MONO}`;g.textAlign='left';g.fillText(`${f+1}F  +${((f+1)*P.fh).toFixed(1)}`,q[0]+8,q[1]+3);
+    }
+    g.fillStyle=RED;g.font=`10px ${MONO}`;g.textAlign='left';g.fillText(`■ C1 ${R.c}×${R.c}   ■ B1 ${R.b}×${R.d}   t=${R.t}`,12,H-12);
+  }
+  function stats(R){
+    const f=v=>v.toLocaleString('ko-KR',{maximumFractionDigits:0});
+    const rows=[['구조 방식',R.S.n],['최대 스팬',Math.max(...sx,...sy).toFixed(1)+' m'],['보 춤 (L/'+R.S.beam+')',R.b+' × '+R.d+' mm'],['슬래브',R.t+' mm'],
+      ['최대 부담 면적',R.trib.toFixed(1)+' ㎡'],['기둥 축력 (개략)',f(R.N)+' kN → '+R.c+'□'],['부재 수',`기둥 ${R.nc} · 보 ${R.nb}`],['연면적 · 물량',f(R.A)+' ㎡ · '+R.q]];
+    out.innerHTML=rows.map(([a,b],i)=>`<div class="${i>=5?'hi':''}"><span>${a}</span><b>${b}</b></div>`).join('')+
+      `<p class="note">보 춤은 스팬비(RC L/12, 철골 L/20, 집성재 L/15), 기둥은 가장 큰 부담 면적 × 층 하중 × 층수로 잡은 계획용 개략치. 스팬을 늘리면 기둥 수는 줄지만 보 춤과 층고 손실이 커지는 걸 확인하는 용도.</p>`;
+  }
+  function draw(){const R=compute();drawTop(R);drawIso(R);stats(R);}
+
+  // ---------- 조작: 축선 드래그
+  const W2=e=>{const r=cT.getBoundingClientRect();return [(e.clientX-r.left-T.ox)/T.k,(e.clientY-r.top-T.oy)/T.k];};
+  function hit(x,y){const X=cum(sx),Y=cum(sy);let best=null,bd=10/T.k;
+    X.forEach((v,i)=>{const d=Math.abs(x-v);if(d<bd&&i>0){bd=d;best=['x',i];}});Y.forEach((v,i)=>{const d=Math.abs(y-v);if(d<bd&&i>0){bd=d;best=['y',i];}});return best;}
+  let drag=null;
+  cT.addEventListener('pointerdown',e=>{const [x,y]=W2(e);drag=hit(x,y);if(drag)cT.setPointerCapture(e.pointerId);});
+  cT.addEventListener('pointermove',e=>{const [x,y]=W2(e);
+    if(!drag){const h=hit(x,y);cT.style.cursor=h?(h[0]==='x'?'ew-resize':'ns-resize'):'crosshair';return;}
+    const [ax,i]=drag, A=ax==='x'?sx:sy, C=cum(A), v=ax==='x'?x:y;
+    const nv=Math.round((v-C[i-1])*10)/10; if(nv<2.4||nv>15) return;
+    if(i<A.length){const tot=A[i-1]+A[i]; if(tot-nv<2.4) return; A[i]=Math.round((tot-nv)*10)/10;} A[i-1]=nv; draw();});
+  cT.addEventListener('pointerup',()=>drag=null);
+  cT.addEventListener('dblclick',e=>{const [x,y]=W2(e);const h=hit(x,y);
+    if(h){const [ax,i]=h,A=ax==='x'?sx:sy; if(A.length>1){ if(i<A.length){A[i-1]+=A[i];A.splice(i,1);} else A.pop(); }}
+    else{const X=cum(sx),Y=cum(sy);const i=X.findIndex(v=>v>x),j=Y.findIndex(v=>v>y);
+      if(i>0&&j>0){const dx=Math.min(x-X[i-1],X[i]-x)/sx[i-1], dy=Math.min(y-Y[j-1],Y[j]-y)/sy[j-1];
+        if(dx>=dy&&sx[i-1]>=4.8){const a=Math.round((x-X[i-1])*10)/10;sx.splice(i-1,1,a,Math.round((sx[i-1]-a)*10)/10);}
+        else if(sy[j-1]>=4.8){const a=Math.round((y-Y[j-1])*10)/10;sy.splice(j-1,1,a,Math.round((sy[j-1]-a)*10)/10);}}}
+    draw();});
+  let rx=null; cI.addEventListener('pointerdown',e=>{rx=e.clientX;cI.setPointerCapture(e.pointerId);});
+  cI.addEventListener('pointermove',e=>{if(rx===null)return;P.yaw+=(e.clientX-rx)*.01;rx=e.clientX;drawIso(compute());});
+  cI.addEventListener('pointerup',()=>rx=null);
+  addEventListener('resize',draw); draw();
+})();
+</script>
 <footer>© 2026 한승현 Seunghyun Han</footer>
 </main>
 <div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>

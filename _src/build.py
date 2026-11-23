@@ -413,6 +413,26 @@ pre.code.ask .f{color:var(--mute)}
 .nls .hi b{color:#b6d36b}
 .nls .note{grid-column:1/-1;background:#0c0d0b;padding:10px 12px;font-size:13px;color:var(--mute)}
 @media (max-width:900px){.app{grid-template-columns:1fr}.nlv{grid-template-columns:1fr}.nls{grid-column:1;grid-template-columns:1fr 1fr}.cv canvas{height:320px}}
+
+.agrid{max-width:1480px;margin:0 auto 12vh;padding:0 24px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.acard{background:#151513!important;border:1px solid #2c2e2a!important;box-shadow:none!important;padding:16px 18px!important;margin:0!important}
+.acard header{display:flex;align-items:baseline;gap:10px;font-family:var(--mono)}
+.acard header b{font-size:12px;letter-spacing:.14em;color:#e0a15a;font-weight:500}
+.acard header span{font-size:11px;color:var(--mute)}
+.acard header a{margin-left:auto;color:var(--mute);text-decoration:none;font-size:15px}.acard header a:hover{color:#b6d36b}
+.acard .app{display:block;margin-top:10px}
+.acard .lctl,.acard .nls .note{display:none}
+.acard .nlv{gap:0;border-top:1px solid #2c2e2a}
+.acard .cv canvas{height:300px}
+.acard .nlv .cv+.cv canvas{border-left:1px solid #2c2e2a}
+.acard .hint{font-size:10px;margin:4px 0 0}
+.acard .nls{display:block;background:none;border:0;margin-top:8px;font-family:var(--mono);font-size:11px;line-height:1.7;color:#cfcac0}
+.acard .nls div{display:inline;background:none;padding:0}
+.acard .nls span{display:inline;font-size:11px}.acard .nls span:after{content:': '}
+.acard .nls b{font-size:11px;font-weight:400}.acard .nls div:not(:last-of-type):after{content:'  |  ';color:#555}
+.cv.sheet canvas{background:#151513}
+@media (max-width:1100px){.agrid{grid-template-columns:1fr}}
+@media (max-width:760px){.agrid{padding:0 12px}.acard .nlv{grid-template-columns:1fr}.acard .nlv .cv+.cv canvas{border-left:0}}
 """
 
 JS = r"""
@@ -603,44 +623,29 @@ LABS = {
     d='실 6개의 면적 · 채광 · 인접 조건에 가중치를 주고, 평면 대안 수백 개 중 기준을 넘으면서 서로 다른 안만 골라낸다.',
     long='실 6개를 대지에 나눠 넣는 평면을 수백 개 만들고, 형태 · 채광(남쪽) · 인접 · 현관(북쪽) 점수에 가중치를 곱해 합산한다. 기준 점수를 넘으면서 서로 충분히 다른 안만 위에 남는다.',
     body='<div class="lbody"><div class="lctl"></div><div class="lout"><p class="lsum"></p><div class="lhist"></div><div class="lpick"></div><p class="k">점수순 상위 96개 · 흐린 칸은 기준 미달, 테두리는 선택된 안</p><div class="lgrid"></div></div></div>'),
-  'northlight': dict(no='02', cat='REGULATION', t='정북 일조사선 매스', js='lab_northlight.js',
+  'northlight': dict(no='02', cat='REGULATION', en='NORTH SETBACK ENVELOPE', ko='정북 일조사선 매스', t='정북 일조사선 매스', js='lab_northlight.js',
     d='대지 꼭짓점을 끌면 정북 일조사선 · 대지안의 공지 · 건폐율 · 용적률로 허용 볼륨과 실제 가능한 연면적이 바로 나온다.',
     long='전용 · 일반주거지역에서는 정북 방향 경계로부터 높이 10m까지는 1.5m, 그 위로는 높이의 절반만큼 떨어져야 한다(건축법 시행령 제86조). 대지 모양을 직접 그리면 이 사선과 건폐율 · 용적률을 함께 걸어, 어느 법규가 연면적을 결정하는지 보여 준다. 도로 사선 · 높이 제한 완화 등은 반영하지 않은 스터디용 계산이다.'),
+  'frame': dict(no='03', cat='STRUCTURE', en='STRUCTURAL GRID → FRAME', ko='구조 그리드 · 골조', t='구조 그리드 → 골조', js='lab_frame.js',
+    d='그리드 축선을 끌어 스팬을 바꾸면 기둥 · 보 · 슬래브 분해 아이소와 개략 부재 크기 · 물량이 바로 나온다.',
+    long='평면에서 축선을 끌어 스팬을 바꾸고, 구조 방식과 층수를 고르면 골조가 층별로 분해된 아이소로 그려진다. 보 춤은 스팬비, 기둥은 가장 큰 부담 면적의 축력으로 잡은 계획 단계 개략치다. 스팬과 기둥 수, 보 춤 사이의 맞바꿈을 눈으로 확인하는 도구.'),
 }
 STEPT = {}
 def lab_page(k):
     L = LABS[k]; st = L['stage']
-    head = f'<section class="lab" id="lab-{k}"><div class="lh"><p class="k"><a href="../process.html#exp-{st}">← EXP–{st} {E(STEPT.get(st, ""))}</a> · LAB {L["no"]} · {L["cat"]}</p><h3>{E(L["t"])}</h3><p>{E(L["long"])}</p></div>'
+    head = f'<section class="lab" id="lab-{k}"><div class="lh"><p class="k"><a href="../process.html">← AI와 설계하기</a> · LAB {L["no"]} · {L["cat"]}</p><h3>{E(L["t"])}</h3><p>{E(L["long"])}</p></div>'
     body = head + L.get('body', '<div class="app"></div>') + '</section>'
     js = open(os.path.join(SRC, 'lab_ui.js')).read() + open(os.path.join(SRC, L['js'])).read()
     open(f'{OUT}/lab/{k}.html', 'w').write(page(f'LAB {L["no"]} {L["t"]} — {SITE["name_ko"]}', body + f'<script>{js}</script>', '../', dark='dark labpg', on='p', desc=L['d']))
+CARDS = ['northlight', 'frame']
 def process_page():
     P = PROCESS
-    out, js = [], []
-    for st in P['steps']:
-        if not st.get('note'):
-            STEPT[st['no']] = st['t']
-            for k in ([st['lab']] if isinstance(st.get('lab'), str) else st.get('lab') or []): LABS[k]['stage'] = st['no']
-    for st in P['steps']:
-        if st.get('note'):
-            flow = '<ol class="flow">' + ''.join(f'<li><b>{E(a)}</b><span>{E(b)}</span></li>' for a, b in st['flow']) + '</ol>' if st.get('flow') else ''
-            out.append(f'<aside class="pnote"><h3>{E(st["t"])}</h3>{flow}<ul>' + ''.join(f'<li>{E(x)}</li>' for x in st['items']) + '</ul></aside>')
-            continue
-        ask = f'<pre class="code ask"><span class="f">예시 요청</span>{E(st["ask"])}</pre>' if st.get('ask') else ''
-        out.append(f'''<section class="pstep" id="exp-{st["no"]}"><div class="ph"><span class="no">EXP–{st["no"]}</span><span class="st {'on' if st.get('lab') else ''}">{'● 실험 가동' if st.get('lab') else '○ 실험 준비 중'}</span><h2>{E(st["t"])}<small>{E(st["en"])}</small></h2></div>
-<div class="pb"><div class="cmp"><div><h4>기존</h4><p>{E(st["before"])}</p></div><div class="ai"><h4>AI와 함께</h4><p>{E(st["ai"])}</p></div></div>
-<p class="hm"><b>사람의 몫</b> {E(st["human"])}</p>{ask}</div></section>''')
-        labs = st.get('lab') or []
-        if isinstance(labs, str): labs = [labs]
-        if labs:
-            os.makedirs(f'{OUT}/lab', exist_ok=True)
-            items = ''
-            for k in labs:
-                L = LABS[k]
-                items += f'<li><a href="lab/{k}.html"><span class="ln">LAB {L["no"]}</span><b>{E(L["t"])}</b><em>{E(L["d"])}</em><i>→</i></a></li>'
-                lab_page(k)
-            out[-1] = out[-1].replace('</div></section>', f'<details class="labs"><summary>실험 {len(labs)}개 보기</summary><ul>{items}</ul></details></div></section>')
-    nlab = sum(1 for x in P['steps'] if x.get('lab')); nexp = sum(1 for x in P['steps'] if not x.get('note'))
-    body = f'''<section class="phd"><p class="k">LAB — 설계 프로세스 실험 노트</p><p class="log">EXP {nexp:02d} · RUNNING {nlab:02d} · UPDATED 2026.11.24</p><h1>{E(P["title"])}<small>{E(P["sub"])}</small></h1><p class="lead">{E(P["lead"])}</p></section>{"".join(out)}'''
+    os.makedirs(f'{OUT}/lab', exist_ok=True)
+    for k, L in LABS.items():
+        L.setdefault('stage', '00'); lab_page(k)
+    cards = ''.join(f'''<article class="acard lab" id="lab-{k}"><header><b>{E(LABS[k]["en"])}</b><span>{E(LABS[k]["ko"])}</span><a href="lab/{k}.html" title="크게 열기 · 조절하기">↗</a></header><div class="app"></div></article>''' for k in CARDS)
+    js = open(os.path.join(SRC, 'lab_ui.js')).read() + ''.join(open(os.path.join(SRC, LABS[k]['js'])).read() for k in CARDS)
+    body = f'''<section class="phd"><p class="k">LAB — 설계를 스킬로</p><h1>{E(P["title"])}<small>{E(P["sub"])}</small></h1><p class="lead">{E(P["lead"])}</p></section>
+<section class="agrid">{cards}</section><script>{js}</script>'''
     open(f'{OUT}/process.html', 'w').write(page(f'Process — {SITE["name_ko"]}', body, '', dark='dark labpg', on='p', desc=P['lead']))
 process_page()

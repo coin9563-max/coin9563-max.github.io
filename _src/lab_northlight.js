@@ -58,41 +58,41 @@
   }
 
   // ---------- 그리기 (흰 도면 시트)
-  const INK='#1b1b1b', RED='#d2412c', BLUE='#2f6fe0', MONO='"JetBrains Mono",ui-monospace,monospace';
+  const INK='#e6e3da', RED='#ff6b4a', BLUE='#4da3ff', MONO='"JetBrains Mono",ui-monospace,monospace';
   function fit(cv){const r=cv.getBoundingClientRect(),dpr=devicePixelRatio||1;cv.width=r.width*dpr;cv.height=r.height*dpr;const g=cv.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.lineJoin='round';return [g,r.width,r.height];}
   const path=(g,pts)=>{g.beginPath();pts.forEach((v,i)=>i?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1]));g.closePath();};
   let T=null;
   function drawTop(R){
-    const [g,W,H]=fit(cT); g.fillStyle='#fbfbf8'; g.fillRect(0,0,W,H);
+    const [g,W,H]=fit(cT); g.fillStyle='#151513'; g.fillRect(0,0,W,H);
     const xs=poly.map(p=>p[0]), ys=poly.map(p=>p[1]), x0=Math.min(...xs)-5, y0=Math.min(...ys)-6, w=Math.max(...xs)-x0+5, h=Math.max(...ys)-y0+5;
     const k=Math.min(W/w,(H-30)/h); T={k,ox:(W-w*k)/2-x0*k,oy:(H-30-h*k)/2-y0*k};
     const M=p=>[T.ox+p[0]*k,T.oy+p[1]*k];
-    if(R.foot.length){path(g,R.foot.map(M));g.fillStyle='rgba(210,65,44,.10)';g.fill();g.strokeStyle=RED;g.lineWidth=1.4;g.stroke();}
-    g.lineWidth=.6; R.env.forEach((pl,i)=>{path(g,pl.map(M));g.strokeStyle=i%5===4?'#777':'#c4c4bd';g.stroke();});
+    if(R.foot.length){path(g,R.foot.map(M));g.fillStyle='rgba(255,107,74,.12)';g.fill();g.strokeStyle=RED;g.lineWidth=1.4;g.stroke();}
+    g.lineWidth=.6; R.env.forEach((pl,i)=>{path(g,pl.map(M));g.strokeStyle=i%5===4?'#8a8a80':'#3a3a35';g.stroke();});
     g.font=`10px ${MONO}`;g.fillStyle='#888';g.textAlign='left';
     R.env.forEach((pl,i)=>{if(i%5!==4&&i!==R.env.length-1)return;const top=pl.reduce((a,b)=>b[1]<a[1]?b:a);const q=M(top);g.fillText((i+1)+'F',q[0]+3,q[1]-3);});
     path(g,poly.map(M));g.strokeStyle=INK;g.lineWidth=1.6;g.stroke();
-    const inset=clipPoly(poly.map(p=>p.slice()),poly,P.sb); if(P.sb>0&&inset.length){g.setLineDash([4,3]);path(g,inset.map(M));g.strokeStyle='#999';g.lineWidth=.8;g.stroke();g.setLineDash([]);}
+    const inset=clipPoly(poly.map(p=>p.slice()),poly,P.sb); if(P.sb>0&&inset.length){g.setLineDash([4,3]);path(g,inset.map(M));g.strokeStyle='#6a6a63';g.lineWidth=.8;g.stroke();g.setLineDash([]);}
     g.fillStyle=INK;g.textAlign='center';g.font=`11px ${MONO}`;
     const s=sgn(poly);
     poly.forEach((a,i)=>{const b=poly[(i+1)%poly.length],m=M([(a[0]+b[0])/2,(a[1]+b[1])/2]);const dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy);
       const nx=dy/L*s, ny=-dx/L*s; // 바깥 법선
       g.fillText(L.toFixed(1),m[0]+nx*14,m[1]+ny*14+4);});
-    poly.forEach(p=>{const q=M(p);g.beginPath();g.arc(q[0],q[1],5,0,7);g.fillStyle='#fff';g.fill();g.strokeStyle=BLUE;g.lineWidth=2;g.stroke();});
+    poly.forEach(p=>{const q=M(p);g.beginPath();g.arc(q[0],q[1],5,0,7);g.fillStyle='#151513';g.fill();g.strokeStyle=BLUE;g.lineWidth=2;g.stroke();});
     g.strokeStyle=INK;g.lineWidth=1;g.beginPath();g.moveTo(W-26,44);g.lineTo(W-26,16);g.moveTo(W-31,22);g.lineTo(W-26,16);g.lineTo(W-21,22);g.stroke();
     g.fillStyle=INK;g.font=`600 11px ${MONO}`;g.fillText('N',W-26,58);
-    g.textAlign='left';g.font=`10px ${MONO}`;g.fillStyle='#666';
-    g.fillText('— 대지  ··· 공지선  — 층별 허용선',12,H-12); g.fillStyle=RED; g.fillText('■ 계획 건축면적',W-110,H-12);
+    g.textAlign='left';g.font=`10px ${MONO}`;g.fillStyle='#8a8a80';
+    g.fillText('— 대지  ··· 공지선  — 층별 허용선',12,H-12); g.fillStyle=RED; g.fillText('■ 계획 건축면적',12,H-26);
   }
   function drawIso(R){
-    const [g,W,H]=fit(cI); g.fillStyle='#fbfbf8'; g.fillRect(0,0,W,H);
+    const [g,W,H]=fit(cI); g.fillStyle='#151513'; g.fillRect(0,0,W,H);
     const xs=poly.map(p=>p[0]), ys=poly.map(p=>p[1]), cx=(Math.min(...xs)+Math.max(...xs))/2, cy=(Math.min(...ys)+Math.max(...ys))/2;
     const span=Math.max(Math.max(...xs)-Math.min(...xs),Math.max(...ys)-Math.min(...ys)), hz=R.topF*P.fh;
     const k=Math.min(W/(span*1.35),(H-40)/(span*.8+hz*.82));
     const co=Math.cos(P.yaw), si=Math.sin(P.yaw);
     const pr=(x,y,z)=>{x-=cx;y-=cy;const xr=x*co-y*si, yr=x*si+y*co;return [W/2+xr*k, H-34-span*.4*k+yr*k*.55-z*k*.82, yr];};
-    path(g,poly.map(p=>pr(p[0],p[1],0)));g.fillStyle='#efefe9';g.fill();g.strokeStyle=INK;g.lineWidth=1.2;g.stroke();
-    g.setLineDash([3,3]);g.strokeStyle='rgba(47,111,224,.6)';g.lineWidth=.7;
+    path(g,poly.map(p=>pr(p[0],p[1],0)));g.fillStyle='#1c1c19';g.fill();g.strokeStyle=INK;g.lineWidth=1.2;g.stroke();
+    g.setLineDash([3,3]);g.strokeStyle='rgba(77,163,255,.55)';g.lineWidth=.7;
     R.env.forEach((pl,i)=>{path(g,pl.map(p=>pr(p[0],p[1],(i+1)*P.fh)));g.stroke();}); g.setLineDash([]);
     R.mass.forEach((pl,i)=>{
       const z0=i*P.fh, z1=(i+1)*P.fh, s=sgn(pl), walls=[];
@@ -100,15 +100,15 @@
         const nx=dy/L*s, ny=-dx/L*s; const facing=nx*si+ny*co; if(facing<=1e-6) continue;
         walls.push({a,b,d:pr((a[0]+b[0])/2,(a[1]+b[1])/2,0)[2],v:Math.round(212+40*Math.abs(nx*co-ny*si))});}
       walls.sort((p,q)=>p.d-q.d).forEach(w=>{path(g,[pr(w.a[0],w.a[1],z0),pr(w.b[0],w.b[1],z0),pr(w.b[0],w.b[1],z1),pr(w.a[0],w.a[1],z1)]);
-        g.fillStyle=`rgb(${w.v},${w.v},${w.v-5})`;g.fill();g.strokeStyle=INK;g.lineWidth=.9;g.stroke();});
-      path(g,pl.map(p=>pr(p[0],p[1],z1)));g.fillStyle='#ffffff';g.fill();g.strokeStyle=INK;g.lineWidth=1;g.stroke();
+        g.fillStyle=`rgb(${w.v-195},${w.v-195},${w.v-198})`;g.fill();g.strokeStyle=INK;g.lineWidth=.9;g.stroke();});
+      path(g,pl.map(p=>pr(p[0],p[1],z1)));g.fillStyle='#1e1e1b';g.fill();g.strokeStyle=INK;g.lineWidth=1;g.stroke();
     });
     if(R.mass.length){const pl=R.mass[R.mass.length-1],q=pl.reduce((a,b)=>pr(b[0],b[1],0)[0]>pr(a[0],a[1],0)[0]?b:a),t=pr(q[0],q[1],R.F*P.fh);
       const lab=`▼ +${(R.F*P.fh).toFixed(1)}  ${R.F}F`; g.font=`11px ${MONO}`; const tw=g.measureText(lab).width, L=t[0]+40+tw>W-8;
       const x1=L?t[0]-6:t[0]+6, x2=L?t[0]-36:t[0]+36;
       g.strokeStyle=RED;g.lineWidth=.8;g.beginPath();g.moveTo(x1,t[1]);g.lineTo(x2,t[1]);g.stroke();
       g.fillStyle=RED;g.textAlign=L?'right':'left';g.fillText(lab,L?x2-4:x2+4,t[1]+4);}
-    g.fillStyle='#666';g.font=`10px ${MONO}`;g.textAlign='left';g.fillText('--- 사선 허용 볼륨   □ 계획 매스',12,H-12);
+    g.fillStyle='#8a8a80';g.font=`10px ${MONO}`;g.textAlign='left';g.fillText('--- 사선 허용 볼륨   □ 계획 매스',12,H-12);
   }
   function stats(R){
     const f=v=>v.toLocaleString('ko-KR',{maximumFractionDigits:0});
