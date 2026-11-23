@@ -249,7 +249,7 @@ PRACTICE = [
   dict(title='JAdU', org='정림 디지털 아카데미 유닛 JAdU 2기', role='수료 · 프로젝트 우수상', kind='', year='2025', hide_in_list=True),
   dict(slug='d5-seminar', title='D5 Render 세미나', sub='D5 Render Student Ambassador', kind='공개 강연 · 홍익대학교', year='2025',
     org='D5 Render Student Ambassador', role='공개 강연 · 홍익대학교', hero='d5_photo0', thumb='d5_photo0',
-    meta=[('Role','D5 Render Student Ambassador · 강연자'),('Year','2025'),('Place','홍익대학교'),('Format','3회차 세미나 — 실내 · 외부 · Digital Maquette')],
+    meta=[('Role','D5 Render Student Ambassador · 강연자'),('Year','2025'),('Place','홍익대학교'),('Format','3회차 세미나 + 보강 강의(Advanced Brush)')],
     statement='학생들에게 D5 Render로 공간을 그리는 법을 나눴다',
     intro=['D5 Render Student Ambassador로 홍익대학교에서 세 차례 세미나를 진행했다. 회차마다 하나의 장면을 함께 만들며 재질, 빛, 식재, 분위기를 다루었다. 아래는 세미나에서 시연하고 과제로 함께 만든 장면들이다.'],
     blocks=[
@@ -263,6 +263,11 @@ PRACTICE = [
       ('text','Digital Maquette','실제 모형을 찍은 사진처럼 보이게 만드는 디지털 마케트 표현.',''),
       ('pair',['d5_10','d5_11'],''),
       ('img','d5_photo1','D5 3차 세미나'),
+      ('text','보강 강의 — Advanced Brush','본 세미나를 보충하는 회차로, D5의 Advanced Brush와 Edge Divide 기능을 다뤘다. 주차장 건물 하나를 두고 잔디 영역 나누기, 수변 경계 식재, 도로와 보도의 경계 처리를 단계별로 시연한 뒤 최종 장면까지 완성했다.',''),
+      ('wide','d5b_r1',''),
+      ('grid',['d5b_s02','d5b_s03','d5b_s09','d5b_s12','d5b_s14','d5b_s16','d5b_s18','d5b_s19','d5b_s21','d5b_s22','d5b_s25','d5b_s29'],'강의 슬라이드: 영역 나누기 → 수변 경계 → 도로 경계 → 장면 완성',3),
+      ('pair',['d5b_r4','d5b_r5'],''),
+      ('pair',['d5b_r6','d5b_r2'],'완성 장면'),
     ]),
   dict(title='우동우 건축사사무소', org='우동우 건축사사무소', role='프리랜서', kind='', year='2024–'),
 ]
