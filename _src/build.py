@@ -39,6 +39,7 @@ def pic(i, root, cls='', alt=''):
 
 CSS = r"""
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap');
 :root{--bg:#f6f5f2;--fg:#1d1c1a;--mute:#86827b;--line:#dedad3;--acc:#c8572f;--max:1180px;--text:680px}
 .dark{--bg:#0b0b0a;--fg:#ecebe7;--mute:#8d8a84;--line:#2a2927;--acc:#e0673a}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -344,6 +345,36 @@ pre.code.ask .f{color:var(--mute)}
 .lgrid .t span{position:absolute;right:3px;bottom:1px;font-size:9px;opacity:.7}
 .lgrid .low{opacity:.25}.lgrid .pk{outline:2px solid #d48f62}
 @media (max-width:900px){.lbody{grid-template-columns:1fr}.lpick{grid-template-columns:1fr 1fr}.lgrid{grid-template-columns:repeat(6,1fr)}.lgrid .t:nth-child(n+37){display:none}.lab{padding:22px 16px}}
+
+/* lab mood */
+.labpg{--bg:#121311;--fg:#e6e4dc;--mute:#8a8a80;--line:#2c2e2a;--mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+ background-color:var(--bg);background-image:linear-gradient(#ffffff08 1px,transparent 1px),linear-gradient(90deg,#ffffff08 1px,transparent 1px),linear-gradient(#ffffff04 1px,transparent 1px),linear-gradient(90deg,#ffffff04 1px,transparent 1px);background-size:120px 120px,120px 120px,24px 24px,24px 24px}
+.labpg header.top{background:color-mix(in srgb,var(--bg) 88%,transparent)}
+.labpg .phd .k,.labpg .log,.labpg .pstep .no,.labpg .st,.labpg .cmp h4,.labpg .lab .k,.labpg .lctl legend,.labpg pre.code .f,.labpg .hm b{font-family:var(--mono);letter-spacing:.02em}
+.labpg .phd .k{color:#b6d36b}
+.labpg .log{color:var(--mute);font-size:12px;margin-top:6px}
+.labpg .log:before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:#b6d36b;margin-right:8px;box-shadow:0 0 8px #b6d36b;animation:blink 1.6s infinite}
+@keyframes blink{50%{opacity:.25}}
+.labpg .pstep{border-top:1px dashed var(--line)}
+.labpg .pstep .no{color:#b6d36b;font-size:12px}
+.labpg .st{display:inline-block;margin-left:10px;font-size:11px;color:var(--mute);border:1px solid var(--line);padding:1px 7px}
+.labpg .st.on{color:#121311;background:#b6d36b;border-color:#b6d36b}
+.labpg .cmp{background:var(--line)}
+.labpg .cmp>div{background:#171816}
+.labpg .cmp .ai{background:#1c2117}
+.labpg .cmp .ai h4{color:#b6d36b}
+.labpg pre.code.ask{background:#0c0d0b;color:#d8d6cc;border:1px solid var(--line);border-left:3px solid #b6d36b;font-family:var(--mono);font-size:13px}
+.labpg pre.code.ask .f{color:#b6d36b}
+.labpg pre.code.ask:before{content:'> ';color:#b6d36b}
+.labpg .pnote{background:transparent;color:var(--fg);border:1px solid #b6d36b}
+.labpg .pnote h3{font-family:var(--mono);font-size:15px;color:#b6d36b}
+.labpg .flow li{border-top-color:#b6d36b}
+.labpg .lab{background:#0c0d0b;border:1px solid #b6d36b;box-shadow:0 0 0 6px #121311,0 0 0 7px var(--line)}
+.labpg .lab .k{color:#b6d36b}
+.labpg .lsum b{color:#b6d36b}.labpg .lhist i.on{background:#b6d36b}
+.labpg .reroll{background:#b6d36b}
+.labpg .lctl input{accent-color:#b6d36b}
+.labpg .lgrid .pk{outline-color:#b6d36b}
 """
 
 JS = r"""
@@ -371,7 +402,7 @@ def page(title, body, root, dark=False, on='', desc='', og='img/t_307.jpg'):
 <link rel="stylesheet" href="{root}style.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%231d1c1a%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22%23f6f5f2%22 font-family=%22sans-serif%22%3EH%3C/text%3E%3C/svg%3E">
 <meta property="og:image" content="https://coin9563-max.github.io/{og}">
-</head><body class="{'dark' if dark else ''}">
+</head><body class="{dark if isinstance(dark, str) else ('dark' if dark else '')}">
 <header class="top"><a class="name" href="{root}index.html">{SITE['name_ko']}<span>{SITE['name_en']}</span></a>
 <nav><a href="{root}index.html#projects" class="{'on' if on=='w' else ''}">Projects</a><a href="{root}index.html#publish">Publish</a><a href="{root}index.html#practice">Practice</a><a href="{root}process.html" class="{'on' if on=='p' else ''}">Process</a><a href="{root}about.html" class="{'on' if on=='a' else ''}">About</a><a href="{root}index.html#contact">Contact</a></nav></header>
 <main>
@@ -541,11 +572,12 @@ def process_page():
             out.append(f'<aside class="pnote"><h3>{E(st["t"])}</h3>{flow}<ul>' + ''.join(f'<li>{E(x)}</li>' for x in st['items']) + '</ul></aside>')
             continue
         ask = f'<pre class="code ask"><span class="f">예시 요청</span>{E(st["ask"])}</pre>' if st.get('ask') else ''
-        out.append(f'''<section class="pstep"><div class="ph"><span class="no">{st["no"]}</span><h2>{E(st["t"])}<small>{E(st["en"])}</small></h2></div>
+        out.append(f'''<section class="pstep"><div class="ph"><span class="no">EXP–{st["no"]}</span><span class="st {'on' if st.get('lab') else ''}">{'● 실험 가동' if st.get('lab') else '○ 실험 준비 중'}</span><h2>{E(st["t"])}<small>{E(st["en"])}</small></h2></div>
 <div class="pb"><div class="cmp"><div><h4>기존</h4><p>{E(st["before"])}</p></div><div class="ai"><h4>AI와 함께</h4><p>{E(st["ai"])}</p></div></div>
 <p class="hm"><b>사람의 몫</b> {E(st["human"])}</p>{ask}</div></section>''')
         if st.get('lab'):
             out.append(LABHTML[st['lab']]); js.append(LABJS[st['lab']])
-    body = f'''<section class="phd"><p class="k">Process</p><h1>{E(P["title"])}<small>{E(P["sub"])}</small></h1><p class="lead">{E(P["lead"])}</p></section>{"".join(out)}<script>{"".join(js)}</script>'''
-    open(f'{OUT}/process.html', 'w').write(page(f'Process — {SITE["name_ko"]}', body, '', on='p', desc=P['lead']))
+    nlab = sum(1 for x in P['steps'] if x.get('lab')); nexp = sum(1 for x in P['steps'] if not x.get('note'))
+    body = f'''<section class="phd"><p class="k">LAB — 설계 프로세스 실험 노트</p><p class="log">EXP {nexp:02d} · RUNNING {nlab:02d} · UPDATED 2026.11.24</p><h1>{E(P["title"])}<small>{E(P["sub"])}</small></h1><p class="lead">{E(P["lead"])}</p></section>{"".join(out)}<script>{"".join(js)}</script>'''
+    open(f'{OUT}/process.html', 'w').write(page(f'Process — {SITE["name_ko"]}', body, '', dark='dark labpg', on='p', desc=P['lead']))
 process_page()
