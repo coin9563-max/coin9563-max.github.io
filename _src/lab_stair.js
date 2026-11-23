@@ -16,7 +16,7 @@
   <div class="nlv"><div class="cv sheet"><canvas class="sec"></canvas><p class="hint">위층 바닥의 파란 점을 위아래로 드래그 = 층고</p></div>
   <div class="cv sheet"><canvas class="pl"></canvas><p class="hint">파란 점을 좌우로 드래그 = 계단 폭</p></div></div><div class="nls"></div>`;
   const cS=app.querySelector('.sec'), cP=app.querySelector('.pl'), out=app.querySelector('.nls');
-  LabUI(app.querySelector('.lctl'),[
+  const refresh=LabUI(app.querySelector('.lctl'),[
     {g:'법규',k:'용도',opts:USE.map(u=>u.n),get:()=>P.use,set:v=>P.use=v},
     {g:'계단',k:'형식',opts:['직선 계단','ㄷ자 (반층참)'],get:()=>P.type,set:v=>P.type=v},
     {g:'계단',k:'목표 단높이 cm',min:14,max:20,step:.5,get:()=>P.rt,set:v=>P.rt=v},
@@ -123,5 +123,6 @@
   cP.addEventListener('pointermove',e=>{const [x,y]=loc(cP,e);if(!dP){cP.style.cursor=Math.hypot(x-SP.hx,y-SP.hy)<14?'ns-resize':'default';return;}
     const yy=(y-SP.oy)/SP.k; P.W=Math.max(60,Math.min(240,Math.round((P.type?(yy-10)/2:yy)/5)*5));draw();});
   cP.addEventListener('pointerup',()=>dP=false);
+  LabIO(app,{name:'stair',state:()=>({P}),load:o=>{Object.assign(P,o.P||{});refresh();},redraw:draw});
   addEventListener('resize',draw); draw();
 })();

@@ -13,7 +13,7 @@
   <div class="cv sheet"><canvas class="iso"></canvas><p class="hint">드래그 = 회전</p></div></div>
   <div class="nls"></div>`;
   const cT=app.querySelector('.top'), cI=app.querySelector('.iso'), out=app.querySelector('.nls');
-  LabUI(app.querySelector('.lctl'),[
+  const refresh=LabUI(app.querySelector('.lctl'),[
     {g:'법규',k:'건폐율 %',min:20,max:80,step:5,get:()=>P.bcr,set:v=>P.bcr=v},
     {g:'법규',k:'용적률 %',min:100,max:500,step:10,get:()=>P.far,set:v=>P.far=v},
     {g:'법규',k:'대지안의 공지 m',min:0,max:3,step:.5,get:()=>P.sb,set:v=>P.sb=v},
@@ -132,5 +132,9 @@
   let rx=null; cI.addEventListener('pointerdown',e=>{rx=e.clientX;cI.setPointerCapture(e.pointerId);});
   cI.addEventListener('pointermove',e=>{if(rx===null)return;P.yaw+=(e.clientX-rx)*.01;rx=e.clientX;drawIso(compute());});
   cI.addEventListener('pointerup',()=>rx=null);
+  LabIO(app,{name:'northlight-envelope',poly:{get:()=>poly,set:v=>poly=v},state:()=>({P,poly}),load:o=>{Object.assign(P,o.P||{});if(o.poly)poly=o.poly;refresh();},redraw:draw,
+    dxf:()=>{const R=compute(),E=[{layer:'SITE',pts:poly},{layer:'FOOTPRINT',pts:R.foot}];
+      R.env.forEach((pl,i)=>E.push({layer:'ENVELOPE',pts:pl,z:(i+1)*P.fh}));
+      R.mass.forEach((pl,i)=>{E.push({layer:'MASS',pts:pl,z:i*P.fh},{layer:'MASS',pts:pl,z:(i+1)*P.fh});pl.forEach(p=>E.push({layer:'MASS',closed:false,pts:[[p[0],p[1],i*P.fh],[p[0],p[1],(i+1)*P.fh]]}));});return E;}});
   addEventListener('resize',draw); draw();
 })();

@@ -462,3 +462,15 @@ pre.code.ask .f{color:var(--mute)}
 
 .cv0 .topo{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block}
 .cv0 .bgs{z-index:0}
+
+.lio{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start;margin-top:4px}
+.app .lio{grid-column:2}
+.lio>button,.lio .up,.lio .ap{background:#1c2117;color:#b6d36b;border:1px solid #3c4a2a;font:12px var(--mono);padding:6px 12px;cursor:pointer}
+.lio>button:hover,.lio .up:hover{background:#26301b}
+.lin{flex-basis:100%;border:1px solid var(--line);padding:0}
+.lin summary{cursor:pointer;padding:6px 12px;font:12px var(--mono);color:#b6d36b}
+.lin p{font-size:12px;color:var(--mute);padding:0 12px}.lin code{color:#e6e3da}
+.lin textarea{width:calc(100% - 24px);margin:8px 12px;background:#0c0d0b;color:#e6e3da;border:1px solid var(--line);font:12px/1.5 var(--mono);padding:8px}
+.lin div{display:flex;gap:8px;align-items:center;padding:0 12px 12px}.lin .up input{display:none}.lin .msg{font-size:12px;color:var(--mute)}
+.acard .lio{display:none}
+@media (max-width:900px){.app .lio{grid-column:1}}

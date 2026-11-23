@@ -12,7 +12,7 @@
   <div class="nlv"><div class="cv sheet"><canvas class="top"></canvas><p class="hint">꼭짓점 드래그 · 변 더블클릭 = 점 추가 · 점 더블클릭 = 삭제</p></div>
   <div class="cv sheet"><canvas class="gr"></canvas><p class="hint">각도별 최대 대수 (탐색 결과) · 막대를 누르면 그 각도로</p></div></div><div class="nls"></div>`;
   const cT=app.querySelector('.top'), cG=app.querySelector('.gr'), out=app.querySelector('.nls');
-  LabUI(app.querySelector('.lctl'),[
+  const refresh=LabUI(app.querySelector('.lctl'),[
     {g:'주차',k:'구획 폭 m',min:2.3,max:2.6,step:.1,get:()=>P.sw,set:v=>P.sw=v},
     {g:'주차',k:'구획 길이 m',min:5,max:5.2,step:.1,get:()=>P.sl,set:v=>P.sl=v},
     {g:'주차',k:'차로 폭 m',min:5,max:7,step:.5,get:()=>P.aw,set:v=>P.aw=v},
@@ -117,5 +117,10 @@
   cT.addEventListener('dblclick',e=>{const [x,y]=W2(e);const vi=poly.findIndex(p=>Math.hypot(p[0]-x,p[1]-y)*T.k<12);
     if(vi>=0){if(poly.length>3)poly.splice(vi,1);} else {let bi=-1,bd=1e9;poly.forEach((a,i)=>{const d=segD(x,y,a,poly[(i+1)%poly.length]);if(d<bd){bd=d;bi=i;}}); if(bd*T.k<14) poly.splice(bi+1,0,[Math.round(x*2)/2,Math.round(y*2)/2]);} search();draw();});
   cG.addEventListener('click',e=>{const r=cG.getBoundingClientRect(),i=Math.floor((e.clientX-r.left-GB.l)/GB.bw);if(i>=0&&i<best.res.length){curTh=best.res[i].th;draw();}});
+  LabIO(app,{name:'parking',poly:{get:()=>poly,set:v=>poly=v},state:()=>({P,poly}),load:o=>{Object.assign(P,o.P||{});if(o.poly)poly=o.poly;refresh();},redraw:()=>{search();draw();},
+    dxf:()=>{const L=current(),c=Math.cos(L.th),s=Math.sin(L.th),G=(x,y)=>[x*c-y*s,x*s+y*c],E=[{layer:'SITE',pts:poly}];
+      L.stalls.forEach(q=>E.push({layer:'STALL',pts:[G(q[0],q[1]),G(q[0]+q[2],q[1]),G(q[0]+q[2],q[1]+q[3]),G(q[0],q[1]+q[3])]}));
+      L.aisles.forEach(a=>E.push({layer:'AISLE',closed:false,pts:[G(a[0],a[1]+a[3]/2),G(a[0]+a[2],a[1]+a[3]/2)]}));
+      if(L.con){const a=L.con;E.push({layer:'AISLE',closed:false,pts:[G(a[0]+a[2]/2,a[1]),G(a[0]+a[2]/2,a[1]+a[3])]});}return E;}});
   addEventListener('resize',draw); search(); draw();
 })();

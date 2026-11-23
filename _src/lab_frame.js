@@ -16,7 +16,7 @@
   <div class="cv sheet"><canvas class="iso"></canvas><p class="hint">드래그 = 회전</p></div></div>
   <div class="nls"></div>`;
   const cT=app.querySelector('.top'), cI=app.querySelector('.iso'), out=app.querySelector('.nls');
-  LabUI(app.querySelector('.lctl'),[
+  const refresh=LabUI(app.querySelector('.lctl'),[
     {g:'구조',k:'구조 방식',opts:SYS.map(s=>s.n),get:()=>P.sys,set:v=>P.sys=v},
     {g:'구조',k:'층 하중 kN/㎡',min:6,max:20,step:1,get:()=>P.load,set:v=>P.load=v},
     {g:'건물',k:'층수',min:1,max:8,step:1,get:()=>P.nf,set:v=>P.nf=v},
@@ -129,5 +129,11 @@
   let rx=null; cI.addEventListener('pointerdown',e=>{rx=e.clientX;cI.setPointerCapture(e.pointerId);});
   cI.addEventListener('pointermove',e=>{if(rx===null)return;P.yaw+=(e.clientX-rx)*.01;rx=e.clientX;drawIso(compute());});
   cI.addEventListener('pointerup',()=>rx=null);
+  LabIO(app,{name:'structural-frame',state:()=>({P,sx,sy}),load:o=>{Object.assign(P,o.P||{});if(o.sx)sx=o.sx;if(o.sy)sy=o.sy;refresh();},redraw:draw,
+    dxf:()=>{const R=compute(),E=[],c=R.c/1000;
+      R.X.forEach(x=>E.push({layer:'GRID',closed:false,pts:[[x,-2],[x,R.Ly+2]]}));R.Y.forEach(y=>E.push({layer:'GRID',closed:false,pts:[[-2,y],[R.Lx+2,y]]}));
+      R.X.forEach(x=>R.Y.forEach(y=>E.push({layer:'COLUMN',pts:[[x-c/2,y-c/2],[x+c/2,y-c/2],[x+c/2,y+c/2],[x-c/2,y+c/2]]})));
+      for(let f=1;f<=P.nf;f++){const z=f*P.fh;R.X.forEach(x=>E.push({layer:'BEAM',closed:false,z,pts:[[x,0],[x,R.Ly]]}));R.Y.forEach(y=>E.push({layer:'BEAM',closed:false,z,pts:[[0,y],[R.Lx,y]]}));}
+      return E;}});
   addEventListener('resize',draw); draw();
 })();
