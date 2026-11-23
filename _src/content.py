@@ -18,7 +18,7 @@ SITE = {
 }
 
 PROJECTS = [
-dict(slug='mosscape-oreum', no='01', title='MOSSCAPE OREUM', sub='모스케이프 오름', year='2026',
+dict(slug='mosscape-oreum', dwg='4227', no='01', title='MOSSCAPE OREUM', sub='모스케이프 오름', year='2026',
   kind='졸업설계 · 집합주거', dark=True, hero=307,
   meta=[('Location','경기 파주시 문산읍 장산리 초평도'),('Year','2026'),('Type','집합주거 · 공동체 시설'),('Status','홍익대학교 건축학과 졸업설계'),('Team','개인')],
   statement='생존을 위해 지었으나, 우연히 면역 장치가 된 마을',
@@ -48,7 +48,7 @@ dict(slug='mosscape-oreum', no='01', title='MOSSCAPE OREUM', sub='모스케이�
     ('pair',[663,665],'의회 The Council · 의식 The Ritual'),
   ]),
 
-dict(slug='alley-house', no='02', title='ALLEY HOUSE', sub='', year='2025',
+dict(slug='alley-house', dwg='348', no='02', title='ALLEY HOUSE', sub='', year='2025',
   kind='4학년 · 집합주거', hero=298,
   meta=[('Location','서울 관악구 난향동'),('Year','2025'),('Type','집합주거'),('Status','4학년 1학기 설계스튜디오'),('Team','개인')],
   statement='확장되어 사라진 발코니를, 확장할 수 없는 복도로 옮긴다',
@@ -72,7 +72,7 @@ dict(slug='alley-house', no='02', title='ALLEY HOUSE', sub='', year='2025',
     ('wide',299,'단면 투시도'),
   ]),
 
-dict(slug='spare-room', no='03', title='SPARE ROOM', sub='', year='2023',
+dict(slug='spare-room', dwg='2305', no='03', title='SPARE ROOM', sub='', year='2023',
   kind='3학년 2학기 · 리노베이션', hero=280,
   meta=[('Location','서울 성동구 사근동 · 구 덕수고 부지'),('Year','2023'),('Type','공공 실험 집합주거 · 학교 리노베이션'),('Status','3학년 2학기 설계스튜디오'),('Team','개인')],
   statement='함께 외로운 도시인들의 집',
@@ -94,7 +94,7 @@ dict(slug='spare-room', no='03', title='SPARE ROOM', sub='', year='2023',
     ('wide',377,'단면 투시도'),
   ]),
 
-dict(slug='in-between', no='04', title='IN-BETWEEN', sub='', year='2023',
+dict(slug='in-between', dwg='4320', no='04', title='IN-BETWEEN', sub='', year='2023',
   kind='3학년 1학기 · 업무시설', hero=87,
   meta=[('Location','서울 중구 초동 72-10 외 6필지 · 대지 약 2,798㎡'),('Year','2023'),('Type','업무시설'),('Status','3학년 1학기 설계스튜디오'),('Team','개인')],
   statement='서로 다른 도시적 스케일을 수용하며 골목과 대로를 연결한다',
@@ -117,7 +117,7 @@ dict(slug='in-between', no='04', title='IN-BETWEEN', sub='', year='2023',
     ('wide',4318,'내부 보이드 — 층마다 자리를 바꾸는 공유공간과 테라스'),
   ]),
 
-dict(slug='stopover', no='05', title='STOPOVER', sub='', year='2022',
+dict(slug='stopover', dwg='3111', no='05', title='STOPOVER', sub='', year='2022',
   kind='2학년 · 공공청사', hero=3101,
   meta=[('Location','서울 종로구 부암동'),('Year','2022'),('Type','공공청사 · 주민센터'),('Status','2학년 2학기 설계스튜디오'),('Team','개인')],
   statement='정류장 앞, 용건이 없어도 들러 쉬어 가는 주민센터',
@@ -142,7 +142,7 @@ dict(slug='stopover', no='05', title='STOPOVER', sub='', year='2022',
     ('wide',3989,'남측 입면도 — 정류장 쪽'),
   ]),
 
-dict(slug='emptying-village', no='06', title='비어가는 마을', sub='사라진 것들이 들어오는 집', year='2026',
+dict(slug='emptying-village', dwg='2950', no='06', title='비어가는 마을', sub='사라진 것들이 들어오는 집', year='2026',
   kind='공모전 · 빈집 · 어촌 재생', hero=2966,
   meta=[('Location','전라남도 고흥군 포두면 오취마을'),('Year','2026'),('Type','공모전 — 빈집 · 어촌 재생'),('Team','팀')],
   statement='비어가는 마을, 사라진 것들이 들어오는 집',

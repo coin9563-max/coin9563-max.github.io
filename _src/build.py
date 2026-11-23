@@ -241,11 +241,40 @@ main>footer{padding-left:0}
  .ixl .mt{display:block;grid-column:1/-1;width:100%;height:58vw;object-fit:cover;margin-top:10px}
  .ixl:hover a{color:inherit}.ixl:hover a .t{color:var(--fg)}.ixl li:hover a{padding-left:0}
 }
+
+/* ---- C2: render | drawing stage + rising card */
+.ix{grid-template-columns:5fr 7fr;gap:48px}
+.ixl .t{font-size:clamp(22px,2.3vw,34px)}
+.ixl .ms{display:none}
+.ixl a{grid-template-columns:40px 1fr;row-gap:2px;padding:18px 0}
+.ixl .k{grid-column:2;text-align:left}
+.stg{position:sticky;top:84px;aspect-ratio:4/3;max-height:calc(100vh - 110px);width:100%}
+.stg .sl{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s .45s}
+.stg .sl.on{opacity:1;visibility:visible;transition:opacity .45s ease}
+.stg .r,.stg .d{overflow:hidden;position:relative}
+.stg .r img{width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform 1.4s ease}
+.stg .sl.on .r img{transform:none}
+.stg .d{background:#ecebe6;display:flex;align-items:center;justify-content:center;padding:6%}
+.stg .d img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;mix-blend-mode:multiply}
+.stg .cd{position:absolute;left:0;bottom:0;width:56%;background:#d8b04a;color:#1d1c1a;padding:22px 24px 20px;transform:translateY(24px);opacity:0;transition:transform .55s cubic-bezier(.2,.7,.2,1) .12s,opacity .4s ease .12s}
+.stg .sl.on .cd{transform:none;opacity:1}
+.stg .cd .cn{font-size:12px;opacity:.7;display:block}
+.stg .cd b{display:block;font-size:22px;font-weight:600;letter-spacing:-.01em;margin-top:6px;line-height:1.2}
+.stg .cd p{font-size:16px;line-height:1.55;margin-top:10px}
+.stg .cd .go{display:inline-block;font-size:13px;margin-top:14px;border-bottom:1px solid currentColor}
+.stg .sl:hover .cd .go{opacity:.7}
+@media (max-width:760px){
+ .ix{grid-template-columns:1fr;gap:0}
+ .ixl li.on a,.ixl li:hover a{padding-left:0}
+ .ixl a{grid-template-columns:32px 1fr}
+ .stg{display:none}
+ .ixl .ms{display:block;grid-column:1/-1;font-size:15px;color:var(--fg);margin-top:8px}
+}
 """
 
 JS = r"""
-(function(){var pv=document.querySelector('.pv');if(!pv)return;var im=pv.querySelectorAll('img');
-document.querySelectorAll('.ixl li').forEach(function(li){li.addEventListener('mouseenter',function(){var i=+li.dataset.i;im.forEach(function(x,k){x.classList.toggle('on',k===i)});document.querySelectorAll('.ixl li').forEach(function(o){o.classList.toggle('on',o===li)});});});})();
+(function(){var st=document.querySelector('.stg');if(!st)return;var sl=st.querySelectorAll('.sl'),li=document.querySelectorAll('.ixl li');
+li.forEach(function(l){l.addEventListener('mouseenter',function(){var i=+l.dataset.i;sl.forEach(function(x,k){x.classList.toggle('on',k===i)});li.forEach(function(o){o.classList.toggle('on',o===l)});});});})();
 
 const lb=document.getElementById('lb'),li=lb.querySelector('img'),lc=lb.querySelector('.c');let L=[],ix=0;
 function show(i){ix=(i+L.length)%L.length;li.src=L[ix].src;const f=L[ix].closest('figure').querySelector('figcaption');lc.textContent=(f?f.textContent:'')+'  '+(ix+1)+' / '+L.length;}
@@ -338,10 +367,13 @@ rows, pvs = [], []
 for k, p in enumerate(PROJECTS):
     src, w, h = use(p['hero'], thumb=True)
     pos = p.get("pos", "50% 50%")
-    rows.append(f'''<li data-i="{k}"><a href="works/{p["slug"]}.html"><span class="n">{p["no"]}</span><span class="t">{E(p["title"])}</span><span class="k">{E(p["kind"])} · {p["year"]}</span><img class="mt" src="{src}" width="{w}" height="{h}" alt="" loading="lazy" style="object-position:{pos}"></a></li>''')
-    pvs.append(f'<img src="{src}" width="{w}" height="{h}" alt="{E(p["title"])}" style="object-position:{pos}" class="{"on" if k==0 else ""}" {"" if k==0 else "loading=\"lazy\""}>')
+    ds, dw_, dh = use(p['dwg'], thumb=True) if p.get('dwg') else (src, w, h)
+    lz = '' if k == 0 else 'loading="lazy"'
+    rows.append(f'''<li data-i="{k}" class="{"on" if k==0 else ""}"><a href="works/{p["slug"]}.html"><span class="n">{p["no"]}</span><span class="t">{E(p["title"])}</span><span class="k">{E(p["kind"])} · {p["year"]}</span><img class="mt" src="{src}" width="{w}" height="{h}" alt="" loading="lazy" style="object-position:{pos}"><span class="ms">{E(p.get("statement",""))}</span></a></li>''')
+    pvs.append(f'''<a class="sl{" on" if k==0 else ""}" href="works/{p["slug"]}.html"><div class="r"><img src="{src}" width="{w}" height="{h}" alt="{E(p["title"])}" style="object-position:{pos}" {lz}></div><div class="d"><img src="{ds}" width="{dw_}" height="{dh}" alt="{E(p["title"])} 도면" {lz}></div>
+<div class="cd"><span class="cn">{p["no"]} — {E(p["kind"])} · {p["year"]}</span><b>{E(p["title"])}</b><p>{E(p.get("statement",""))}</p><span class="go">프로젝트 보기 →</span></div></a>''')
 body = f'''<section class="ix" id="projects"><div class="ixh"><h1>{SITE["name_ko"]} <span>{SITE["name_en"]}</span></h1><p class="sub">Selected Works 2021–2026 · {SITE["school"]}</p><p class="lead">{E(ABOUT.get("intro") or "")}</p></div>
-<ul class="ixl">{"".join(rows)}</ul><div class="pv">{"".join(pvs)}</div></section>
+<ul class="ixl">{"".join(rows)}</ul><div class="stg">{"".join(pvs)}</div></section>
 <div class="sec" id="publish"><h2>Publish</h2><span>출판 · 책자</span></div>{cardgrid(PUBLISH)}
 <div class="sec" id="practice"><h2>Practice &amp; Activities</h2><span>인턴 · 대외활동</span></div>{practice()}'''
 open(f'{OUT}/index.html', 'w').write(page(f'{SITE["name_ko"]} — Portfolio', body, '', on='w'))
