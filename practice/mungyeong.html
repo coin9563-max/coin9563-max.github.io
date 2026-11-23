@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>문경시 체육시설 설계공모 — 한승현</title>
+<meta name="description" content="두 가지 매스 대안의 렌더링">
+<meta property="og:title" content="문경시 체육시설 설계공모 — 한승현"><meta property="og:description" content="두 가지 매스 대안의 렌더링">
+<link rel="stylesheet" href="../style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%231d1c1a%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22%23f6f5f2%22 font-family=%22sans-serif%22%3EH%3C/text%3E%3C/svg%3E">
+<meta property="og:image" content="https://coin9563-max.github.io/img/t_ra_03.jpg">
+</head><body class="">
+<header class="top"><a class="name" href="../index.html">한승현<span>Seunghyun Han</span></a>
+<nav><a href="../index.html#projects" class="on">Projects</a><a href="../index.html#publish">Publish</a><a href="../index.html#practice">Practice</a><a href="../about.html" class="">About</a></nav></header>
+<main>
+<div class="hero"><img class="" src="../img/ra_03.jpg" width="2400" height="1598" loading="lazy" decoding="async" alt="문경시 체육시설 설계공모"></div>
+<section class="phead"><div><div class="no">이진미 교수 RA</div><h1>문경시 체육시설 설계공모</h1><dl><dt>Lab</dt><dd>이진미 교수 연구실 (RA)</dd><dt>Year</dt><dd>2025</dd><dt>Site</dt><dd>경북 문경시</dd><dt>Role</dt><dd>RA — 모델링 · 렌더링</dd></dl></div>
+<div><p class="st">두 가지 매스 대안의 렌더링</p><div class="body"><p>이진미 교수 연구실 RA로 참여한 문경시 설계공모 작업. 막 구조 돔과 목재 매스, 두 가지 대안을 같은 시점에서 렌더링해 비교했다.</p></div></div></section><section class="txt"><h2>대안 A — 막 구조 돔</h2><div class="b"></div></section>
+<figure class="blk "><img class="" src="../img/ra_00.jpg" width="2400" height="1598" loading="lazy" decoding="async" alt=""></figure>
+<figure class="blk"><div class="row " style="grid-template-columns:1.502fr 1.502fr"><div><img class="" src="../img/ra_05.jpg" width="2400" height="1598" loading="lazy" decoding="async" alt=""></div><div><img class="" src="../img/ra_02.jpg" width="2400" height="1598" loading="lazy" decoding="async" alt=""></div></div></figure>
+<section class="txt"><h2>대안 B — 목재 매스</h2><div class="b"></div></section>
+<figure class="blk "><img class="" src="../img/ra_07.jpg" width="2400" height="1598" loading="lazy" decoding="async" alt=""></figure>
+<figure class="blk"><div class="row " style="grid-template-columns:1.502fr 1.502fr"><div><img class="" src="../img/ra_06.jpg" width="2400" height="1598" loading="lazy" decoding="async" alt=""></div><div><img class="" src="../img/ra_09.jpg" width="2400" height="1598" loading="lazy" decoding="async" alt=""></div></div></figure>
+<figure class="blk"><div class="row " style="grid-template-columns:1.502fr 1.502fr"><div><img class="" src="../img/ra_10.jpg" width="2400" height="1598" loading="lazy" decoding="async" alt=""></div><div><img class="" src="../img/ra_11.jpg" width="2400" height="1598" loading="lazy" decoding="async" alt=""></div></div></figure><nav class="pnav"><a href="mvsf-neom.html"><span>← 이전</span>MVSF in NEOM</a><a href="salmgut.html"><span>다음 →</span>삶것 건축사사무소</a></nav>
+<footer>© 2026 한승현 Seunghyun Han</footer>
+</main>
+<div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>
+<script>
+const lb=document.getElementById('lb'),li=lb.querySelector('img'),lc=lb.querySelector('.c');let L=[],ix=0;
+function show(i){ix=(i+L.length)%L.length;li.src=L[ix].src;const f=L[ix].closest('figure').querySelector('figcaption');lc.textContent=(f?f.textContent:'')+'  '+(ix+1)+' / '+L.length;}
+document.addEventListener('click',e=>{
+ if(e.target.closest('#lb button')){show(ix+(e.target.classList.contains('n')?1:-1));return}
+ if(e.target.closest('#lb')){lb.classList.remove('on');return}
+ const im=e.target.closest('figure img');if(im){L=[...document.querySelectorAll('figure img')];show(L.indexOf(im));lb.classList.add('on')}});
+document.addEventListener('keydown',e=>{if(!lb.classList.contains('on'))return;if(e.key==='Escape')lb.classList.remove('on');if(e.key==='ArrowRight')show(ix+1);if(e.key==='ArrowLeft')show(ix-1)});
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.blk,.txt,.work').forEach(el=>{el.classList.add('fade');io.observe(el)})}
+</script>
+</body></html>

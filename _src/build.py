@@ -5,6 +5,7 @@ import os, sys, shutil, html, json
 from PIL import Image
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from content import SITE, PROJECTS, ABOUT, PUBLISH, PRACTICE
+PRACTICE = sorted(PRACTICE, key=lambda i: i['year'][:4], reverse=True)
 
 SRC, OUT = sys.argv[1], sys.argv[2]
 os.makedirs(OUT + '/img', exist_ok=True)
