@@ -23,9 +23,30 @@
 </main>
 <div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>
 <script>
+
+// 표지 기본 화면: 흐르는 지형 등고선 (3D value noise + marching squares), 마우스 = 언덕
+(function(){var cv=document.querySelector('.cv0 .topo');if(!cv)return;var g=cv.getContext('2d'),W,H,S=11,nx,ny,F,mx=-1e4,my=-1e4,tx=-1e4,ty=-1e4,t=Math.random()*100,still=matchMedia('(prefers-reduced-motion:reduce)').matches;
+var P=new Uint8Array(512);for(var i=0;i<256;i++)P[i]=i;for(i=255;i>0;i--){var j=Math.floor(Math.random()*(i+1)),x=P[i];P[i]=P[j];P[j]=x;}for(i=0;i<256;i++)P[i+256]=P[i];
+function h(x,y,z){return P[P[P[x&255]+(y&255)]+(z&255)]/255;}function sm(a){return a*a*(3-2*a);}
+function n3(x,y,z){var X=Math.floor(x),Y=Math.floor(y),Z=Math.floor(z),u=sm(x-X),v=sm(y-Y),w=sm(z-Z);function L(a,b,k){return a+(b-a)*k;}
+return L(L(L(h(X,Y,Z),h(X+1,Y,Z),u),L(h(X,Y+1,Z),h(X+1,Y+1,Z),u),v),L(L(h(X,Y,Z+1),h(X+1,Y,Z+1),u),L(h(X,Y+1,Z+1),h(X+1,Y+1,Z+1),u),v),w);}
+function size(){var r=cv.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;g.setTransform(d,0,0,d,0,0);nx=Math.ceil(W/S)+1;ny=Math.ceil(H/S)+1;F=new Float32Array(nx*ny);}
+function field(){var sc=1/260;for(var j=0;j<ny;j++)for(var i=0;i<nx;i++){var x=i*S,y=j*S,e=n3(x*sc,y*sc,t)*.62+n3(x*sc*2.1,y*sc*2.1,t*1.3+7)*.28+n3(x*sc*4.3,y*sc*4.3,t*1.7+3)*.1;
+var dx=x-mx,dy=y-my;e+=.34*Math.exp(-(dx*dx+dy*dy)/(2*170*170));F[j*nx+i]=e;}}
+function draw(){g.clearRect(0,0,W,H);var N=22;for(var k=1;k<N;k++){var lv=.12+k*.045;g.beginPath();
+for(var j=0;j<ny-1;j++)for(var i=0;i<nx-1;i++){var a=F[j*nx+i],b=F[j*nx+i+1],c=F[(j+1)*nx+i+1],d=F[(j+1)*nx+i],cs=(a>lv?8:0)|(b>lv?4:0)|(c>lv?2:0)|(d>lv?1:0);if(cs===0||cs===15)continue;
+var x=i*S,y=j*S,T=[x+S*(lv-a)/(b-a),y],R=[x+S,y+S*(lv-b)/(c-b)],B=[x+S*(lv-d)/(c-d),y+S],Lf=[x,y+S*(lv-a)/(d-a)],sg;
+switch(cs){case 1:case 14:sg=[Lf,B];break;case 2:case 13:sg=[B,R];break;case 3:case 12:sg=[Lf,R];break;case 4:case 11:sg=[T,R];break;case 6:case 9:sg=[T,B];break;case 7:case 8:sg=[Lf,T];break;case 5:sg=[Lf,T,B,R];break;case 10:sg=[Lf,B,T,R];break;}
+for(var q=0;q<sg.length;q+=2){g.moveTo(sg[q][0],sg[q][1]);g.lineTo(sg[q+1][0],sg[q+1][1]);}}
+g.strokeStyle=k%5===0?'rgba(239,237,230,.42)':'rgba(239,237,230,.13)';g.lineWidth=k%5===0?1:.7;g.stroke();}}
+var last=0;function loop(ts){requestAnimationFrame(loop);if(ts-last<40)return;last=ts;t+=.0022;mx+=(tx-mx)*.08;my+=(ty-my)*.08;field();draw();}
+addEventListener('resize',function(){size();field();draw();});
+cv.parentNode.addEventListener('mousemove',function(e){var r=cv.getBoundingClientRect();tx=e.clientX-r.left;ty=e.clientY-r.top;if(mx<-1e3){mx=tx;my=ty;}});
+cv.parentNode.addEventListener('mouseleave',function(){tx=ty=-1e4;});
+size();field();draw();if(!still)requestAnimationFrame(loop);})();
 (function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a');
 a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
-m.addEventListener('mouseleave',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===0)});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});});})();
+m.addEventListener('mouseleave',function(){bg.forEach(function(b){b.classList.remove('on')});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});});})();
 (function(){var pv=document.querySelector('.lpv');if(!pv)return;document.querySelectorAll('.lr.f').forEach(function(r){
 r.addEventListener('mouseenter',function(){pv.src=r.dataset.img;pv.classList.add('on');});r.addEventListener('mouseleave',function(){pv.classList.remove('on');});
 r.addEventListener('mousemove',function(e){pv.style.transform='translate('+(e.clientX+28)+'px,'+(e.clientY-120)+'px)';});});})();
