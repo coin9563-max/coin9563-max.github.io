@@ -410,7 +410,7 @@ pre.code.ask .f{color:var(--mute)}
 .hint{font-family:var(--mono);font-size:11px;color:var(--mute);margin-top:6px}
 .nls{grid-column:2;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
 .nls div{background:#0c0d0b;padding:10px 12px}.nls span{display:block;font-size:12px;color:var(--mute)}.nls b{font-family:var(--mono);font-weight:500;font-size:15px}
-.nls .hi b{color:#b6d36b}
+.nls .hi b{color:#b6d36b}.nls .ng b{color:#ff6b4a!important}
 .nls .note{grid-column:1/-1;background:#0c0d0b;padding:10px 12px;font-size:13px;color:var(--mute)}
 @media (max-width:900px){.app{grid-template-columns:1fr}.nlv{grid-template-columns:1fr}.nls{grid-column:1;grid-template-columns:1fr 1fr}.cv canvas{height:320px}}
 
@@ -760,6 +760,9 @@ LABS = {
   'frame': dict(no='03', cat='STRUCTURE', en='STRUCTURAL GRID → FRAME', ko='구조 그리드 · 골조', t='구조 그리드 → 골조', js='lab_frame.js',
     d='그리드 축선을 끌어 스팬을 바꾸면 기둥 · 보 · 슬래브 분해 아이소와 개략 부재 크기 · 물량이 바로 나온다.',
     long='평면에서 축선을 끌어 스팬을 바꾸고, 구조 방식과 층수를 고르면 골조가 층별로 분해된 아이소로 그려진다. 보 춤은 스팬비, 기둥은 가장 큰 부담 면적의 축력으로 잡은 계획 단계 개략치다. 스팬과 기둥 수, 보 춤 사이의 맞바꿈을 눈으로 확인하는 도구.'),
+  'stair': dict(no='04', cat='CIRCULATION', en='STAIR DESIGN', ko='계단 설계', t='계단 설계', js='lab_stair.js',
+    d='층고를 끌면 단 수 · 단높이 · 디딤판 · 계단참이 다시 잡히고 용도별 법규 OK/NG가 나온다.',
+    long='층고와 용도를 정하면 단높이를 목표값 이하로 맞춰 단 수를 정하고, 보행 공식(2R+T ≈ 63cm)으로 단너비를 잡는다. 3m마다 계단참, 용도별 단높이 · 단너비 · 폭 기준(피난·방화구조 규칙 제15조 등)을 함께 판정하고 계단실 크기를 낸다.'),
 }
 STEPT = {}
 def lab_page(k):
@@ -768,7 +771,7 @@ def lab_page(k):
     body = head + L.get('body', '<div class="app"></div>') + '</section>'
     js = open(os.path.join(SRC, 'lab_ui.js')).read() + open(os.path.join(SRC, L['js'])).read()
     open(f'{OUT}/lab/{k}.html', 'w').write(page(f'LAB {L["no"]} {L["t"]} — {SITE["name_ko"]}', body + f'<script>{js}</script>', '../', dark='dark labpg', on='p', desc=L['d']))
-CARDS = ['northlight', 'frame']
+CARDS = ['northlight', 'frame', 'stair']
 def process_page():
     P = PROCESS
     os.makedirs(f'{OUT}/lab', exist_ok=True)

@@ -371,7 +371,7 @@ pre.code.ask .f{color:var(--mute)}
 .hint{font-family:var(--mono);font-size:11px;color:var(--mute);margin-top:6px}
 .nls{grid-column:2;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
 .nls div{background:#0c0d0b;padding:10px 12px}.nls span{display:block;font-size:12px;color:var(--mute)}.nls b{font-family:var(--mono);font-weight:500;font-size:15px}
-.nls .hi b{color:#b6d36b}
+.nls .hi b{color:#b6d36b}.nls .ng b{color:#ff6b4a!important}
 .nls .note{grid-column:1/-1;background:#0c0d0b;padding:10px 12px;font-size:13px;color:var(--mute)}
 @media (max-width:900px){.app{grid-template-columns:1fr}.nlv{grid-template-columns:1fr}.nls{grid-column:1;grid-template-columns:1fr 1fr}.cv canvas{height:320px}}
 
