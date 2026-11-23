@@ -2,8 +2,8 @@
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Process — 한승현</title>
-<meta name="description" content="설계의 판단은 사람이 하고, 반복과 계산은 AI와 나눈다. 아래는 졸업설계를 하며 실제로 만든 Grasshopper 컴포넌트들을 설계 단계 순서로 정리한 것이다. 모든 컴포넌트는 Claude와 대화하며 Python 코드로 작성했다.">
-<meta property="og:title" content="Process — 한승현"><meta property="og:description" content="설계의 판단은 사람이 하고, 반복과 계산은 AI와 나눈다. 아래는 졸업설계를 하며 실제로 만든 Grasshopper 컴포넌트들을 설계 단계 순서로 정리한 것이다. 모든 컴포넌트는 Claude와 대화하며 Python 코드로 작성했다.">
+<meta name="description" content="설계는 조사에서 시작해 매스, 평면, 구조, 도면, 발표로 이어진다. 단계마다 반복과 계산은 AI에 맡기고, 판단에 쓰는 시간을 늘리는 방법을 정리했다. 기존 방식과 AI를 넣은 방식을 나란히 놓고, 일부 단계는 직접 조절해 볼 수 있는 실험을 붙였다.">
+<meta property="og:title" content="Process — 한승현"><meta property="og:description" content="설계는 조사에서 시작해 매스, 평면, 구조, 도면, 발표로 이어진다. 단계마다 반복과 계산은 AI에 맡기고, 판단에 쓰는 시간을 늘리는 방법을 정리했다. 기존 방식과 AI를 넣은 방식을 나란히 놓고, 일부 단계는 직접 조절해 볼 수 있는 실험을 붙였다.">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%231d1c1a%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22%23f6f5f2%22 font-family=%22sans-serif%22%3EH%3C/text%3E%3C/svg%3E">
 <meta property="og:image" content="https://coin9563-max.github.io/img/t_307.jpg">
@@ -11,51 +11,160 @@
 <header class="top"><a class="name" href="index.html">한승현<span>Seunghyun Han</span></a>
 <nav><a href="index.html#projects" class="">Projects</a><a href="index.html#publish">Publish</a><a href="index.html#practice">Practice</a><a href="process.html" class="on">Process</a><a href="about.html" class="">About</a><a href="index.html#contact">Contact</a></nav></header>
 <main>
-<section class="phd"><p class="k">Process</p><h1>AI와 설계하기<small>Designing with AI — 설계 단계마다 AI를 어디에 쓰는가</small></h1><p class="lead">설계의 판단은 사람이 하고, 반복과 계산은 AI와 나눈다. 아래는 졸업설계를 하며 실제로 만든 Grasshopper 컴포넌트들을 설계 단계 순서로 정리한 것이다. 모든 컴포넌트는 Claude와 대화하며 Python 코드로 작성했다.</p><div class="stats"><div><b>17</b><span>Grasshopper 파일</span></div><div><b>40</b><span>직접 만든 Python 컴포넌트</span></div><div><b>13,700</b><span>코드 줄 수</span></div><div><b>v5.7</b><span>가장 많이 고친 컴포넌트의 버전</span></div></div></section><section class="pstep"><div class="ph"><span class="no">01</span><h2>대지 읽기<small>Reading the ground</small></h2></div>
-<div class="pb"><div class="cmp"><div><h4>기존</h4><p>지형도를 캐드로 따고, 등고선을 한 줄씩 올려 지형 모형을 만든다.</p></div><div class="ai"><h4>AI와 함께</h4><p>하이트맵에서 만든 지형 메시를 자르고, 다듬고, 겹치는 작은 도구를 필요할 때마다 만든다. 단면 추출, 윗면만 남기기, 다중 스케일 합성 등 10여 개.</p></div></div>
-<p class="hm"><b>사람의 몫</b> 무엇을 볼지 정하는 일. 섬의 물길과 능선을 어디서 자를지.</p><pre class="code"><span class="f">unnamed.gh · 컴포넌트 12개</span>import Rhino.Geometry as rg
-# Cut - 메시를 수평면으로 잘라 단면 추출
-plane = rg.Plane(rg.Point3d(0, 0, plane_z), rg.Vector3d.ZAxis)
-polylines = rg.Intersect.Intersection.MeshPlane(mesh, plane)</pre><figure class="pfig"><img class="" src="img/pg_4397.jpg" width="2525" height="1785" loading="lazy" decoding="async" alt="결과 — 세 필터의 교집합으로 초평도를 찾은 부지 분석"><figcaption>결과 — 세 필터의 교집합으로 초평도를 찾은 부지 분석</figcaption></figure></div></section><section class="pstep"><div class="ph"><span class="no">02</span><h2>프로그램에서 매스로<small>From program to mass</small></h2></div>
-<div class="pb"><div class="cmp"><div><h4>기존</h4><p>면적표를 보고 버블 다이어그램을 그린 뒤, 매스를 손으로 하나씩 만든다.</p></div><div class="ai"><h4>AI와 함께</h4><p>가구 수, 면적, 천장고를 넣으면 셸 군집이 생기는 &quot;집합주거 마스터&quot;를 만들었다. 가구와 공용을 따로 입력하고, 시드를 바꾸면 배치가 바뀐다.</p></div></div>
-<p class="hm"><b>사람의 몫</b> 가구 구성과 공용 프로그램, 몇 개의 셸이 한 클러스터가 될지.</p><pre class="code"><span class="f">클러스터 생성 알고리즘.gh · v4</span>&quot;&quot;&quot;
-집합주거 마스터 v4: 가구/공용 입출력 분리
-INPUTS (가구):  areas_house, heights_house, seeds_house, anchors_house
-INPUTS (공용):  areas_common, heights_common, seeds_common
-&quot;&quot;&quot;</pre><figure class="pfig"><img class="" src="img/pg_264.jpg" width="2525" height="1785" loading="lazy" decoding="async" alt="결과 — 노동 · 주거 · 커뮤니티 · 외부인의 네 층위로 나눈 프로그램"><figcaption>결과 — 노동 · 주거 · 커뮤니티 · 외부인의 네 층위로 나눈 프로그램</figcaption></figure></div></section><section class="pstep"><div class="ph"><span class="no">03</span><h2>대안 100개와 평가<small>100 alternatives, scored</small></h2></div>
-<div class="pb"><div class="cmp"><div><h4>기존</h4><p>대안 서너 개를 만들어 크리틱에서 고른다.</p></div><div class="ai"><h4>AI와 함께</h4><p>시드 두 축으로 매스 100개를 격자로 펼치고, 각 매스에 점수를 매겨 상위안을 &quot;트로피 진열장&quot;에 따로 세운 뒤 자동으로 베이크한다.</p></div></div>
-<p class="hm"><b>사람의 몫</b> 점수 기준을 정하는 일, 그리고 점수가 놓친 좋은 안을 알아보는 눈.</p><pre class="code"><span class="f">매스 생성.gh · 매스평가.gh</span>&quot;&quot;&quot;
-100개 매스 매트릭스 + 트로피 진열장 + 자동 베이크
-세로축: master_seed (배치 변경)
-가로축: shell_seeds (셸 형태 변경)
-&quot;&quot;&quot;</pre><figure class="pfig"><img class="" src="img/pg_4630.jpg" width="2525" height="1785" loading="lazy" decoding="async" alt="관련 작업 — 그물을 매달아 흙 셸 형태를 찾는 동적 이완 코드(numpy), 역시 Claude와 작성"><figcaption>관련 작업 — 그물을 매달아 흙 셸 형태를 찾는 동적 이완 코드(numpy), 역시 Claude와 작성</figcaption></figure></div></section><aside class="pnote"><h3>도구 노트 — Claude에게 컴포넌트를 부탁하는 법</h3><ol class="flow"><li><b>말로 정의</b><span>입력 · 출력 · 규칙</span></li><li><b>Claude</b><span>Python 3 코드</span></li><li><b>Grasshopper</b><span>붙여넣고 슬라이더 연결</span></li><li><b>확인</b><span>캡처 · info 출력</span></li><li><b>다시 요청</b><span>버전 올려 수정</span></li></ol><ul><li>입력과 출력을 먼저 적는다. 이름, 자료형, 단위, 기본값까지.</li><li>한 컴포넌트는 한 가지 일만. 커지면 합치는 컴포넌트를 따로 만든다(매스평가.gh는 4개를 통합).</li><li>결과가 이상하면 화면 캡처와 info 출력을 그대로 붙여 고쳐 달라고 한다. 버전 번호와 변경점을 코드 맨 위에 남긴다.</li><li>Rhino 8 Script 에디터의 Python 3 컴포넌트에 붙여넣고, 입력을 슬라이더와 패널에 연결한다.</li></ul></aside><section class="pstep"><div class="ph"><span class="no">04</span><h2>평면 구성<small>Plan layouts</small></h2></div>
-<div class="pb"><div class="cmp"><div><h4>기존</h4><p>동선을 여러 번 스케치하며 실 배치를 바꾼다.</p></div><div class="ai"><h4>AI와 함께</h4><p>동선 규칙(공용은 관통, 개인은 스쳐가기)을 코드로 정하고, 네 가지 위상(Linear Spine, Distributed, Hierarchical, Flow Through)으로 평면을 만든다. 구역 폐곡선을 감싸는 외곽선도 자동으로 뽑는다.</p></div></div>
-<p class="hm"><b>사람의 몫</b> 나선형처럼 &quot;현실적인 동선이 아닌&quot; 패턴을 걸러내는 판단. v3에서 실제로 뺐다.</p><pre class="code"><span class="f">평면생성.gh · v5.7까지</span>&quot;&quot;&quot;
-Step 1 v4: 4 Topology Patterns
-- 나선형 (Spiral) 제거 (현실적 동선 X)
-- 동선 규칙: 공용 관통 + 개인 스쳐가기
-&quot;&quot;&quot;</pre><figure class="pfig"><img class="" src="img/4227.jpg" width="1903" height="2400" loading="lazy" decoding="async" alt="결과 — 진입에서 가장 깊은 셀로 갈수록 사적이 되는 클러스터 평면"><figcaption>결과 — 진입에서 가장 깊은 셀로 갈수록 사적이 되는 클러스터 평면</figcaption></figure></div></section><section class="pstep"><div class="ph"><span class="no">05</span><h2>손 스케치를 입력으로<small>Hand-drawn input</small></h2></div>
-<div class="pb"><div class="cmp"><div><h4>기존</h4><p>스케치를 보고 3D를 다시 모델링한다.</p></div><div class="ai"><h4>AI와 함께</h4><p>라이노에 손으로 그린 외곽선, 공용·개인 영역, 능선을 그대로 입력받아 외피를 만든다. AI가 형태를 정하는 게 아니라 손의 선이 코드의 입력이 된다.</p></div></div>
-<p class="hm"><b>사람의 몫</b> 선을 긋는 일 자체.</p><pre class="code"><span class="f">매스 생성기 (수동).gh</span>&quot;&quot;&quot;
-Envelope Hand-Drawn v2
-라이노에서 손으로 그린 모든 디자인 정보 입력:
-1. 클러스터 외곽 footprint  2. 공용공간 영역들
-3. 개인공간 영역들          4. 동선/능선
-&quot;&quot;&quot;</pre><figure class="pfig"><img class="" src="img/1604.jpg" width="2400" height="1488" loading="lazy" decoding="async" alt="결과 — 손으로 그린 외곽과 능선에서 나온 셀, 실물 모형"><figcaption>결과 — 손으로 그린 외곽과 능선에서 나온 셀, 실물 모형</figcaption></figure></div></section><section class="pstep"><div class="ph"><span class="no">06</span><h2>배치<small>Placing on the site</small></h2></div>
-<div class="pb"><div class="cmp"><div><h4>기존</h4><p>클러스터를 대지 위에 하나씩 옮겨 본다.</p></div><div class="ai"><h4>AI와 함께</h4><p>여러 클러스터를 서로 겹치지 않게 대지에 흩뿌린다. Bridson 알고리즘이 막히자 대화로 원인을 찾고 dart throwing으로 바꿨다(v6).</p></div></div>
-<p class="hm"><b>사람의 몫</b> 어디에 모이고 어디를 비울지.</p><pre class="code"><span class="f">클러스터 배치.gh · v6</span>&quot;&quot;&quot;
-Envelope Scatter v6 — Dart Throwing
-v5 문제: Bridson 알고리즘이 첫 점 이후 추가 못함
-v6 해결: 단순 랜덤 + 충돌 검사 반복
-&quot;&quot;&quot;</pre><figure class="pfig"><img class="" src="img/1416m.jpg" width="1047" height="1175" loading="lazy" decoding="async" alt="결과 — 섬 위에 흩어진 클러스터, 대지 모형"><figcaption>결과 — 섬 위에 흩어진 클러스터, 대지 모형</figcaption></figure></div></section><section class="pstep"><div class="ph"><span class="no">07</span><h2>재료에서 나오는 구조<small>Structure from material</small></h2></div>
-<div class="pb"><div class="cmp"><div><h4>기존</h4><p>구조 부재를 하나씩 그리거나, 플러그인 예제를 고쳐 쓴다.</p></div><div class="ai"><h4>AI와 함께</h4><p>나뭇가지 상호 프레임(v5), 다짐벽을 물결치는 켜로 나누기, 나무 기둥과 오큘러스, 셸 두께 그라데이션(벽 600 → 지붕 300), 한증막 증기 구멍까지 재료의 성질을 규칙으로 옮겼다.</p></div></div>
-<p class="hm"><b>사람의 몫</b> 흙과 나뭇가지가 실제로 어떻게 쌓이고 엮이는지에 대한 이해.</p><pre class="code"><span class="f">격자 생성.gh · 다짐벽.gh · 평면생성.gh</span>&quot;&quot;&quot;
-Rammed Wall Layer Split v2
-다짐벽을 수평 파도치는 곡면으로 split → 띠들.
-layer_height 180 · height_var 0.25 · wave_amplitude 40
-&quot;&quot;&quot;</pre><figure class="pfig"><img class="" src="img/pg_1454.jpg" width="2525" height="1785" loading="lazy" decoding="async" alt="결과 — 하이브리드 토착 외피, 상호 프레임 셀과 부재 인벤토리"><figcaption>결과 — 하이브리드 토착 외피, 상호 프레임 셀과 부재 인벤토리</figcaption></figure></div></section><aside class="pnote"><h3>도구 노트 — MCP로 AI와 프로그램 잇기</h3><ul><li>MCP는 AI가 다른 프로그램을 직접 다루게 해 주는 연결 방식이다.</li><li>작업 폴더 연결: AI가 도면, 면적표, 자료를 직접 읽고 정리한다. 이 포트폴리오와 홈페이지도 그렇게 만들었다.</li><li>브라우저 연결: 자료 조사와 사이트 확인을 AI가 직접 한다.</li><li>(작성 중) 라이노 연결로 매스 생성과 레이어 정리를 말로 지시하는 방법.</li></ul></aside><section class="pstep"><div class="ph"><span class="no">08</span><h2>도면과 표현<small>Drawings</small></h2></div>
-<div class="pb"><div class="cmp"><div><h4>기존</h4><p>캐드 도면을 일러스트에서 하나씩 꾸민다. 피드백이 오면 처음부터 다시.</p></div><div class="ai"><h4>AI와 함께</h4><p>3D 모델을 잘라 단면과 평면을 코드로 그리고, 해치와 식재 표현을 규칙으로 만든다. 피드백이 오면 규칙만 고쳐 전체를 다시 그린다. 주거 전개단면은 이렇게 v1에서 v25까지 왔다.</p></div></div>
-<p class="hm"><b>사람의 몫</b> &quot;흙 계단은 깎아 만든 것처럼&quot;, &quot;세로 해치는 기둥처럼 보인다&quot; 같은 눈의 판단.</p><p class="f2">이번 포트폴리오 도면 작업</p><figure class="pfig"><img class="" src="img/4228.jpg" width="2400" height="693" loading="lazy" decoding="async" alt="결과 — 주거 클러스터 전개단면 A–A′, 25번째 버전"><figcaption>결과 — 주거 클러스터 전개단면 A–A′, 25번째 버전</figcaption></figure></div></section>
+<section class="phd"><p class="k">Process</p><h1>AI와 설계하기<small>Design Process × AI — 단계마다 무엇을 맡기고, 무엇을 붙잡는가</small></h1><p class="lead">설계는 조사에서 시작해 매스, 평면, 구조, 도면, 발표로 이어진다. 단계마다 반복과 계산은 AI에 맡기고, 판단에 쓰는 시간을 늘리는 방법을 정리했다. 기존 방식과 AI를 넣은 방식을 나란히 놓고, 일부 단계는 직접 조절해 볼 수 있는 실험을 붙였다.</p></section><section class="pstep"><div class="ph"><span class="no">01</span><h2>권역 · 자료 조사<small>Research</small></h2></div>
+<div class="pb"><div class="cmp"><div><h4>기존</h4><p>검색과 답사로 자료를 모으고, 기사와 논문을 하나씩 읽어 엑셀로 정리한다. 공공데이터는 내려받아 손으로 가공한다.</p></div><div class="ai"><h4>AI와 함께</h4><p>조사 질문부터 나눈다(인구, 교통, 용도지역, 역사, 사례). AI에게 출처가 달린 요약을 받고, 공공데이터 CSV는 AI가 짜 준 코드로 바로 차트와 지도로 만든다. 폴더나 브라우저를 MCP로 연결하면 AI가 자료를 직접 읽어 표로 정리한다.</p></div></div>
+<p class="hm"><b>사람의 몫</b> 출처를 확인하는 일, 그리고 조사에서 무엇이 문제인지 정의하는 일.</p><pre class="code ask"><span class="f">예시 요청</span>대상지 반경 1km의 연령별 인구, 대중교통 노선, 용도지역을 조사해 줘.
+항목마다 출처 링크를 달고, 확실하지 않은 건 따로 표시해.
+마지막에 이 지역의 문제 세 가지를 근거와 함께 정리해 줘.</pre></div></section><section class="pstep"><div class="ph"><span class="no">02</span><h2>대지 분석<small>Site analysis</small></h2></div>
+<div class="pb"><div class="cmp"><div><h4>기존</h4><p>지형도를 캐드로 따고 등고선을 올려 모형을 만든다. 일조와 조망은 손으로 그려 본다.</p></div><div class="ai"><h4>AI와 함께</h4><p>수치지형도나 DEM을 Grasshopper 지형 메시로 바꾸고, 경사 · 일조 시간 · 조망 분석 컴포넌트를 AI에게 받아 히트맵으로 본다. 조건이 바뀌어도 다시 돌리면 된다.</p></div></div>
+<p class="hm"><b>사람의 몫</b> 어떤 조건을 볼지, 분석 결과 중 무엇을 설계 근거로 삼을지.</p><pre class="code ask"><span class="f">예시 요청</span>Grasshopper Python 3 컴포넌트를 만들어 줘.
+입력: 지형 Mesh, 태양 벡터 리스트, 격자 간격(m)
+출력: 격자점, 점별 일조 시간, 색 입힌 Mesh
+코드 맨 위에 입력 · 출력 설명과 버전을 적어 줘.</pre></div></section><section class="pstep"><div class="ph"><span class="no">03</span><h2>프로그램 · 면적<small>Program</small></h2></div>
+<div class="pb"><div class="cmp"><div><h4>기존</h4><p>사례를 찾아 면적표를 엑셀로 만들고, 버블 다이어그램을 손으로 여러 번 그린다.</p></div><div class="ai"><h4>AI와 함께</h4><p>사례 면적 비율로 면적표 초안을 받고, 실 사이 인접 관계를 표로 적으면 버블 다이어그램이 자동으로 배치된다. 면적이나 관계를 바꾸면 다이어그램이 바로 다시 그려진다.</p></div></div>
+<p class="hm"><b>사람의 몫</b> 어떤 실이 붙어야 하는지에 대한 판단. 표의 숫자는 그 판단의 기록이다.</p><pre class="code ask"><span class="f">예시 요청</span>주민센터 연면적 1,200㎡ 기준으로 실별 면적표 초안을 만들어 줘.
+비슷한 사례 2~3개의 비율을 근거로 들고,
+실 사이 인접 필요도(필수 · 권장 · 무관)를 표로 같이 줘.</pre></div></section><section class="pstep"><div class="ph"><span class="no">04</span><h2>기초 매스<small>Massing</small></h2></div>
+<div class="pb"><div class="cmp"><div><h4>기존</h4><p>대안 서너 개를 모델링해 크리틱에서 고른다.</p></div><div class="ai"><h4>AI와 함께</h4><p>용적률, 높이 제한, 일조 사선 같은 규칙을 파라미터로 만들고, 시드를 바꿔 매스 수십~수백 개를 뽑는다. 각 매스에 면적 · 일조 · 외피 면적 같은 지표 점수를 매겨 정렬한다.</p></div></div>
+<p class="hm"><b>사람의 몫</b> 점수 기준을 정하는 일, 그리고 점수가 놓친 좋은 안을 알아보는 눈.</p><pre class="code ask"><span class="f">예시 요청</span>대지 경계 Curve, 용적률, 최고 높이, 층고를 입력으로
+매스 대안을 seed별로 만드는 컴포넌트를 짜 줘.
+대안마다 연면적, 외피 면적, 남향 입면 비율을 출력해서 점수로 비교할 수 있게.</pre></div></section><aside class="pnote"><h3>도구 노트 — 코드를 받아 Grasshopper로</h3><ol class="flow"><li><b>말로 정의</b><span>입력 · 출력 · 규칙</span></li><li><b>AI</b><span>Python 3 코드</span></li><li><b>Grasshopper</b><span>붙여넣고 슬라이더 연결</span></li><li><b>확인</b><span>캡처 · 출력값</span></li><li><b>다시 요청</b><span>버전 올려 수정</span></li></ol><ul><li>입력과 출력을 먼저 적는다. 이름, 자료형, 단위, 기본값까지.</li><li>한 컴포넌트는 한 가지 일만 한다. 커지면 합치는 컴포넌트를 따로 만든다.</li><li>결과가 이상하면 화면 캡처와 출력값을 그대로 붙여 고쳐 달라고 한다. 버전과 변경점은 코드 맨 위에 남긴다.</li><li>Rhino 8 Script 에디터의 Python 3 컴포넌트에 붙여넣으면 플러그인 없이 바로 쓸 수 있다.</li></ul></aside><section class="pstep"><div class="ph"><span class="no">05</span><h2>평면 구성<small>Plan layouts</small></h2></div>
+<div class="pb"><div class="cmp"><div><h4>기존</h4><p>동선과 실 배치를 스케치로 여러 번 바꿔 보고, 마음에 드는 안을 고른다.</p></div><div class="ai"><h4>AI와 함께</h4><p>실별 면적, 채광 요구, 인접 관계를 데이터로 넣고 가중치를 준다. 평면 대안을 수백 개 뽑아 점수를 매기고, 기준 점수를 넘으면서 서로 충분히 다른 안만 골라낸다. 아래에서 직접 조절해 볼 수 있다.</p></div></div>
+<p class="hm"><b>사람의 몫</b> 가중치를 정하는 일. 채광을 얼마나 중요하게 볼지는 설계자의 태도다.</p><pre class="code ask"><span class="f">예시 요청</span>실 6개(이름, 면적, 채광 요구도)와 필수 인접 쌍을 입력으로
+평면 대안 N개를 만들고 형태 · 채광 · 인접 점수를 매겨 줘.
+기준 점수 이상이면서 서로 다른 안만 골라 보여 줘.</pre></div></section><section class="lab" id="lab-plan"><div class="lh"><p class="k">LAB 01 · 직접 돌려보기</p><h3>평면 대안 생성기</h3>
+<p>실 6개를 대지에 나눠 넣는 평면을 수백 개 만들고, 형태 · 채광(남쪽) · 인접 · 현관(북쪽) 점수에 가중치를 곱해 합산한다. 기준 점수를 넘으면서 서로 충분히 다른 안만 위에 남는다.</p></div>
+<div class="lbody"><div class="lctl"></div><div class="lout"><p class="lsum"></p><div class="lhist"></div><div class="lpick"></div><p class="k">점수순 상위 96개 · 흐린 칸은 기준 미달, 테두리는 선택된 안</p><div class="lgrid"></div></div></div></section><section class="pstep"><div class="ph"><span class="no">06</span><h2>구조 · 재료<small>Structure &amp; material</small></h2></div>
+<div class="pb"><div class="cmp"><div><h4>기존</h4><p>부재를 하나씩 그리고, 물량은 따로 세어 표로 만든다.</p></div><div class="ai"><h4>AI와 함께</h4><p>그리드, 기둥, 보, 패널을 규칙으로 생성하는 컴포넌트를 받는다. 부재 길이와 개수 같은 물량은 같은 정의에서 자동으로 뽑는다. 셸이나 막처럼 형태를 찾아야 하는 구조는 간단한 시뮬레이션 코드로 실험한다.</p></div></div>
+<p class="hm"><b>사람의 몫</b> 재료가 실제로 어떻게 만들어지고 쌓이는지에 대한 이해.</p><pre class="code ask"><span class="f">예시 요청</span>곡면 Surface를 입력으로 u, v 분할 수에 따라 격자 부재를 만들고
+부재 길이별 개수표를 출력하는 컴포넌트를 짜 줘.
+길이는 50mm 단위로 묶어서.</pre></div></section><aside class="pnote"><h3>도구 노트 — MCP로 AI와 프로그램 잇기</h3><ul><li>MCP는 AI가 다른 프로그램을 직접 다루게 해 주는 연결 방식이다. 코드를 복사해 붙여넣는 대신 AI가 도구를 직접 실행한다.</li><li>폴더 연결: 도면, 면적표, 조사 자료를 AI가 직접 읽고 정리한다.</li><li>브라우저 연결: 자료 조사와 사이트 확인을 AI가 직접 한다.</li><li>Rhino 연결: 오브젝트 생성, 레이어 정리, 반복 모델링을 말로 지시한다.</li></ul></aside><section class="pstep"><div class="ph"><span class="no">07</span><h2>도면 · 표현<small>Drawings</small></h2></div>
+<div class="pb"><div class="cmp"><div><h4>기존</h4><p>캐드 도면을 일러스트레이터에서 하나씩 꾸민다. 피드백이 오면 처음부터 다시 한다.</p></div><div class="ai"><h4>AI와 함께</h4><p>선 두께, 해치, 레이어 규칙을 스크립트로 만들어 도면 전체에 한 번에 적용한다. 피드백이 오면 규칙만 고쳐 다시 그린다. 렌더 전에는 이미지 생성으로 분위기를 빠르게 스터디한다.</p></div></div>
+<p class="hm"><b>사람의 몫</b> &quot;이 선이 너무 강하다&quot; 같은 눈의 판단. 규칙은 그 판단을 반복하는 도구다.</p><pre class="code ask"><span class="f">예시 요청</span>이 DWG에서 레이어 이름별로 선 두께와 색을 정리하는 규칙표를 만들고,
+절단된 벽 레이어만 골라 포셰로 채우는 스크립트를 짜 줘.</pre></div></section><section class="pstep"><div class="ph"><span class="no">08</span><h2>정리 · 발표<small>Presentation</small></h2></div>
+<div class="pb"><div class="cmp"><div><h4>기존</h4><p>패널과 PPT를 손으로 배치하고, 설명글은 마감 직전에 쓴다.</p></div><div class="ai"><h4>AI와 함께</h4><p>설명글을 다듬고, 다이어그램을 코드로 그리고, 포트폴리오와 웹사이트를 만든다. 이 웹사이트도 같은 방식으로 만들었다.</p></div></div>
+<p class="hm"><b>사람의 몫</b> 무엇을 보여 주고 무엇을 뺄지.</p><pre class="code ask"><span class="f">예시 요청</span>이 프로젝트 설명을 300자로 줄여 줘.
+과장된 표현은 빼고, 대지 · 문제 · 해법 순서로.</pre></div></section><script>// LAB 01 — 평면 대안 생성기
+// 실 6개를 슬라이싱(길로틴) 방식으로 대지에 나눠 넣고, 대안 N개를 만든 뒤
+// 형태 · 채광 · 인접 · 현관 점수에 가중치를 곱해 합산 → 기준 점수 이상이면서 서로 충분히 다른 안만 골라낸다.
+(function(){
+  const root=document.getElementById('lab-plan'); if(!root) return;
+  const ROOMS=[
+    {n:'거실',a:28,l:1.0,c:'#d48f62'},
+    {n:'부엌',a:14,l:0.5,c:'#d2ad78'},
+    {n:'침실 1',a:14,l:0.8,c:'#a9b89a'},
+    {n:'침실 2',a:11,l:0.7,c:'#9dccef'},
+    {n:'욕실',a:6,l:0.0,c:'#b2c3cc'},
+    {n:'현관',a:5,l:0.0,c:'#e3a3a0'},
+  ];
+  const ADJ=[[0,1,'거실–부엌'],[0,5,'거실–현관'],[2,4,'침실1–욕실'],[3,4,'침실2–욕실']];
+  const P={N:300, ratio:1.4, w:{shape:1,light:1.5,adj:1.2,entry:0.6}, th:65, div:0.18, seed:7};
+  const AREAS=ROOMS.map(r=>r.a);
+
+  // ---------- 생성
+  function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
+  function slice(R,ids,rnd,out){
+    if(ids.length===1){out[ids[0]]=R;return;}
+    const k=1+Math.floor(rnd()*(ids.length-1)), A=ids.slice(0,k), B=ids.slice(k);
+    const sa=A.reduce((s,i)=>s+AREAS[i],0), sb=B.reduce((s,i)=>s+AREAS[i],0), f=sa/(sa+sb);
+    const vert = rnd()<0.75 ? R.w>=R.h : rnd()<0.5;   // 대체로 긴 변을 자른다
+    if(vert){ slice({x:R.x,y:R.y,w:R.w*f,h:R.h},A,rnd,out); slice({x:R.x+R.w*f,y:R.y,w:R.w*(1-f),h:R.h},B,rnd,out); }
+    else    { slice({x:R.x,y:R.y,w:R.w,h:R.h*f},A,rnd,out); slice({x:R.x,y:R.y+R.h*f,w:R.w,h:R.h*(1-f)},B,rnd,out); }
+  }
+  function generate(){
+    const tot=AREAS.reduce((a,b)=>a+b,0), W=Math.sqrt(tot*P.ratio), H=tot/W, alts=[];
+    for(let s=0;s<P.N;s++){
+      const rnd=rng(P.seed*100003+s), ids=[0,1,2,3,4,5];
+      for(let i=5;i>0;i--){const j=Math.floor(rnd()*(i+1));[ids[i],ids[j]]=[ids[j],ids[i]];}
+      const r=[]; slice({x:0,y:0,w:W,h:H},ids,rnd,r);
+      alts.push(score({r,W,H,id:s+1}));
+    }
+    return alts;
+  }
+  // ---------- 평가
+  const E=1e-6;
+  function shared(a,b){ // 두 실이 맞닿은 벽 길이
+    if(Math.abs(a.x+a.w-b.x)<E||Math.abs(b.x+b.w-a.x)<E) return Math.max(0,Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y));
+    if(Math.abs(a.y+a.h-b.y)<E||Math.abs(b.y+b.h-a.y)<E) return Math.max(0,Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x));
+    return 0;
+  }
+  function score(alt){
+    const {r,W,H}=alt;
+    // 형태: 가로세로비 1.5 이하 만점, 3 이상 0점. 폭 1.8m 미만인 실은 0점
+    const shape=r.reduce((s,q)=>{const m=Math.min(q.w,q.h),k=Math.max(q.w,q.h)/m;return s+(m<1.8?0:k<=1.5?1:Math.max(0,1-(k-1.5)/1.5));},0)/6;
+    // 채광: 남쪽(아래) 외벽에 면한 길이 비율 × 실별 채광 요구도. 동서 외벽은 절반 인정
+    let ln=0,ld=0; r.forEach((q,i)=>{const L=ROOMS[i].l; if(!L) return;
+      const south=Math.abs(q.y+q.h-H)<E?q.w:0, side=(q.x<E?q.h:0)+(Math.abs(q.x+q.w-W)<E?q.h:0);
+      ln+=L*Math.min(1,(south+0.4*side)/Math.max(q.w,q.h)); ld+=L;});
+    const light=ld?ln/ld:1;
+    // 인접: 필요한 짝이 0.9m 이상 벽을 맞대면 통과
+    const adjOk=ADJ.map(([a,b])=>shared(r[a],r[b])>=0.9);
+    const adj=adjOk.filter(Boolean).length/ADJ.length;
+    // 현관: 북쪽(위) 외벽에 면하면 1, 동서면 0.5
+    const e=r[5], entry=e.y<E?1:(e.x<E||Math.abs(e.x+e.w-W)<E)?0.5:0;
+    const s={shape,light,adj,entry}, w=P.w, ws=w.shape+w.light+w.adj+w.entry||1;
+    alt.s=s; alt.adjOk=adjOk;
+    alt.total=100*(w.shape*shape+w.light*light+w.adj*adj+w.entry*entry)/ws;
+    // 폭 1.5m도 안 되는 실이 있으면 쓸 수 없는 평면 → 감점
+    if(r.some(q=>Math.min(q.w,q.h)<1.5)) alt.total*=0.6;
+    alt.sig=r.map(q=>[(q.x+q.w/2)/W,(q.y+q.h/2)/H]);
+    return alt;
+  }
+  function dist(a,b){let d=0;for(let i=0;i<6;i++)d+=Math.hypot(a.sig[i][0]-b.sig[i][0],a.sig[i][1]-b.sig[i][1]);return d/6;}
+  function pick(alts){
+    const sorted=[...alts].sort((a,b)=>b.total-a.total), picked=[];
+    for(const a of sorted){ if(a.total<P.th) break; if(picked.every(p=>dist(a,p)>=P.div)) picked.push(a); if(picked.length>=6) break; }
+    return {sorted,picked};
+  }
+  // ---------- 그리기
+  function svg(alt,big){
+    const {r,W,H}=alt, pad=big?1.4:0.25, vb=`${-pad} ${-pad} ${W+2*pad} ${H+2*pad+(big?1.2:0)}`;
+    let g=r.map((q,i)=>`<rect x="${q.x}" y="${q.y}" width="${q.w}" height="${q.h}" fill="${ROOMS[i].c}" stroke="#1d1c1a" stroke-width="${big?0.08:0.12}"/>`+
+      (big?`<text x="${q.x+q.w/2}" y="${q.y+q.h/2}" font-size="${Math.min(0.62,q.w/4)}" text-anchor="middle" dominant-baseline="middle">${ROOMS[i].n}<tspan x="${q.x+q.w/2}" dy="1.1em" font-size=".8em" opacity=".7">${(q.w*q.h).toFixed(1)}㎡</tspan></text>`:'')).join('');
+    if(big){
+      g+=`<rect x="0" y="0" width="${W}" height="${H}" fill="none" stroke="#1d1c1a" stroke-width="0.22"/>`;
+      g+=`<text x="${W/2}" y="${H+0.9}" font-size="0.5" text-anchor="middle" fill="#86827b">S · 남쪽 ☀</text><text x="${W/2}" y="-0.5" font-size="0.5" text-anchor="middle" fill="#86827b">N · 진입</text>`;
+    }
+    return `<svg viewBox="${vb}" preserveAspectRatio="xMidYMid meet">${g}</svg>`;
+  }
+  const $=s=>root.querySelector(s);
+  function bars(a){
+    const L=[['형태','shape'],['채광','light'],['인접','adj'],['현관','entry']];
+    return L.map(([k,v])=>`<div class="bar"><span>${k}</span><i style="--v:${(a.s[v]*100).toFixed(0)}%"></i><b>${(a.s[v]*100).toFixed(0)}</b></div>`).join('')+
+      `<p class="adjl">${ADJ.map(([,,n],i)=>`<span class="${a.adjOk[i]?'ok':'no'}">${a.adjOk[i]?'●':'○'} ${n}</span>`).join('')}</p>`;
+  }
+  function run(){
+    const alts=generate(), {sorted,picked}=pick(alts), pass=sorted.filter(a=>a.total>=P.th).length;
+    $('.lsum').innerHTML=`대안 <b>${P.N}</b>개 생성 → 기준 ${P.th}점 이상 <b>${pass}</b>개 → 서로 충분히 다른 안 <b>${picked.length}</b>개`;
+    $('.lpick').innerHTML=picked.length?picked.map((a,k)=>`<figure><div class="lpv">${svg(a,true)}</div><figcaption><p class="sc"><b>${a.total.toFixed(1)}</b>점 <span>#${a.id} · 선택 ${k+1}</span></p>${bars(a)}</figcaption></figure>`).join('')
+      :'<p class="none">기준을 넘는 안이 없어요. 기준 점수를 낮추거나 가중치를 바꿔 보세요.</p>';
+    const pk=new Set(picked.map(a=>a.id));
+    $('.lgrid').innerHTML=sorted.slice(0,96).map(a=>`<div class="t ${a.total>=P.th?'':'low'} ${pk.has(a.id)?'pk':''}" title="#${a.id} · ${a.total.toFixed(1)}점">${svg(a,false)}<span>${a.total.toFixed(0)}</span></div>`).join('');
+    // 점수 분포
+    const bins=new Array(20).fill(0); alts.forEach(a=>bins[Math.min(19,Math.floor(a.total/5))]++); const mx=Math.max(...bins);
+    $('.lhist').innerHTML=bins.map((b,i)=>`<i class="${i*5>=P.th?'on':''}" style="height:${(b/mx*100).toFixed(1)}%" title="${i*5}–${i*5+5}점 · ${b}개"></i>`).join('')+`<em style="left:${P.th}%"></em>`;
+  }
+  // ---------- 입력
+  const ctl=[
+    ...ROOMS.map((r,i)=>({g:'면적 (㎡)',k:r.n,min:3,max:40,step:1,get:()=>AREAS[i],set:v=>AREAS[i]=v})),
+    {g:'가중치',k:'형태',min:0,max:3,step:.1,get:()=>P.w.shape,set:v=>P.w.shape=v},
+    {g:'가중치',k:'채광',min:0,max:3,step:.1,get:()=>P.w.light,set:v=>P.w.light=v},
+    {g:'가중치',k:'인접',min:0,max:3,step:.1,get:()=>P.w.adj,set:v=>P.w.adj=v},
+    {g:'가중치',k:'현관',min:0,max:3,step:.1,get:()=>P.w.entry,set:v=>P.w.entry=v},
+    {g:'선택',k:'기준 점수',min:40,max:95,step:1,get:()=>P.th,set:v=>P.th=v},
+    {g:'선택',k:'서로 다른 정도',min:0,max:.4,step:.01,get:()=>P.div,set:v=>P.div=v},
+    {g:'선택',k:'대지 가로세로비',min:1,max:2.5,step:.05,get:()=>P.ratio,set:v=>P.ratio=v},
+    {g:'선택',k:'대안 개수',min:50,max:1000,step:50,get:()=>P.N,set:v=>P.N=v},
+  ];
+  const groups={}; ctl.forEach(c=>(groups[c.g]=groups[c.g]||[]).push(c));
+  $('.lctl').innerHTML=Object.entries(groups).map(([g,cs])=>`<fieldset><legend>${g}</legend>${cs.map(c=>`<label><span>${c.k}</span><input type="range" min="${c.min}" max="${c.max}" step="${c.step}" value="${c.get()}" data-k="${ctl.indexOf(c)}"><output>${c.get()}</output></label>`).join('')}</fieldset>`).join('')+
+    `<button type="button" class="reroll">다시 뽑기 ↻</button>`;
+  let tm=null;
+  root.addEventListener('input',e=>{const i=e.target.dataset.k; if(i===undefined) return; const c=ctl[i], v=parseFloat(e.target.value); c.set(v); e.target.nextElementSibling.textContent=v; clearTimeout(tm); tm=setTimeout(run,60);});
+  $('.reroll').onclick=()=>{P.seed=Math.floor(Math.random()*1e6); run();};
+  run();
+})();
+</script>
 <footer>© 2026 한승현 Seunghyun Han</footer>
 </main>
 <div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>

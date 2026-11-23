@@ -312,6 +312,38 @@ pre.code .f{display:block;color:#a9b89a;font-family:Pretendard,sans-serif;font-s
 .pnote h3{font-size:18px;font-weight:600}
 .pnote ul{margin-top:12px;padding-left:1.2em}.pnote li{margin-top:6px;font-size:15.5px}
 @media (max-width:760px){.stats{grid-template-columns:1fr 1fr}.pstep{grid-template-columns:1fr;gap:16px}.pstep h2{position:static}.cmp{grid-template-columns:1fr}}
+
+pre.code.ask{white-space:pre-wrap;font:14px/1.75 Pretendard,sans-serif;background:#ecebe6;color:#1d1c1a;border-left:3px solid #1d1c1a}
+pre.code.ask .f{color:var(--mute)}
+.lab{max-width:var(--max);margin:8px auto 64px;background:#1d1c1a;color:#ecebe6;padding:32px}
+.lab .k{color:#a9b89a;font-size:13px}
+.lab h3{font-size:clamp(22px,2.4vw,30px);font-weight:500;margin-top:6px}
+.lh>p:last-child{max-width:760px;margin-top:10px;font-size:15px;line-height:1.7;opacity:.85}
+.lbody{display:grid;grid-template-columns:260px 1fr;gap:32px;margin-top:28px}
+.lctl fieldset{border:0;margin-bottom:18px}
+.lctl legend{font-size:12px;color:#a9b89a;letter-spacing:.05em;margin-bottom:6px}
+.lctl label{display:grid;grid-template-columns:84px 1fr 38px;align-items:center;gap:8px;font-size:13px;margin:4px 0}
+.lctl input{width:100%;accent-color:#d48f62}
+.lctl output{text-align:right;font-variant-numeric:tabular-nums;opacity:.8}
+.reroll{width:100%;padding:10px;background:#d48f62;color:#1d1c1a;border:0;font:600 14px Pretendard,sans-serif;cursor:pointer}
+.lsum{font-size:15px}.lsum b{color:#d48f62;font-weight:600}
+.lhist{position:relative;height:56px;display:flex;align-items:flex-end;gap:2px;margin:12px 0 22px;border-bottom:1px solid #555}
+.lhist i{flex:1;background:#555;min-height:1px}.lhist i.on{background:#a9b89a}
+.lhist em{position:absolute;top:0;bottom:0;border-left:1px dashed #d48f62}
+.lpick{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:26px}
+.lpick figure{background:#f6f5f2;color:#1d1c1a;padding:12px}
+.lpick .lpv svg{width:100%;height:auto;display:block}
+.lpick text{font-family:Pretendard,sans-serif;fill:#1d1c1a}
+.lpick .sc{font-size:13px;color:var(--mute);margin:6px 0}.lpick .sc b{font-size:22px;color:#1d1c1a;font-weight:600}
+.bar{display:grid;grid-template-columns:30px 1fr 24px;gap:6px;align-items:center;font-size:12px;margin:2px 0}
+.bar i{height:5px;background:linear-gradient(90deg,#1d1c1a var(--v),#dedad3 var(--v))}.bar b{font-weight:500;text-align:right}
+.adjl{display:flex;flex-wrap:wrap;gap:2px 10px;font-size:11px;margin-top:6px}.adjl .no{color:#c8572f}
+.lpick .none{grid-column:1/-1;opacity:.8}
+.lgrid{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin-top:8px}
+.lgrid .t{position:relative;background:#2a2927;padding:3px}.lgrid .t svg{width:100%;height:auto;aspect-ratio:1;display:block}
+.lgrid .t span{position:absolute;right:3px;bottom:1px;font-size:9px;opacity:.7}
+.lgrid .low{opacity:.25}.lgrid .pk{outline:2px solid #d48f62}
+@media (max-width:900px){.lbody{grid-template-columns:1fr}.lpick{grid-template-columns:1fr 1fr}.lgrid{grid-template-columns:repeat(6,1fr)}.lgrid .t:nth-child(n+37){display:none}.lab{padding:22px 16px}}
 """
 
 JS = r"""
@@ -496,20 +528,24 @@ for it in PUBLISH:
 </body></html>""")
 
 # ---- Process page
+LABJS = {'plan': open(os.path.join(os.path.dirname(__file__), 'lab_plan.js')).read()}
+LABHTML = {'plan': '''<section class="lab" id="lab-plan"><div class="lh"><p class="k">LAB 01 · 직접 돌려보기</p><h3>평면 대안 생성기</h3>
+<p>실 6개를 대지에 나눠 넣는 평면을 수백 개 만들고, 형태 · 채광(남쪽) · 인접 · 현관(북쪽) 점수에 가중치를 곱해 합산한다. 기준 점수를 넘으면서 서로 충분히 다른 안만 위에 남는다.</p></div>
+<div class="lbody"><div class="lctl"></div><div class="lout"><p class="lsum"></p><div class="lhist"></div><div class="lpick"></div><p class="k">점수순 상위 96개 · 흐린 칸은 기준 미달, 테두리는 선택된 안</p><div class="lgrid"></div></div></div></section>'''}
 def process_page():
     P = PROCESS
-    stats = ''.join(f'<div><b>{E(a)}</b><span>{E(b)}</span></div>' for a, b in P['stats'])
-    out = []
+    out, js = [], []
     for st in P['steps']:
         if st.get('note'):
             flow = '<ol class="flow">' + ''.join(f'<li><b>{E(a)}</b><span>{E(b)}</span></li>' for a, b in st['flow']) + '</ol>' if st.get('flow') else ''
             out.append(f'<aside class="pnote"><h3>{E(st["t"])}</h3>{flow}<ul>' + ''.join(f'<li>{E(x)}</li>' for x in st['items']) + '</ul></aside>')
             continue
-        code = f'<pre class="code"><span class="f">{E(st["file"])}</span>{E(st["code"])}</pre>' if st.get('code') else f'<p class="f2">{E(st["file"])}</p>'
-        fig = f'<figure class="pfig">{pic(st["img"], "", alt=st["cap"])}<figcaption>{E(st["cap"])}</figcaption></figure>' if st.get('img') else ''
+        ask = f'<pre class="code ask"><span class="f">예시 요청</span>{E(st["ask"])}</pre>' if st.get('ask') else ''
         out.append(f'''<section class="pstep"><div class="ph"><span class="no">{st["no"]}</span><h2>{E(st["t"])}<small>{E(st["en"])}</small></h2></div>
 <div class="pb"><div class="cmp"><div><h4>기존</h4><p>{E(st["before"])}</p></div><div class="ai"><h4>AI와 함께</h4><p>{E(st["ai"])}</p></div></div>
-<p class="hm"><b>사람의 몫</b> {E(st["human"])}</p>{code}{fig}</div></section>''')
-    body = f'''<section class="phd"><p class="k">Process</p><h1>{E(P["title"])}<small>{E(P["sub"])}</small></h1><p class="lead">{E(P["lead"])}</p><div class="stats">{stats}</div></section>{"".join(out)}'''
+<p class="hm"><b>사람의 몫</b> {E(st["human"])}</p>{ask}</div></section>''')
+        if st.get('lab'):
+            out.append(LABHTML[st['lab']]); js.append(LABJS[st['lab']])
+    body = f'''<section class="phd"><p class="k">Process</p><h1>{E(P["title"])}<small>{E(P["sub"])}</small></h1><p class="lead">{E(P["lead"])}</p></section>{"".join(out)}<script>{"".join(js)}</script>'''
     open(f'{OUT}/process.html', 'w').write(page(f'Process — {SITE["name_ko"]}', body, '', on='p', desc=P['lead']))
 process_page()
