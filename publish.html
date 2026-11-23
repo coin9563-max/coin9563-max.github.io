@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Publish — 한승현</title>
+<meta name="description" content="한승현 — 건축 포트폴리오">
+<meta property="og:title" content="Publish — 한승현"><meta property="og:description" content="">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%231d1c1a%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22%23f6f5f2%22 font-family=%22sans-serif%22%3EH%3C/text%3E%3C/svg%3E">
+<meta property="og:image" content="https://coin9563-max.github.io/img/t_307.jpg">
+</head><body class="pubpg">
+<header class="top"><a class="name" href="index.html">한승현<span>Seunghyun Han</span></a>
+<nav><a href="projects.html" class="">Projects</a><a href="publish.html" class="on">Publish</a><a href="practice.html" class="">Practice</a><a href="process.html" class="">Process</a><a href="about.html" class="">About</a><a href="about.html#contact">Contact</a></nav></header>
+<main>
+<section class="shelfh"><p class="pk">02 — Publish</p><h1>Books</h1><p>졸업전시를 위해 만든 책 두 권. 표지를 누르면 실제 책처럼 넘겨 볼 수 있다.</p></section><section class="shelf"><a class="bk" href="publish/from-city-to-earth.html"><div class="obj"><img src="img/t_2069.jpg" width="988" height="1400" alt="FROM CITY TO EARTH"><i></i></div>
+<div class="meta"><span>졸업전시 책자 · 2026</span><b>FROM CITY TO EARTH</b><em>MOSSCAPE OREUM 졸업전시 책자</em><u>펼쳐 읽기 →</u></div></a><a class="bk" href="publish/unwashed.html"><div class="obj"><img src="img/t_2071.jpg" width="988" height="1400" alt="UNWASHED"><i></i></div>
+<div class="meta"><span>졸업전시 책자 · 2026</span><b>UNWASHED</b><em>From Social Escape to Biological Survival</em><u>펼쳐 읽기 →</u></div></a></section>
+<footer>© 2026 한승현 Seunghyun Han</footer>
+</main>
+<div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>
+<script>
+(function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a');
+a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
+m.addEventListener('mouseleave',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===0)});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});});})();
+(function(){var pv=document.querySelector('.lpv');if(!pv)return;document.querySelectorAll('.lr.f').forEach(function(r){
+r.addEventListener('mouseenter',function(){pv.src=r.dataset.img;pv.classList.add('on');});r.addEventListener('mouseleave',function(){pv.classList.remove('on');});
+r.addEventListener('mousemove',function(e){pv.style.transform='translate('+(e.clientX+28)+'px,'+(e.clientY-120)+'px)';});});})();
+(function(){var st=document.querySelector('.stg');if(!st)return;var sl=st.querySelectorAll('.sl'),li=document.querySelectorAll('.ixl li');
+li.forEach(function(l){l.addEventListener('mouseenter',function(){var i=+l.dataset.i;sl.forEach(function(x,k){x.classList.toggle('on',k===i)});li.forEach(function(o){o.classList.toggle('on',o===l)});});});})();
+
+const lb=document.getElementById('lb'),li=lb.querySelector('img'),lc=lb.querySelector('.c');let L=[],ix=0;
+function show(i){ix=(i+L.length)%L.length;li.src=L[ix].src;const f=L[ix].closest('figure').querySelector('figcaption');lc.textContent=(f?f.textContent:'')+'  '+(ix+1)+' / '+L.length;}
+document.addEventListener('click',e=>{
+ if(e.target.closest('#lb button')){show(ix+(e.target.classList.contains('n')?1:-1));return}
+ if(e.target.closest('#lb')){lb.classList.remove('on');return}
+ const im=e.target.closest('figure img');if(im){L=[...document.querySelectorAll('figure img')];show(L.indexOf(im));lb.classList.add('on')}});
+document.addEventListener('keydown',e=>{if(!lb.classList.contains('on'))return;if(e.key==='Escape')lb.classList.remove('on');if(e.key==='ArrowRight')show(ix+1);if(e.key==='ArrowLeft')show(ix-1)});
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.blk,.txt,.work').forEach(el=>{el.classList.add('fade');io.observe(el)})}
+</script>
+</body></html>

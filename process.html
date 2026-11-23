@@ -9,7 +9,7 @@
 <meta property="og:image" content="https://coin9563-max.github.io/img/t_307.jpg">
 </head><body class="dark labpg">
 <header class="top"><a class="name" href="index.html">한승현<span>Seunghyun Han</span></a>
-<nav><a href="index.html#projects" class="">Projects</a><a href="index.html#publish">Publish</a><a href="index.html#practice">Practice</a><a href="process.html" class="on">Process</a><a href="about.html" class="">About</a><a href="index.html#contact">Contact</a></nav></header>
+<nav><a href="projects.html" class="">Projects</a><a href="publish.html" class="">Publish</a><a href="practice.html" class="">Practice</a><a href="process.html" class="on">Process</a><a href="about.html" class="">About</a><a href="about.html#contact">Contact</a></nav></header>
 <main>
 <section class="phd"><p class="k">LAB — 설계를 스킬로</p><h1>AI와 설계하기<small>Architecture as skills — 설계 판단을 작은 도구로</small></h1><p class="lead">법규, 구조, 배치처럼 설계에서 반복되는 판단을 하나씩 떼어 AI와 함께 작은 도구로 만든다. 카드마다 직접 끌어서 조작할 수 있고, ↗를 누르면 조건을 바꿔 볼 수 있는 큰 화면이 열린다.</p></section>
 <section class="agrid"><article class="acard lab" id="lab-northlight"><header><b>NORTH SETBACK ENVELOPE</b><span>정북 일조사선 매스</span><a href="lab/northlight.html" title="크게 열기 · 조절하기">↗</a></header><div class="app"></div></article><article class="acard lab" id="lab-frame"><header><b>STRUCTURAL GRID → FRAME</b><span>구조 그리드 · 골조</span><a href="lab/frame.html" title="크게 열기 · 조절하기">↗</a></header><div class="app"></div></article></section><script>// 실험 앱 공통: 슬라이더 패널 만들기 + 임베드(모달) 모드
@@ -300,6 +300,12 @@
 </main>
 <div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>
 <script>
+(function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a');
+a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
+m.addEventListener('mouseleave',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===0)});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});});})();
+(function(){var pv=document.querySelector('.lpv');if(!pv)return;document.querySelectorAll('.lr.f').forEach(function(r){
+r.addEventListener('mouseenter',function(){pv.src=r.dataset.img;pv.classList.add('on');});r.addEventListener('mouseleave',function(){pv.classList.remove('on');});
+r.addEventListener('mousemove',function(e){pv.style.transform='translate('+(e.clientX+28)+'px,'+(e.clientY-120)+'px)';});});})();
 (function(){var st=document.querySelector('.stg');if(!st)return;var sl=st.querySelectorAll('.sl'),li=document.querySelectorAll('.ixl li');
 li.forEach(function(l){l.addEventListener('mouseenter',function(){var i=+l.dataset.i;sl.forEach(function(x,k){x.classList.toggle('on',k===i)});li.forEach(function(o){o.classList.toggle('on',o===l)});});});})();
 

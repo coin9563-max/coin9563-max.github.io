@@ -39,7 +39,7 @@ def pic(i, root, cls='', alt=''):
 
 CSS = r"""
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Noto+Serif+KR:wght@500&display=swap');
 :root{--bg:#f6f5f2;--fg:#1d1c1a;--mute:#86827b;--line:#dedad3;--acc:#c8572f;--max:1180px;--text:680px}
 .dark{--bg:#0b0b0a;--fg:#ecebe7;--mute:#8d8a84;--line:#2a2927;--acc:#e0673a}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -433,9 +433,80 @@ pre.code.ask .f{color:var(--mute)}
 .cv.sheet canvas{background:#151513}
 @media (max-width:1100px){.agrid{grid-template-columns:1fr}}
 @media (max-width:760px){.agrid{padding:0 12px}.acard .nlv{grid-template-columns:1fr}.acard .nlv .cv+.cv canvas{border-left:0}}
+
+/* ===== 표지 */
+.coverpg{--bg:#0d0d0c;--fg:#efede6;--mute:#8b887f;--line:#2a2927}
+.coverpg header.top,.coverpg footer{display:none}.coverpg main{padding:0}
+.cv0{position:relative;min-height:100vh;min-height:100svh;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr auto;padding:5vh 5vw 4vh;gap:4vh 6vw;overflow:hidden}
+.bgs{position:absolute;inset:0;z-index:0}
+.bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity .6s ease,transform 1.6s ease;transform:scale(1.04);filter:brightness(.42) saturate(.85)}
+.bg.on{opacity:1;transform:none}
+.bg.grid{background-color:#121311;background-image:linear-gradient(#ffffff10 1px,transparent 1px),linear-gradient(90deg,#ffffff10 1px,transparent 1px);background-size:48px 48px;filter:none}
+.cvh,.cvm,.cvf{position:relative;z-index:1}
+.cvh{align-self:end}
+.cvh>p:first-child{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.cvh h1{font-size:clamp(64px,11vw,180px);font-weight:700;letter-spacing:-.05em;line-height:.92;margin-top:2vh}
+.cvh h1 span{display:block;font-size:.3em;font-weight:400;letter-spacing:-.01em;color:var(--mute);margin-top:.5em}
+.cvh .tag{max-width:440px;margin-top:4vh;font-size:15px;line-height:1.75;color:#c9c6bd}
+.cvm{list-style:none;align-self:end;justify-self:end;width:min(100%,520px)}
+.cvm a{display:grid;grid-template-columns:40px 1fr auto;align-items:baseline;gap:12px;padding:10px 0;border-top:1px solid #ffffff22;color:inherit;text-decoration:none;transition:opacity .3s,padding .3s}
+.cvm li:last-child a{border-bottom:1px solid #ffffff22}
+.cvm .n{font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
+.cvm .w{font-size:clamp(30px,3.6vw,54px);font-weight:500;letter-spacing:-.03em;line-height:1.1}
+.cvm .c{font-size:13px;color:var(--mute)}
+.cvm.hov a{opacity:.35}.cvm.hov a.on{opacity:1;padding-left:14px}
+.cvf{grid-column:1/-1;display:flex;justify-content:space-between;font-size:13px;color:var(--mute)}.cvf a{color:inherit}
+@media (max-width:860px){.cv0{grid-template-columns:1fr;padding:8vh 20px 4vh}.cvm{justify-self:stretch}.cvf{flex-direction:column;gap:4px}}
+
+/* ===== 공통 페이지 머리 */
+.pk{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.ixh h1 span{color:var(--mute);font-weight:400}
+
+/* ===== Publish: 서가 */
+.pubpg{--bg:#1d1916;--fg:#efe6d6;--mute:#a39784;--line:#3a322b}
+.pubpg header.top{background:color-mix(in srgb,#1d1916 90%,transparent)}
+.shelfh{max-width:var(--max);margin:12vh auto 8vh}
+.shelfh h1{font-family:'Noto Serif KR',Georgia,serif;font-size:clamp(56px,9vw,140px);font-weight:500;letter-spacing:-.03em;line-height:1;margin-top:12px}
+.shelfh>p:last-child{max-width:420px;margin-top:20px;color:var(--mute)}
+.shelf{max-width:var(--max);margin:0 auto 16vh;display:grid;grid-template-columns:1fr 1fr;gap:8vw;padding:6vh 0 0;border-top:1px solid var(--line)}
+.bk{color:inherit;text-decoration:none;display:grid;grid-template-rows:auto auto;gap:28px;perspective:1600px}
+.bk .obj{position:relative;width:72%;margin:0 auto;transform:rotateY(-24deg) rotateX(4deg);transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.7,.2,1);box-shadow:30px 34px 50px rgba(0,0,0,.55)}
+.bk .obj img{display:block;width:100%;height:auto}
+.bk .obj i{position:absolute;inset:0 auto 0 0;width:6%;background:linear-gradient(90deg,rgba(0,0,0,.45),rgba(255,255,255,.12) 60%,rgba(0,0,0,.1))}
+.bk:hover .obj{transform:rotateY(-4deg) rotateX(0) translateY(-10px)}
+.bk .meta{display:grid;gap:4px;text-align:center}
+.bk .meta span{font-size:12px;letter-spacing:.1em;color:var(--mute)}
+.bk .meta b{font-family:'Noto Serif KR',Georgia,serif;font-size:28px;font-weight:500}
+.bk .meta em{font-style:italic;color:var(--mute);font-size:14px}
+.bk .meta u{text-decoration:none;font-size:13px;margin-top:8px;color:#d9b97a}
+@media (max-width:760px){.shelf{grid-template-columns:1fr;gap:10vh}}
+
+/* ===== Practice: 원장 */
+.ledpg{--bg:#f4f3ef;--fg:#111;--mute:#7b7a75;--line:#111}
+.ledh{max-width:var(--max);margin:12vh auto 0}
+.ledh h1{font-size:clamp(48px,8vw,124px);font-weight:600;letter-spacing:-.045em;line-height:.95;margin:16px 0 8vh}
+.lcol,.lr{display:grid;grid-template-columns:150px 1.3fr 1fr 30px;gap:24px;align-items:baseline}
+.lcol{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);padding-bottom:10px;border-bottom:2px solid #111}
+.ledger{max-width:var(--max);margin:0 auto 16vh}
+.lr{padding:22px 0;border-bottom:1px solid #11111133;color:inherit;text-decoration:none;transition:background .2s,padding .2s}
+.lr .y{font-variant-numeric:tabular-nums;font-size:15px;font-weight:600}
+.lr .t b{display:block;font-size:clamp(18px,1.8vw,24px);font-weight:600;letter-spacing:-.01em;line-height:1.3}
+.lr .t small{display:block;font-size:13px;color:var(--mute);margin-top:4px}
+.lr .r{font-size:14px;color:#333}
+.lr .go{font-size:18px}
+.lr.f:hover{background:#111;color:#f4f3ef;padding-left:16px;padding-right:16px}.lr.f:hover .r,.lr.f:hover small{color:#bbb}
+.lpv{position:fixed;left:0;top:0;width:320px;aspect-ratio:4/3;object-fit:cover;pointer-events:none;opacity:0;transition:opacity .25s;z-index:30;box-shadow:0 20px 40px rgba(0,0,0,.3)}
+.lpv.on{opacity:1}
+@media (max-width:760px){.lcol{display:none}.lr{grid-template-columns:70px 1fr 20px}.lr .r{grid-column:2}.lr .go{grid-row:1;grid-column:3}.lpv{display:none}}
 """
 
 JS = r"""
+(function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a');
+a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
+m.addEventListener('mouseleave',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===0)});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});});})();
+(function(){var pv=document.querySelector('.lpv');if(!pv)return;document.querySelectorAll('.lr.f').forEach(function(r){
+r.addEventListener('mouseenter',function(){pv.src=r.dataset.img;pv.classList.add('on');});r.addEventListener('mouseleave',function(){pv.classList.remove('on');});
+r.addEventListener('mousemove',function(e){pv.style.transform='translate('+(e.clientX+28)+'px,'+(e.clientY-120)+'px)';});});})();
 (function(){var st=document.querySelector('.stg');if(!st)return;var sl=st.querySelectorAll('.sl'),li=document.querySelectorAll('.ixl li');
 li.forEach(function(l){l.addEventListener('mouseenter',function(){var i=+l.dataset.i;sl.forEach(function(x,k){x.classList.toggle('on',k===i)});li.forEach(function(o){o.classList.toggle('on',o===l)});});});})();
 
@@ -462,7 +533,7 @@ def page(title, body, root, dark=False, on='', desc='', og='img/t_307.jpg'):
 <meta property="og:image" content="https://coin9563-max.github.io/{og}">
 </head><body class="{dark if isinstance(dark, str) else ('dark' if dark else '')}">
 <header class="top"><a class="name" href="{root}index.html">{SITE['name_ko']}<span>{SITE['name_en']}</span></a>
-<nav><a href="{root}index.html#projects" class="{'on' if on=='w' else ''}">Projects</a><a href="{root}index.html#publish">Publish</a><a href="{root}index.html#practice">Practice</a><a href="{root}process.html" class="{'on' if on=='p' else ''}">Process</a><a href="{root}about.html" class="{'on' if on=='a' else ''}">About</a><a href="{root}index.html#contact">Contact</a></nav></header>
+<nav><a href="{root}projects.html" class="{'on' if on=='w' else ''}">Projects</a><a href="{root}publish.html" class="{'on' if on=='b' else ''}">Publish</a><a href="{root}practice.html" class="{'on' if on=='r' else ''}">Practice</a><a href="{root}process.html" class="{'on' if on=='p' else ''}">Process</a><a href="{root}about.html" class="{'on' if on=='a' else ''}">About</a><a href="{root}about.html#contact">Contact</a></nav></header>
 <main>
 {body}
 <footer>© 2026 {SITE['name_ko']} {SITE['name_en']}</footer>
@@ -538,12 +609,48 @@ for k, p in enumerate(PROJECTS):
     rows.append(f'''<li data-i="{k}" class="{"on" if k==0 else ""}"><a href="works/{p["slug"]}.html"><span class="n">{p["no"]}</span><span class="t">{E(p["title"])}</span><span class="k">{E(p["kind"])} · {p["year"]}</span><img class="mt" src="{src}" width="{w}" height="{h}" alt="" loading="lazy" style="object-position:{pos}"><span class="ms">{E(p.get("statement",""))}</span></a></li>''')
     pvs.append(f'''<a class="sl{" on" if k==0 else ""}" href="works/{p["slug"]}.html"><div class="r"><img src="{src}" width="{w}" height="{h}" alt="{E(p["title"])}" style="object-position:{pos}" {lz}></div><div class="d"><img src="{ds}" width="{dw_}" height="{dh}" alt="{E(p["title"])} 도면" {lz}></div>
 <div class="cd" style="background:{p.get('tone','#d8b04a')}"><span class="cn">{p["no"]} — {E(p["kind"])} · {p["year"]}</span><b>{E(p["title"])}</b><p>{E(p.get("statement",""))}</p><span class="go">프로젝트 보기 →</span></div></a>''')
-body = f'''<section class="ix" id="projects"><div class="ixh"><h1>{SITE["name_ko"]} <span>{SITE["name_en"]}</span></h1><p class="sub">Selected Works 2021–2026 · {SITE["school"]}</p><p class="lead">{E(ABOUT.get("intro") or "")}</p></div>
-<ul class="ixl">{"".join(rows)}</ul><div class="stg">{"".join(pvs)}</div></section>
-<div class="sec" id="publish"><h2>Publish</h2><span>출판 · 책자</span></div>{cardgrid(PUBLISH)}
-<div class="sec" id="practice"><h2>Practice &amp; Activities</h2><span>인턴 · 대외활동</span></div>{practice()}
-<section class="contact" id="contact"><div class="sec"><h2>Contact</h2><span>연락처</span></div><div class="ct"><a class="big" href="mailto:{SITE["email"]}">{SITE["email"]}</a><a class="big" href="tel:{SITE["phone"].replace('-','')}">{SITE["phone"]}</a><p>인턴, 협업, 포트폴리오 문의 모두 메일로 연락 주세요.</p></div></section>'''
-open(f'{OUT}/index.html', 'w').write(page(f'{SITE["name_ko"]} — Portfolio', body, '', on='w'))
+body = f'''<section class="ix" id="projects"><div class="ixh"><p class="pk">01 — Projects</p><h1>Selected Works <span>2021–2026</span></h1><p class="sub">{SITE["school"]} · 설계 스튜디오 · 졸업설계</p></div>
+<ul class="ixl">{"".join(rows)}</ul><div class="stg">{"".join(pvs)}</div></section>'''
+open(f'{OUT}/projects.html', 'w').write(page(f'Projects — {SITE["name_ko"]}', body, '', on='w'))
+
+# ---- Publish: 서가
+def shelf():
+    out=[]
+    for it in PUBLISH:
+        s_,w,h=use(it['img'],thumb=True)
+        out.append(f'''<a class="bk" href="publish/{it["slug"]}.html"><div class="obj"><img src="{s_}" width="{w}" height="{h}" alt="{E(it["title"])}"><i></i></div>
+<div class="meta"><span>{E(it["kind"])} · {it["year"]}</span><b>{E(it["title"])}</b><em>{E(it.get("desc",""))}</em><u>펼쳐 읽기 →</u></div></a>''')
+    return ''.join(out)
+body = f'''<section class="shelfh"><p class="pk">02 — Publish</p><h1>Books</h1><p>졸업전시를 위해 만든 책 두 권. 표지를 누르면 실제 책처럼 넘겨 볼 수 있다.</p></section><section class="shelf">{shelf()}</section>'''
+open(f'{OUT}/publish.html', 'w').write(page(f'Publish — {SITE["name_ko"]}', body, '', dark='pubpg', on='b'))
+
+# ---- Practice: 원장(Ledger)
+def ledger():
+    rows=[]
+    for i in PRACTICE:
+        if i.get('hide_in_list'): continue
+        if i.get('slug'):
+            s_,w,h=use(i['thumb'],thumb=True)
+            rows.append(f'''<a class="lr f" href="practice/{i["slug"]}.html" data-img="{s_}"><span class="y">{E(i["year"])}</span><span class="t"><b>{E(i["title"])}</b><small>{E(i.get("org") or i["kind"])}</small></span><span class="r">{E(i.get("role") or i["kind"])}</span><span class="go">→</span></a>''')
+        else:
+            rows.append(f'''<div class="lr"><span class="y">{E(i["year"])}</span><span class="t"><b>{E(i.get("org") or i["title"])}</b><small>{E(i["title"] if i.get("org") and i["title"]!=i["org"] else i["kind"])}</small></span><span class="r">{E(i.get("role") or i["kind"])}</span><span class="go"></span></div>''')
+    return ''.join(rows)
+body = f'''<section class="ledh"><p class="pk">03 — Practice &amp; Activities</p><h1>Practice<br>&amp; Activities</h1><div class="lcol"><span>Year</span><span>Project · Office</span><span>Role</span></div></section><section class="ledger">{ledger()}</section><img class="lpv" alt="">'''
+open(f'{OUT}/practice.html', 'w').write(page(f'Practice — {SITE["name_ko"]}', body, '', dark='ledpg', on='r'))
+
+# ---- 표지
+def cover():
+    feat=[i for i in PRACTICE if i.get('slug')]
+    items=[('01','Projects','projects.html',f'설계 작업 {len(PROJECTS)}',use(PROJECTS[0]['hero'],thumb=True)[0]),
+           ('02','Publish','publish.html',f'책 {len(PUBLISH)}',use(PUBLISH[0]['img'],thumb=True)[0]),
+           ('03','Practice','practice.html',f'실무 · 활동 {len(PRACTICE)}',use(feat[0]['thumb'],thumb=True)[0] if feat else ''),
+           ('04','Process','process.html','AI와 설계하기',''),
+           ('05','About','about.html','소개 · 연락처','')]
+    li=''.join(f'<li><a href="{h}" data-bg="{b}"><span class="n">{n}</span><span class="w">{t}</span><span class="c">{c}</span></a></li>' for n,t,h,c,b in items)
+    return f'''<section class="cv0"><div class="bgs">{"".join(f'<div class="bg{" on" if k==0 else ""}" style="background-image:url({b})"></div>' if b else '<div class="bg grid"></div>' for k,(*_,b) in enumerate(items))}</div>
+<div class="cvh"><p>Portfolio 2021–2026</p><h1>{SITE["name_ko"]}<span>{SITE["name_en"]}</span></h1><p class="tag">{E(ABOUT.get("intro") or "")}</p></div>
+<ol class="cvm">{li}</ol><p class="cvf"><a href="mailto:{SITE["email"]}">{SITE["email"]}</a><span>{SITE["school"]}</span></p></section>'''
+open(f'{OUT}/index.html', 'w').write(page(f'{SITE["name_ko"]} — Portfolio', cover(), '', dark='coverpg', on=''))
 
 # ---- projects / practice detail pages
 def detail(p, prv, nxt, folder, back):
@@ -558,12 +665,12 @@ def detail(p, prv, nxt, folder, back):
 <div><p class="st">{E(p["statement"])}</p><div class="body">{"".join(f"<p>{E(x)}</p>" for x in p["intro"])}{en}</div></div></section>'''
     blocks = '\n'.join(block(b, r) for b in p['blocks'])
     nav = '<nav class="pnav">'
-    nav += f'<a href="{prv["slug"]}.html"><span>← 이전</span>{E(prv["title"])}</a>' if prv else f'<a href="../index.html#{back}"><span>←</span>Index</a>'
-    nav += f'<a href="{nxt["slug"]}.html"><span>다음 →</span>{E(nxt["title"])}</a>' if nxt else f'<a href="../index.html#{back}"><span>→</span>Index</a>'
+    nav += f'<a href="{prv["slug"]}.html"><span>← 이전</span>{E(prv["title"])}</a>' if prv else f'<a href="../{back}.html"><span>←</span>Index</a>'
+    nav += f'<a href="{nxt["slug"]}.html"><span>다음 →</span>{E(nxt["title"])}</a>' if nxt else f'<a href="../{back}.html"><span>→</span>Index</a>'
     nav += '</nav>'
     og = use(p['hero'], thumb=True)[0] if p.get('hero') is not None else 'img/t_307.jpg'
     open(f'{OUT}/{folder}/{p["slug"]}.html', 'w').write(
-        page(f'{p["title"]} — {SITE["name_ko"]}', head + blocks + nav, r, dark=p.get('dark', False), on='w', desc=p['statement'], og=og))
+        page(f'{p["title"]} — {SITE["name_ko"]}', head + blocks + nav, r, dark=p.get('dark', False), on=('r' if folder=='practice' else 'w'), desc=p['statement'], og=og))
 
 for n, p in enumerate(PROJECTS):
     detail(p, PROJECTS[n-1] if n else None, PROJECTS[n+1] if n+1 < len(PROJECTS) else None, 'works', 'projects')
@@ -581,7 +688,7 @@ lead = f'<p class="lead">{E(A["intro"])}</p>' if A.get('intro') else ''
 src, w, h = use(405)
 body = f'''<section class="about"><div><img src="{src}" width="{w}" height="{h}" alt="D5 Render 공개 강연"></div>
 <div><h1>{SITE["name_ko"]}<small>{SITE["name_en"]} · {SITE["school"]}</small></h1>{lead}
-{f'<h3>Areas of Interest</h3><p>{E(A["interests"])}</p>' if A.get("interests") else ''}<h3>Contact</h3><table><tr><td>E-mail</td><td><a href="mailto:{SITE["email"]}">{SITE["email"]}</a></td></tr><tr><td>Phone</td><td><a href="tel:{SITE["phone"].replace('-','')}">{SITE["phone"]}</a></td></tr></table>
+{f'<h3>Areas of Interest</h3><p>{E(A["interests"])}</p>' if A.get("interests") else ''}<h3 id="contact">Contact</h3><table><tr><td>E-mail</td><td><a href="mailto:{SITE["email"]}">{SITE["email"]}</a></td></tr><tr><td>Phone</td><td><a href="tel:{SITE["phone"].replace('-','')}">{SITE["phone"]}</a></td></tr></table>
 <h3>Education</h3>{tbl(A["education"])}
 <h3>Experience</h3>{tbl(A["experience"])}
 <h3>Awards &amp; Activities</h3>{tbl(A["activities"])}
@@ -601,7 +708,7 @@ for it in PUBLISH:
         dst=f'{dd}/{k:02d}.jpg'
         if not os.path.exists(dst): shutil.copy(os.path.join(sd,f), dst)
     w,h=Image.open(f'{dd}/01.jpg').size
-    cfg=json.dumps(dict(n=len(files), ar=round(w/h,4), dir=f'../book/{it["slug"]}/', back='../index.html#publish'))
+    cfg=json.dumps(dict(n=len(files), ar=round(w/h,4), dir=f'../book/{it["slug"]}/', back='../publish.html'))
     open(f'{OUT}/publish/{it["slug"]}.html','w').write(f"""<!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(it['title'])} — {SITE['name_ko']}</title>
@@ -609,7 +716,7 @@ for it in PUBLISH:
 <meta property="og:image" content="https://coin9563-max.github.io/book/{it['slug']}/01.jpg">
 <link rel="stylesheet" href="../style.css"></head>
 <body class="dark bookpg">
-<header class="top"><a class="name" href="../index.html#publish">← {SITE['name_ko']}<span>Publish</span></a><span class="bt">{E(it['title'])} <em>{E(it['kind'])} · {it['year']}</em></span></header>
+<header class="top"><a class="name" href="../publish.html">← {SITE['name_ko']}<span>Publish</span></a><span class="bt">{E(it['title'])} <em>{E(it['kind'])} · {it['year']}</em></span></header>
 <div class="stage"><div id="book"><div class="pg L"></div><div class="pg R"></div><i class="spine"></i></div></div>
 <div class="bctl"><button id="pv" aria-label="이전">‹</button><span id="cnt"></span><button id="nx" aria-label="다음">›</button></div>
 <p class="bhint">클릭 · 방향키 · 스와이프로 넘기기</p>

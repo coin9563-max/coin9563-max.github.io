@@ -1,6 +1,6 @@
 
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Noto+Serif+KR:wght@500&display=swap');
 :root{--bg:#f6f5f2;--fg:#1d1c1a;--mute:#86827b;--line:#dedad3;--acc:#c8572f;--max:1180px;--text:680px}
 .dark{--bg:#0b0b0a;--fg:#ecebe7;--mute:#8d8a84;--line:#2a2927;--acc:#e0673a}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -394,3 +394,68 @@ pre.code.ask .f{color:var(--mute)}
 .cv.sheet canvas{background:#151513}
 @media (max-width:1100px){.agrid{grid-template-columns:1fr}}
 @media (max-width:760px){.agrid{padding:0 12px}.acard .nlv{grid-template-columns:1fr}.acard .nlv .cv+.cv canvas{border-left:0}}
+
+/* ===== 표지 */
+.coverpg{--bg:#0d0d0c;--fg:#efede6;--mute:#8b887f;--line:#2a2927}
+.coverpg header.top,.coverpg footer{display:none}.coverpg main{padding:0}
+.cv0{position:relative;min-height:100vh;min-height:100svh;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr auto;padding:5vh 5vw 4vh;gap:4vh 6vw;overflow:hidden}
+.bgs{position:absolute;inset:0;z-index:0}
+.bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity .6s ease,transform 1.6s ease;transform:scale(1.04);filter:brightness(.42) saturate(.85)}
+.bg.on{opacity:1;transform:none}
+.bg.grid{background-color:#121311;background-image:linear-gradient(#ffffff10 1px,transparent 1px),linear-gradient(90deg,#ffffff10 1px,transparent 1px);background-size:48px 48px;filter:none}
+.cvh,.cvm,.cvf{position:relative;z-index:1}
+.cvh{align-self:end}
+.cvh>p:first-child{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.cvh h1{font-size:clamp(64px,11vw,180px);font-weight:700;letter-spacing:-.05em;line-height:.92;margin-top:2vh}
+.cvh h1 span{display:block;font-size:.3em;font-weight:400;letter-spacing:-.01em;color:var(--mute);margin-top:.5em}
+.cvh .tag{max-width:440px;margin-top:4vh;font-size:15px;line-height:1.75;color:#c9c6bd}
+.cvm{list-style:none;align-self:end;justify-self:end;width:min(100%,520px)}
+.cvm a{display:grid;grid-template-columns:40px 1fr auto;align-items:baseline;gap:12px;padding:10px 0;border-top:1px solid #ffffff22;color:inherit;text-decoration:none;transition:opacity .3s,padding .3s}
+.cvm li:last-child a{border-bottom:1px solid #ffffff22}
+.cvm .n{font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
+.cvm .w{font-size:clamp(30px,3.6vw,54px);font-weight:500;letter-spacing:-.03em;line-height:1.1}
+.cvm .c{font-size:13px;color:var(--mute)}
+.cvm.hov a{opacity:.35}.cvm.hov a.on{opacity:1;padding-left:14px}
+.cvf{grid-column:1/-1;display:flex;justify-content:space-between;font-size:13px;color:var(--mute)}.cvf a{color:inherit}
+@media (max-width:860px){.cv0{grid-template-columns:1fr;padding:8vh 20px 4vh}.cvm{justify-self:stretch}.cvf{flex-direction:column;gap:4px}}
+
+/* ===== 공통 페이지 머리 */
+.pk{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.ixh h1 span{color:var(--mute);font-weight:400}
+
+/* ===== Publish: 서가 */
+.pubpg{--bg:#1d1916;--fg:#efe6d6;--mute:#a39784;--line:#3a322b}
+.pubpg header.top{background:color-mix(in srgb,#1d1916 90%,transparent)}
+.shelfh{max-width:var(--max);margin:12vh auto 8vh}
+.shelfh h1{font-family:'Noto Serif KR',Georgia,serif;font-size:clamp(56px,9vw,140px);font-weight:500;letter-spacing:-.03em;line-height:1;margin-top:12px}
+.shelfh>p:last-child{max-width:420px;margin-top:20px;color:var(--mute)}
+.shelf{max-width:var(--max);margin:0 auto 16vh;display:grid;grid-template-columns:1fr 1fr;gap:8vw;padding:6vh 0 0;border-top:1px solid var(--line)}
+.bk{color:inherit;text-decoration:none;display:grid;grid-template-rows:auto auto;gap:28px;perspective:1600px}
+.bk .obj{position:relative;width:72%;margin:0 auto;transform:rotateY(-24deg) rotateX(4deg);transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.7,.2,1);box-shadow:30px 34px 50px rgba(0,0,0,.55)}
+.bk .obj img{display:block;width:100%;height:auto}
+.bk .obj i{position:absolute;inset:0 auto 0 0;width:6%;background:linear-gradient(90deg,rgba(0,0,0,.45),rgba(255,255,255,.12) 60%,rgba(0,0,0,.1))}
+.bk:hover .obj{transform:rotateY(-4deg) rotateX(0) translateY(-10px)}
+.bk .meta{display:grid;gap:4px;text-align:center}
+.bk .meta span{font-size:12px;letter-spacing:.1em;color:var(--mute)}
+.bk .meta b{font-family:'Noto Serif KR',Georgia,serif;font-size:28px;font-weight:500}
+.bk .meta em{font-style:italic;color:var(--mute);font-size:14px}
+.bk .meta u{text-decoration:none;font-size:13px;margin-top:8px;color:#d9b97a}
+@media (max-width:760px){.shelf{grid-template-columns:1fr;gap:10vh}}
+
+/* ===== Practice: 원장 */
+.ledpg{--bg:#f4f3ef;--fg:#111;--mute:#7b7a75;--line:#111}
+.ledh{max-width:var(--max);margin:12vh auto 0}
+.ledh h1{font-size:clamp(48px,8vw,124px);font-weight:600;letter-spacing:-.045em;line-height:.95;margin:16px 0 8vh}
+.lcol,.lr{display:grid;grid-template-columns:150px 1.3fr 1fr 30px;gap:24px;align-items:baseline}
+.lcol{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);padding-bottom:10px;border-bottom:2px solid #111}
+.ledger{max-width:var(--max);margin:0 auto 16vh}
+.lr{padding:22px 0;border-bottom:1px solid #11111133;color:inherit;text-decoration:none;transition:background .2s,padding .2s}
+.lr .y{font-variant-numeric:tabular-nums;font-size:15px;font-weight:600}
+.lr .t b{display:block;font-size:clamp(18px,1.8vw,24px);font-weight:600;letter-spacing:-.01em;line-height:1.3}
+.lr .t small{display:block;font-size:13px;color:var(--mute);margin-top:4px}
+.lr .r{font-size:14px;color:#333}
+.lr .go{font-size:18px}
+.lr.f:hover{background:#111;color:#f4f3ef;padding-left:16px;padding-right:16px}.lr.f:hover .r,.lr.f:hover small{color:#bbb}
+.lpv{position:fixed;left:0;top:0;width:320px;aspect-ratio:4/3;object-fit:cover;pointer-events:none;opacity:0;transition:opacity .25s;z-index:30;box-shadow:0 20px 40px rgba(0,0,0,.3)}
+.lpv.on{opacity:1}
+@media (max-width:760px){.lcol{display:none}.lr{grid-template-columns:70px 1fr 20px}.lr .r{grid-column:2}.lr .go{grid-row:1;grid-column:3}.lpv{display:none}}

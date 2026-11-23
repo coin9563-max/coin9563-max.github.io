@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice — 한승현</title>
+<meta name="description" content="한승현 — 건축 포트폴리오">
+<meta property="og:title" content="Practice — 한승현"><meta property="og:description" content="">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%231d1c1a%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22%23f6f5f2%22 font-family=%22sans-serif%22%3EH%3C/text%3E%3C/svg%3E">
+<meta property="og:image" content="https://coin9563-max.github.io/img/t_307.jpg">
+</head><body class="ledpg">
+<header class="top"><a class="name" href="index.html">한승현<span>Seunghyun Han</span></a>
+<nav><a href="projects.html" class="">Projects</a><a href="publish.html" class="">Publish</a><a href="practice.html" class="on">Practice</a><a href="process.html" class="">Process</a><a href="about.html" class="">About</a><a href="about.html#contact">Contact</a></nav></header>
+<main>
+<section class="ledh"><p class="pk">03 — Practice &amp; Activities</p><h1>Practice<br>&amp; Activities</h1><div class="lcol"><span>Year</span><span>Project · Office</span><span>Role</span></div></section><section class="ledger"><a class="lr f" href="practice/deau-hannam.html" data-img="img/t_sla_int1.jpg"><span class="y">2026</span><span class="t"><b>D&#x27;EAU HANNAM</b><small>SLA</small></span><span class="r">인턴</span><span class="go">→</span></a><a class="lr f" href="practice/mvsf-neom.html" data-img="img/t_jr_Image3c.jpg"><span class="y">2025</span><span class="t"><b>MVSF in NEOM</b><small>정림 디지털 아카데미 유닛 (JAdU 2기)</small></span><span class="r">설계 · 다이어그램 · 모델링 · 렌더링 · 프로젝트 우수상</span><span class="go">→</span></a><a class="lr f" href="practice/mungyeong.html" data-img="img/t_ra_07.jpg"><span class="y">2025</span><span class="t"><b>문경시 체육시설 설계공모</b><small>이진미 교수 학부조교</small></span><span class="r">RA</span><span class="go">→</span></a><div class="lr"><span class="y">2025</span><span class="t"><b>디어 건축사사무소</b><small>인턴</small></span><span class="r">인턴</span><span class="go"></span></div><a class="lr f" href="practice/d5-seminar.html" data-img="img/t_d5_photo0.jpg"><span class="y">2025</span><span class="t"><b>D5 Render 세미나</b><small>D5 Render Student Ambassador</small></span><span class="r">공개 강연 · 홍익대학교</span><span class="go">→</span></a><a class="lr f" href="practice/salmgut.html" data-img="img/t_salm_v1p.jpg"><span class="y">2024</span><span class="t"><b>삶것 건축사사무소</b><small>삶것 건축사사무소</small></span><span class="r">인턴 · 모델링 · 렌더링 · 도면 수정 · 영상</span><span class="go">→</span></a><div class="lr"><span class="y">2024–</span><span class="t"><b>우동우 건축사사무소</b><small></small></span><span class="r">프리랜서</span><span class="go"></span></div></section><img class="lpv" alt="">
+<footer>© 2026 한승현 Seunghyun Han</footer>
+</main>
+<div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>
+<script>
+(function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a');
+a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
+m.addEventListener('mouseleave',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===0)});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});});})();
+(function(){var pv=document.querySelector('.lpv');if(!pv)return;document.querySelectorAll('.lr.f').forEach(function(r){
+r.addEventListener('mouseenter',function(){pv.src=r.dataset.img;pv.classList.add('on');});r.addEventListener('mouseleave',function(){pv.classList.remove('on');});
+r.addEventListener('mousemove',function(e){pv.style.transform='translate('+(e.clientX+28)+'px,'+(e.clientY-120)+'px)';});});})();
+(function(){var st=document.querySelector('.stg');if(!st)return;var sl=st.querySelectorAll('.sl'),li=document.querySelectorAll('.ixl li');
+li.forEach(function(l){l.addEventListener('mouseenter',function(){var i=+l.dataset.i;sl.forEach(function(x,k){x.classList.toggle('on',k===i)});li.forEach(function(o){o.classList.toggle('on',o===l)});});});})();
+
+const lb=document.getElementById('lb'),li=lb.querySelector('img'),lc=lb.querySelector('.c');let L=[],ix=0;
+function show(i){ix=(i+L.length)%L.length;li.src=L[ix].src;const f=L[ix].closest('figure').querySelector('figcaption');lc.textContent=(f?f.textContent:'')+'  '+(ix+1)+' / '+L.length;}
+document.addEventListener('click',e=>{
+ if(e.target.closest('#lb button')){show(ix+(e.target.classList.contains('n')?1:-1));return}
+ if(e.target.closest('#lb')){lb.classList.remove('on');return}
+ const im=e.target.closest('figure img');if(im){L=[...document.querySelectorAll('figure img')];show(L.indexOf(im));lb.classList.add('on')}});
+document.addEventListener('keydown',e=>{if(!lb.classList.contains('on'))return;if(e.key==='Escape')lb.classList.remove('on');if(e.key==='ArrowRight')show(ix+1);if(e.key==='ArrowLeft')show(ix-1)});
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.blk,.txt,.work').forEach(el=>{el.classList.add('fade');io.observe(el)})}
+</script>
+</body></html>
