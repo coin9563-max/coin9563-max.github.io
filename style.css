@@ -416,7 +416,7 @@ pre.code.ask .f{color:var(--mute)}
 .cvm .w{font-size:clamp(30px,3.6vw,54px);font-weight:500;letter-spacing:-.03em;line-height:1.1}
 .cvm .c{font-size:13px;color:var(--mute)}
 .cvm.hov a{opacity:.35}.cvm.hov a.on{opacity:1;padding-left:14px}
-.cvf{grid-column:1/-1;display:flex;justify-content:space-between;font-size:13px;color:var(--mute)}.cvf a{color:inherit}
+.cvf{grid-column:1/-1;display:flex;justify-content:space-between;gap:16px;font-size:13px;color:var(--mute)}.sunr{font-family:var(--mono,ui-monospace,monospace);font-size:11px;letter-spacing:.04em}.cvf a{color:inherit}
 @media (max-width:860px){.cv0{grid-template-columns:1fr;padding:8vh 20px 4vh}.cvm{justify-self:stretch}.cvf{flex-direction:column;gap:4px}}
 
 /* ===== 공통 페이지 머리 */
