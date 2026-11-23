@@ -181,8 +181,8 @@ ABOUT = dict(
 
 # ---- 메인 2: Publish (출판·책자·게재)
 PUBLISH = [
-  dict(title='FROM CITY TO EARTH', kind='졸업전시 책자', year='2026', img=2069, desc='MOSSCAPE OREUM 졸업전시 책자'),
-  dict(title='UNWASHED', kind='졸업전시 책자', year='2026', img=2071, desc='From Social Escape to Biological Survival'),
+  dict(title='FROM CITY TO EARTH', kind='졸업전시 책자', year='2026', img=2069, desc='MOSSCAPE OREUM 졸업전시 책자', slug='from-city-to-earth', pages='fcte'),
+  dict(title='UNWASHED', kind='졸업전시 책자', year='2026', img=2071, desc='From Social Escape to Biological Survival', slug='unwashed', pages='unw'),
 ]
 
 # ---- 메인 3: Practice & Activities (인턴 · 대외활동 작업)

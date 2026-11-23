@@ -12,6 +12,7 @@ os.makedirs(OUT + '/img', exist_ok=True)
 os.makedirs(OUT + '/works', exist_ok=True)
 os.makedirs(OUT + '/practice', exist_ok=True)
 os.makedirs(OUT + '/vid', exist_ok=True)
+BK = os.environ.get('BK', os.path.join(os.path.dirname(SRC.rstrip('/')), 'bk'))
 VID = os.environ.get('VID', os.path.join(os.path.dirname(SRC.rstrip('/')), 'vid'))
 E = html.escape
 sizes = {}
@@ -135,6 +136,34 @@ main>footer{padding-left:0}
 .plist .y{color:var(--mute);font-variant-numeric:tabular-nums;font-size:14px}
 .plist .t{font-weight:600}
 .plist .k{color:var(--mute);font-size:14px}
+.card .im img{transition:transform .5s ease}a.card:hover .im img{transform:scale(1.03)}
+.bookpg{height:100vh;height:100dvh;overflow:hidden;background:#141412;user-select:none;-webkit-user-select:none}
+.bookpg header.top{background:transparent;backdrop-filter:none;align-items:center}
+.bookpg .bt{font-size:14px;font-weight:600}.bookpg .bt em{font-style:normal;font-weight:400;color:var(--mute);margin-left:.6em}
+.stage{height:calc(100dvh - 130px);display:flex;align-items:center;justify-content:center;perspective:4200px}
+#book{--w:300px;--h:420px;position:relative;display:flex;width:calc(var(--w)*2);height:var(--h);transition:transform .7s cubic-bezier(.4,.1,.2,1);transform-style:preserve-3d;cursor:pointer}
+#book .pg{width:var(--w);height:var(--h);position:relative;background:#1b1b19;box-shadow:0 18px 50px rgba(0,0,0,.55)}
+#book .pg.empty{background:transparent;box-shadow:none}
+#book img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+#book .L::after,#book .R::after{content:"";position:absolute;inset:0;pointer-events:none}
+#book .L:not(.empty)::after{background:linear-gradient(to left,rgba(0,0,0,.35),rgba(0,0,0,0) 7%)}
+#book .R:not(.empty)::after{background:linear-gradient(to right,rgba(0,0,0,.35),rgba(0,0,0,0) 7%)}
+#book .spine{display:none}
+.leaf{position:absolute;top:0;width:var(--w);height:var(--h);transform-style:preserve-3d;transition:transform .85s cubic-bezier(.45,.05,.25,1);z-index:5}
+.leaf.fw{left:var(--w);transform-origin:left center}.leaf.fw.go{transform:rotateY(-180deg)}
+.leaf.bw{left:0;transform-origin:right center}.leaf.bw.go{transform:rotateY(180deg)}
+.leaf .f,.leaf .b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:#1b1b19;overflow:hidden}
+.leaf .b{transform:rotateY(180deg)}
+.leaf .f.empty,.leaf .b.empty{background:transparent}
+.leaf .sh{position:absolute;inset:0;opacity:0;transition:opacity .85s;pointer-events:none}
+.leaf.fw .f .sh{background:linear-gradient(to left,rgba(0,0,0,.5),transparent 60%)}.leaf.fw .b .sh{background:linear-gradient(to left,rgba(0,0,0,.4),transparent 40%)}
+.leaf.bw .f .sh{background:linear-gradient(to right,rgba(0,0,0,.5),transparent 60%)}.leaf.bw .b .sh{background:linear-gradient(to right,rgba(0,0,0,.4),transparent 40%)}
+.leaf.go .f .sh{opacity:1}.leaf .b .sh{opacity:1}.leaf.go .b .sh{opacity:0}
+#book.one{width:var(--w)}#book.one .L{display:none}#book.one .R::after{display:none}
+.bctl{display:flex;justify-content:center;align-items:center;gap:22px;color:var(--mute);font-size:13px;font-variant-numeric:tabular-nums}
+.bctl button{background:none;border:1px solid var(--line);color:var(--fg);width:40px;height:40px;border-radius:50%;font-size:22px;line-height:1;cursor:pointer}
+.bctl button:disabled{opacity:.25;cursor:default}
+.bhint{text-align:center;color:var(--mute);font-size:12px;margin-top:8px;opacity:.7}
 @media (max-width:760px){.cards{grid-template-columns:1fr 1fr}.plist li{grid-template-columns:70px 1fr}.plist .k{grid-column:2}}
 @media (max-width:760px){
   .works{grid-template-columns:1fr;gap:48px}
@@ -225,7 +254,8 @@ def cardgrid(items):
         if it.get('img') is not None:
             s,w,h=use(it['img'],thumb=True); im=f'<img src="{s}" width="{w}" height="{h}" loading="lazy" alt="{E(it["title"])}">'
         else: im='<em>이미지 준비 중</em>'
-        out.append(f'<div class="card"><div class="im">{im}</div><div class="t">{E(it["title"])}</div><div class="k">{E(it["kind"])} · {it["year"]}</div></div>')
+        inner=f'<div class="im">{im}</div><div class="t">{E(it["title"])}</div><div class="k">{E(it["kind"])} · {it["year"]}{" · 책 펼쳐보기 →" if it.get("slug") else ""}</div>'
+        out.append(f'<a class="card" href="publish/{it["slug"]}.html">{inner}</a>' if it.get('slug') else f'<div class="card">{inner}</div>')
     return '<section class="cards">'+''.join(out)+'</section>'
 def practice():
     cards=[]
@@ -289,3 +319,29 @@ body = f'''<section class="about"><div><img src="{src}" width="{w}" height="{h}"
 </div></section>'''
 open(f'{OUT}/about.html', 'w').write(page(f'About — {SITE["name_ko"]}', body, '', on='a'))
 print('ok', len(os.listdir(OUT + '/img')), 'images')
+
+# ---- PUBLISH 플립북
+BOOKJS=open(os.path.join(os.path.dirname(__file__),'book.js')).read()
+os.makedirs(f'{OUT}/publish', exist_ok=True)
+for it in PUBLISH:
+    if not it.get('slug'): continue
+    sd=os.path.join(BK, it['pages']); dd=f'{OUT}/book/{it["slug"]}'; os.makedirs(dd, exist_ok=True)
+    files=sorted(f for f in os.listdir(sd) if f.endswith('.jpg'))
+    for k,f in enumerate(files,1):
+        dst=f'{dd}/{k:02d}.jpg'
+        if not os.path.exists(dst): shutil.copy(os.path.join(sd,f), dst)
+    w,h=Image.open(f'{dd}/01.jpg').size
+    cfg=json.dumps(dict(n=len(files), ar=round(w/h,4), dir=f'../book/{it["slug"]}/', back='../index.html#publish'))
+    open(f'{OUT}/publish/{it["slug"]}.html','w').write(f"""<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{E(it['title'])} — {SITE['name_ko']}</title>
+<meta name="description" content="{E(it['desc'])}"><meta property="og:title" content="{E(it['title'])}">
+<meta property="og:image" content="https://coin9563-max.github.io/book/{it['slug']}/01.jpg">
+<link rel="stylesheet" href="../style.css"></head>
+<body class="dark bookpg">
+<header class="top"><a class="name" href="../index.html#publish">← {SITE['name_ko']}<span>Publish</span></a><span class="bt">{E(it['title'])} <em>{E(it['kind'])} · {it['year']}</em></span></header>
+<div class="stage"><div id="book"><div class="pg L"></div><div class="pg R"></div><i class="spine"></i></div></div>
+<div class="bctl"><button id="pv" aria-label="이전">‹</button><span id="cnt"></span><button id="nx" aria-label="다음">›</button></div>
+<p class="bhint">클릭 · 방향키 · 스와이프로 넘기기</p>
+<script>window.BOOK={cfg};</script><script>{BOOKJS}</script>
+</body></html>""")
