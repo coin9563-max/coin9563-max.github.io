@@ -1,0 +1,214 @@
+# -*- coding: utf-8 -*-
+"""정적 사이트 생성기: python3 build.py <이미지폴더> <출력폴더>
+이미지폴더에는 <id>.jpg (포트폴리오 asset) 와 pg_<id>.jpg (페이지 렌더)가 있어야 함."""
+import os, sys, shutil, html, json
+from PIL import Image
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from content import SITE, PROJECTS, ABOUT
+
+SRC, OUT = sys.argv[1], sys.argv[2]
+os.makedirs(OUT + '/img', exist_ok=True)
+os.makedirs(OUT + '/works', exist_ok=True)
+E = html.escape
+sizes = {}
+
+def use(i, thumb=False):
+    """이미지를 출력폴더로 복사하고 (경로, w, h) 반환"""
+    name = f'{i}.jpg'
+    src = f'{SRC}/{name}'
+    if thumb:
+        dst = f'{OUT}/img/t_{name}'
+        if not os.path.exists(dst):
+            im = Image.open(src); im.thumbnail((1400, 1400)); im.save(dst, quality=82, optimize=True, progressive=True)
+        w, h = Image.open(dst).size
+        return f'img/t_{name}', w, h
+    dst = f'{OUT}/img/{name}'
+    if not os.path.exists(dst):
+        shutil.copy(src, dst)
+    w, h = Image.open(dst).size
+    return f'img/{name}', w, h
+
+def pic(i, root, cls='', alt=''):
+    p, w, h = use(i)
+    return f'<img class="{cls}" src="{root}{p}" width="{w}" height="{h}" loading="lazy" decoding="async" alt="{E(alt)}">'
+
+CSS = r"""
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+:root{--bg:#f6f5f2;--fg:#1d1c1a;--mute:#86827b;--line:#dedad3;--acc:#c8572f;--max:1180px;--text:680px}
+.dark{--bg:#0b0b0a;--fg:#ecebe7;--mute:#8d8a84;--line:#2a2927;--acc:#e0673a}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--fg);font-family:Pretendard,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:16px;line-height:1.75;word-break:keep-all;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%;height:auto}
+header.top{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:baseline;padding:18px clamp(16px,4vw,48px);background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px)}
+header.top .name{font-weight:600;letter-spacing:.01em}
+header.top .name span{color:var(--mute);font-weight:400;margin-left:.5em}
+header.top nav a{margin-left:clamp(14px,2.5vw,32px);color:var(--mute);font-size:14px}
+header.top nav a:hover,header.top nav a.on{color:var(--fg)}
+main{padding:0 clamp(16px,4vw,48px)}
+.intro{max-width:var(--max);margin:9vh auto 7vh}
+.intro h1{font-size:clamp(28px,4.4vw,54px);font-weight:500;line-height:1.25;letter-spacing:-.02em}
+.intro p{color:var(--mute);margin-top:18px}
+.works{max-width:var(--max);margin:0 auto 14vh;display:grid;grid-template-columns:1fr 1fr;gap:72px 40px}
+.work img{width:100%;transition:opacity .3s}
+.work:hover img{opacity:.85}
+.work .cap{display:flex;gap:14px;margin-top:14px;font-size:15px;align-items:baseline}
+.work .cap .no{color:var(--mute);font-variant-numeric:tabular-nums}
+.work .cap .t{font-weight:600}
+.work .cap .k{color:var(--mute);margin-left:auto;font-size:13px;text-align:right}
+.work:nth-child(1){grid-column:1/-1}
+/* project */
+.hero{margin:0 calc(-1*clamp(16px,4vw,48px))}
+.hero img{width:100%;height:auto}
+.phead{max-width:var(--max);margin:64px auto 40px;display:grid;grid-template-columns:5fr 7fr;gap:40px}
+.phead .no{color:var(--mute);font-size:14px}
+.phead h1{font-size:clamp(30px,4vw,48px);font-weight:600;line-height:1.15;letter-spacing:-.01em;margin-top:6px}
+.phead h1 small{display:block;font-size:.45em;font-weight:400;color:var(--mute);margin-top:10px;letter-spacing:0}
+.phead dl{margin-top:28px;display:grid;grid-template-columns:auto 1fr;gap:4px 18px;font-size:14px}
+.phead dt{color:var(--mute)}
+.phead .st{font-size:clamp(19px,2vw,24px);font-weight:500;line-height:1.5;margin-bottom:20px}
+.phead .body p+p{margin-top:1em}
+.phead .en{color:var(--mute);font-size:14.5px;margin-top:1.2em}
+.blk{max-width:var(--max);margin:0 auto 56px}
+.blk.w{max-width:1600px}
+figure img{width:100%;cursor:zoom-in}
+figcaption{font-size:13px;color:var(--mute);margin-top:10px;line-height:1.55}
+.row{display:grid;gap:16px;align-items:end}
+.txt{max-width:var(--max);margin:96px auto 40px;display:grid;grid-template-columns:5fr 7fr;gap:40px}
+.txt h2{font-size:clamp(19px,2vw,23px);font-weight:600;line-height:1.45}
+.txt h2 small{display:block;font-size:13px;font-weight:400;color:var(--mute);margin-top:6px;letter-spacing:.02em}
+.txt .b p+p{margin-top:1em}
+ol.leg{max-width:var(--max);margin:-24px auto 56px;columns:3;font-size:14px;color:var(--mute);padding-left:1.4em}
+.pnav{max-width:var(--max);margin:120px auto 0;padding:28px 0 80px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;font-size:15px}
+.pnav a span{display:block;color:var(--mute);font-size:13px}
+.pnav a:last-child{text-align:right}
+footer{max-width:var(--max);margin:0 auto;padding:0 0 48px;color:var(--mute);font-size:13px}
+main>footer{padding-left:0}
+/* about */
+.about{max-width:var(--max);margin:10vh auto 14vh;display:grid;grid-template-columns:4fr 8fr;gap:56px}
+.about img{width:100%;max-width:340px}
+.about h1{font-size:clamp(28px,3.6vw,44px);font-weight:500;line-height:1.2}
+.about h1 small{display:block;font-size:.42em;color:var(--mute);font-weight:400;margin-top:10px}
+.about h3{font-size:13px;color:var(--mute);font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.about table{border-collapse:collapse;width:100%;font-size:15px}
+.about td{padding:6px 0;vertical-align:top}
+.about td:first-child{color:var(--mute);width:150px;font-variant-numeric:tabular-nums;padding-right:16px}
+.about td .r{color:var(--mute)}
+.about .lead{font-size:18px;margin-top:28px;max-width:var(--text)}
+/* lightbox */
+#lb{position:fixed;inset:0;background:rgba(10,10,9,.96);display:none;align-items:center;justify-content:center;z-index:50;cursor:zoom-out;padding:2vw}
+#lb.on{display:flex}
+#lb img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+@media (max-width:760px){
+  .works{grid-template-columns:1fr;gap:48px}
+  .phead,.txt,.about{grid-template-columns:1fr;gap:20px}
+  .txt{margin-top:64px}
+  .row{grid-template-columns:1fr!important}
+  ol.leg{columns:1}
+  header.top .name span{display:none}
+  .work .cap .k{display:none}
+}
+"""
+
+JS = r"""
+document.addEventListener('click',e=>{const lb=document.getElementById('lb');
+ if(e.target.closest('#lb')){lb.classList.remove('on');return}
+ const im=e.target.closest('figure img');if(im){lb.querySelector('img').src=im.src;lb.classList.add('on')}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('lb').classList.remove('on')});
+"""
+
+def page(title, body, root, dark=False, on='', desc=''):
+    return f"""<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{E(title)}</title>
+<meta name="description" content="{E(desc or SITE['name_ko']+' — 건축 포트폴리오')}">
+<meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc or '')}">
+<link rel="stylesheet" href="{root}style.css">
+</head><body class="{'dark' if dark else ''}">
+<header class="top"><a class="name" href="{root}index.html">{SITE['name_ko']}<span>{SITE['name_en']}</span></a>
+<nav><a href="{root}index.html" class="{'on' if on=='w' else ''}">Works</a><a href="{root}about.html" class="{'on' if on=='a' else ''}">About</a></nav></header>
+<main>
+{body}
+<footer>© 2026 {SITE['name_ko']} {SITE['name_en']}</footer>
+</main>
+<div id="lb"><img alt=""></div>
+<script>{JS}</script>
+</body></html>"""
+
+def para(t):
+    return ''.join(f'<p>{E(x)}</p>' for x in t.split('\n\n') if x.strip()).replace('\n', '<br>')
+
+def block(b, root):
+    k = b[0]
+    if k in ('img', 'wide'):
+        cap = f'<figcaption>{E(b[2])}</figcaption>' if b[2] else ''
+        return f'<figure class="blk {"w" if k=="wide" else ""}">{pic(b[1], root, alt=b[2])}{cap}</figure>'
+    if k in ('pair', 'grid'):
+        ids = b[1]; cols = b[3] if k == 'grid' else 2
+        if k == 'pair':
+            # 높이를 맞추도록 비율 기반 열 폭
+            rs = [use(i)[1] / use(i)[2] for i in ids]
+            tmpl = ' '.join(f'{r:.3f}fr' for r in rs)
+        else:
+            tmpl = f'repeat({cols},1fr)'
+        imgs = ''.join(f'<div>{pic(i, root)}</div>' for i in ids)
+        cap = f'<figcaption>{E(b[2])}</figcaption>' if b[2] else ''
+        return f'<figure class="blk"><div class="row" style="grid-template-columns:{tmpl}">{imgs}</div>{cap}</figure>'
+    if k == 'text':
+        en = f'<small>{E(b[3])}</small>' if len(b) > 3 and b[3] else ''
+        return f'<section class="txt"><h2>{E(b[1])}{en}</h2><div class="b">{para(b[2])}</div></section>'
+    if k == 'list':
+        return '<ol class="leg">' + ''.join(f'<li>{E(x)}</li>' for x in b[2]) + '</ol>'
+    raise ValueError(k)
+
+# ---- style
+open(f'{OUT}/style.css', 'w').write(CSS)
+open(f'{OUT}/.nojekyll', 'w').write('')
+
+# ---- index
+cards = []
+for p in PROJECTS:
+    src, w, h = use(p['hero'], thumb=True)
+    cards.append(f'''<a class="work" href="works/{p["slug"]}.html"><img src="{src}" width="{w}" height="{h}" alt="{E(p["title"])}" {'' if p is PROJECTS[0] else 'loading="lazy"'}>
+<div class="cap"><span class="no">{p["no"]}</span><span class="t">{E(p["title"])}</span><span class="k">{E(p["kind"])} · {p["year"]}</span></div></a>''')
+body = f'''<section class="intro"><h1>{SITE["name_ko"]} {SITE["name_en"]}<br>Selected Works 2021–2026</h1><p>{SITE["school"]}</p></section>
+<section class="works">{"".join(cards)}</section>'''
+open(f'{OUT}/index.html', 'w').write(page(f'{SITE["name_ko"]} — Portfolio', body, '', on='w'))
+
+# ---- projects
+for n, p in enumerate(PROJECTS):
+    r = '../'
+    meta = ''.join(f'<dt>{E(a)}</dt><dd>{E(b)}</dd>' for a, b in p['meta'])
+    en = f'<p class="en">{E(p["intro_en"])}</p>' if p.get('intro_en') else ''
+    sub = f'<small>{E(p["sub"])}</small>' if p.get('sub') else ''
+    head = f'''<div class="hero">{pic(p["hero"], r, alt=p["title"])}</div>
+<section class="phead"><div><div class="no">{p["no"]} — {E(p["kind"])}</div><h1>{E(p["title"])}{sub}</h1><dl>{meta}</dl></div>
+<div><p class="st">{E(p["statement"])}</p><div class="body">{"".join(f"<p>{E(x)}</p>" for x in p["intro"])}{en}</div></div></section>'''
+    blocks = '\n'.join(block(b, r) for b in p['blocks'])
+    prv = PROJECTS[n - 1] if n > 0 else None
+    nxt = PROJECTS[n + 1] if n + 1 < len(PROJECTS) else None
+    nav = '<nav class="pnav">'
+    nav += f'<a href="{prv["slug"]}.html"><span>← 이전</span>{E(prv["title"])}</a>' if prv else '<a href="../index.html"><span>←</span>Works</a>'
+    nav += f'<a href="{nxt["slug"]}.html"><span>다음 →</span>{E(nxt["title"])}</a>' if nxt else '<a href="../about.html"><span>→</span>About</a>'
+    nav += '</nav>'
+    open(f'{OUT}/works/{p["slug"]}.html', 'w').write(
+        page(f'{p["title"]} — {SITE["name_ko"]}', head + blocks + nav, r, dark=p.get('dark', False), on='w', desc=p['statement']))
+
+# ---- about
+A = ABOUT
+def tbl(rows):
+    return '<table>' + ''.join(f'<tr><td>{E(a)}</td><td>{E(b)}' + (f' <span class="r">· {E(c)}</span>' if c else '') + '</td></tr>' for a, b, c in rows) + '</table>'
+lead = f'<p class="lead">{E(A["intro"])}</p>' if A.get('intro') else ''
+src, w, h = use(405)
+body = f'''<section class="about"><div><img src="{src}" width="{w}" height="{h}" alt="D5 Render 공개 강연"></div>
+<div><h1>{SITE["name_ko"]}<small>{SITE["name_en"]} · {SITE["school"]}</small></h1>{lead}
+<h3>Contact</h3><table><tr><td>E-mail</td><td><a href="mailto:{SITE["email"]}">{SITE["email"]}</a></td></tr></table>
+<h3>Education</h3>{tbl(A["education"])}
+<h3>Experience</h3>{tbl(A["experience"])}
+<h3>Activities</h3>{tbl(A["activities"])}
+<h3>Skills</h3><table>{"".join(f"<tr><td>{E(a)}</td><td>{E(b)}</td></tr>" for a,b in A["skills"])}</table>
+</div></section>'''
+open(f'{OUT}/about.html', 'w').write(page(f'About — {SITE["name_ko"]}', body, '', on='a'))
+print('ok', len(os.listdir(OUT + '/img')), 'images')

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>About — 한승현</title>
+<meta name="description" content="한승현 — 건축 포트폴리오">
+<meta property="og:title" content="About — 한승현"><meta property="og:description" content="">
+<link rel="stylesheet" href="style.css">
+</head><body class="">
+<header class="top"><a class="name" href="index.html">한승현<span>Seunghyun Han</span></a>
+<nav><a href="index.html" class="">Works</a><a href="about.html" class="on">About</a></nav></header>
+<main>
+<section class="about"><div><img src="img/405.jpg" width="2400" height="1800" alt="D5 Render 공개 강연"></div>
+<div><h1>한승현<small>Seunghyun Han · 홍익대학교 건축학과</small></h1>
+<h3>Contact</h3><table><tr><td>E-mail</td><td><a href="mailto:james9563@naver.com">james9563@naver.com</a></td></tr></table>
+<h3>Education</h3><table><tr><td>2021–2027</td><td>홍익대학교 건축학과</td></tr></table>
+<h3>Experience</h3><table><tr><td>2026.07–2026.11</td><td>SLA <span class="r">· 인턴</span></td></tr><tr><td>2025.06–2025.08</td><td>디어 건축사사무소 <span class="r">· 인턴</span></td></tr><tr><td>2025.05–2025.12</td><td>이진미 교수 학부조교 <span class="r">· RA</span></td></tr><tr><td>2024.10–</td><td>우동우 건축사사무소 <span class="r">· 프리랜서</span></td></tr><tr><td>2024.10–2025.02</td><td>정림 디지털 아카데미 유닛 <span class="r">· jadu 수료</span></td></tr><tr><td>2024.04–2024.09</td><td>삶것 건축사사무소 <span class="r">· 인턴</span></td></tr></table>
+<h3>Activities</h3><table><tr><td>2025</td><td>D5 Render Student Ambassador <span class="r">· 공개 강연 · 홍익대학교</span></td></tr></table>
+<h3>Skills</h3><table><tr><td>Modeling &amp; Scripting</td><td>Rhino · Grasshopper · GhPython · SketchUp</td></tr><tr><td>Visualization</td><td>D5 Render · Enscape</td></tr><tr><td>Drafting &amp; BIM</td><td>Revit · AutoCAD</td></tr></table>
+</div></section>
+<footer>© 2026 한승현 Seunghyun Han</footer>
+</main>
+<div id="lb"><img alt=""></div>
+<script>
+document.addEventListener('click',e=>{const lb=document.getElementById('lb');
+ if(e.target.closest('#lb')){lb.classList.remove('on');return}
+ const im=e.target.closest('figure img');if(im){lb.querySelector('img').src=im.src;lb.classList.add('on')}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.getElementById('lb').classList.remove('on')});
+</script>
+</body></html>
