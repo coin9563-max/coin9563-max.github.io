@@ -574,7 +574,7 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .crl figure.on{opacity:1}
 .crl i{position:absolute;inset:-40px;background:center/cover no-repeat;filter:blur(28px) brightness(.28) saturate(.7)}
 .crl img{position:relative;width:100%;height:100%;object-fit:cover;filter:brightness(.38) saturate(.75);transform:scale(1.08);transition:transform 7s linear}
-@media (min-width:861px){.crl img{object-fit:contain;transform:scale(1.03)}.crl figure.on img{transform:scale(1)}}
+@media (min-width:861px){.crl img{transform:scale(1.025);object-position:50% 45%}.crl figure.on img{transform:scale(1)}}
 .crl figure.on img{transform:scale(1)}
 .crl figcaption{position:absolute;right:clamp(20px,4vw,64px);top:clamp(70px,10vh,110px);font:11px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.06em;color:#e9e4da;opacity:.75}
 .cv0.pk .crl,.cv0:has(.cvm.hov) .crl{opacity:.0;transition:opacity .5s}.crl{transition:opacity .5s}
