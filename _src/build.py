@@ -559,6 +559,17 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .bcs .it em{font-style:normal;font-size:14px;color:var(--sub);line-height:1.5}
 .bcs .sz{position:absolute;right:clamp(28px,6vw,96px);bottom:26px;font:10px var(--mono);letter-spacing:.12em;color:var(--pm)}
 .flyin .bcs>*{animation:bcin .7s .05s both}@keyframes bcin{from{opacity:0;transform:translateY(10px)}}
+.bg.pubg{background:radial-gradient(80% 70% at 38% 40%,#26231f 0%,#121110 70%);filter:none}
+.pbs{position:absolute;left:34%;top:38%;--h:min(52vh,470px);--w:calc(var(--h) * .705);transform:translate(-50%,-50%);perspective:2600px}
+.pbk{position:relative;width:calc(var(--w) * 2);height:var(--h);transform:translateX(calc(var(--w) * -.5)) rotateX(10deg);transform-style:preserve-3d;transition:transform .9s cubic-bezier(.6,0,.2,1)}
+.pbk.open{transform:translateX(0) rotateX(10deg)}
+.pp{position:absolute;top:0;width:var(--w);height:100%;background:#1d1c1a center/cover no-repeat}
+.pp.L{left:0;box-shadow:-1px 1px 0 #cfc9bd,-2px 2px 0 #9c968a,-3px 3px 0 #cfc9bd,-4px 4px 0 #8a8478,-20px 34px 50px #000c}.pp.R{left:var(--w);box-shadow:1px 1px 0 #cfc9bd,2px 2px 0 #9c968a,3px 3px 0 #cfc9bd,4px 4px 0 #8a8478,5px 5px 0 #cfc9bd,6px 6px 0 #77726a,20px 34px 50px #000c}
+.pp.empty{visibility:hidden}.pp.L::after,.pp.R::after{content:'';position:absolute;inset:0;pointer-events:none}.pp.L::after{background:linear-gradient(90deg,transparent 80%,#0005)}.pp.R::after{background:linear-gradient(90deg,#0006,transparent 14%)}
+.lf{position:absolute;left:var(--w);top:0;width:var(--w);height:100%;transform-origin:0 50%;transform-style:preserve-3d;transition:transform .85s cubic-bezier(.45,.05,.25,1);z-index:2}.lf.go{transform:rotateY(-180deg)}
+.lf i{position:absolute;inset:0;background:#1d1c1a center/cover no-repeat;-webkit-backface-visibility:hidden;backface-visibility:hidden}.lf i.b{transform:rotateY(180deg)}
+.pb2{position:absolute;left:calc(var(--w) * .62);top:-5%;width:calc(var(--w) * 1.06);height:calc(var(--h) * 1.05);background:center/cover no-repeat;transform:rotate(-7deg);box-shadow:1px 1px 0 #cfc9bd,3px 3px 0 #9c968a,5px 5px 0 #cfc9bd,20px 30px 50px #000c;filter:brightness(.6)}
+@media (max-width:860px){.pbs{left:50%;top:34%;--h:44vh}}
 .bg .pdr{position:absolute;inset:0;pointer-events:none}
 .bst{position:fixed;inset:0;z-index:120;display:grid;place-items:end center;padding-bottom:62px;pointer-events:none;perspective:1600px;perspective-origin:50% 30%}
 .bst::before{content:'';position:absolute;inset:0;background:#141412;opacity:0;transition:opacity .4s}.bst::before{background:linear-gradient(to top,#141412 0%,#14141200 70%)}.bst.up::before{opacity:.7}
@@ -650,6 +661,50 @@ if(!document.body.classList.contains('cardpg')&&matchMedia('(hover:hover)').matc
 })();
 
 
+// 표지 Publish 호버: 책 두 권이 실제 크기로 놓이고, 위 책 표지가 열리며 펼침면이 넘어감
+(function(){var bg=document.querySelector('.cv0 .pubg');if(!bg)return;var A=bg.dataset.a,N=+bg.dataset.n,SQ=bg.dataset.s.split(',').map(Number),src=function(i){return A+String(i).padStart(2,'0')+'.jpg';},built=false,bk,L,R,tm=[],q=0,rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function img(el,i){el.style.backgroundImage=i?'url('+src(i)+')':'none';el.classList.toggle('empty',!i);}
+function build(){if(built)return;built=true;bg.innerHTML='<div class="pbs"><div class="pb2" style="background-image:url('+bg.dataset.b+')"></div><div class="pbk"><div class="pp L empty"></div><div class="pp R"></div></div></div>';bk=bg.querySelector('.pbk');L=bk.querySelector('.L');R=bk.querySelector('.R');
+ SQ.forEach(function(p){[p,p+1].forEach(function(i){var m=new Image();m.src=src(i);});});}
+function reset(){tm.forEach(clearTimeout);tm=[];q=0;bk.classList.remove('open');img(L,0);img(R,1);bk.querySelectorAll('.lf').forEach(function(x){x.remove();});}
+function flip(lp){var f=document.createElement('div');f.className='lf';f.innerHTML='<i class="a"></i><i class="b"></i>';f.firstChild.style.backgroundImage=R.style.backgroundImage;f.lastChild.style.backgroundImage='url('+src(lp)+')';bk.appendChild(f);img(R,lp+1<=N?lp+1:0);
+ void f.offsetWidth;f.classList.add('go');tm.push(setTimeout(function(){img(L,lp);f.remove();},880));}
+function run(){reset();if(rm){bk.classList.add('open');img(L,SQ[0]);img(R,SQ[0]+1);return;}
+ tm.push(setTimeout(function(){bk.classList.add('open');flip(SQ[0]);q=1;
+  (function nx(){tm.push(setTimeout(function(){flip(SQ[q%SQ.length]);q++;nx();},1700));})();},650));}
+new MutationObserver(function(){if(bg.classList.contains('on')){build();run();}else tm.push(setTimeout(function(){if(!bg.classList.contains('on')&&built){tm.forEach(clearTimeout);tm=[];}},700));}).observe(bg,{attributes:true,attributeFilter:['class']});
+})();
+// 표지 Practice 호버: 그리드 위에 실무 도면 목록과 표제란이 한 줄씩 찍히고 마지막에 도장
+(function(){var bg=document.querySelector('.cv0 .prag');if(!bg)return;var rows=JSON.parse(bg.dataset.r),c=document.createElement('canvas');c.className='pdr';bg.appendChild(c);
+var g=c.getContext('2d'),G=48,W,H,DP,OX,OY,raf=0,t0=0,still=matchMedia('(prefers-reduced-motion:reduce)').matches,X0,Y0,CW=26,CH=5;
+function size(){var r=bg.getBoundingClientRect();DP=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;c.width=W*DP;c.height=H*DP;c.style.width=W+'px';c.style.height=H+'px';OX=(W/2)%G;OY=(H/2)%G;var cols=Math.floor(W/G);CW=Math.min(26,cols-2);X0=Math.max(1,Math.floor((cols-CW)/2));Y0=2;}
+var LT='rgba(236,232,222,',RD='rgba(255,110,80,';
+function fit(t,w){g.font="11px 'JetBrains Mono',ui-monospace,monospace";if(g.measureText(t).width<=w)return t;while(t.length>1&&g.measureText(t+'…').width>w)t=t.slice(0,-1);return t+'…';}
+function frame(now){if(!t0)t0=now;var t=still?1e6:now-t0;g.setTransform(DP,0,0,DP,0,0);g.clearRect(0,0,W,H);g.translate(OX-G+X0*G,OY-G+Y0*G);
+ var w=CW*G,h=CH*G,tb=Math.min(8,Math.floor(CW*0.32))*G,lw=w-tb,rh=G/2,k=Math.min(1,t/700);
+ // 1. 도곽: 틱 단위로 둘레가 그려짐
+ var per=2*(w+h),dl=Math.floor(k*24)/24*per;g.strokeStyle=LT+'.8)';g.lineWidth=1.3;g.beginPath();g.moveTo(0,0);var pts=[[w,0],[w,h],[0,h],[0,0]],px=0,py=0;for(var i=0;i<4&&dl>0;i++){var L=Math.hypot(pts[i][0]-px,pts[i][1]-py),f=Math.min(1,dl/L);g.lineTo(px+(pts[i][0]-px)*f,py+(pts[i][1]-py)*f);dl-=L;px=pts[i][0];py=pts[i][1];}g.stroke();
+ if(t>700){g.lineWidth=1;g.beginPath();g.moveTo(lw+.5,0);g.lineTo(lw+.5,h);g.stroke();}
+ // 2. 도면 목록 표
+ var cols=[['NO',G],['YEAR',G*2],['PROJECT',G*6],['OFFICE',G*5],['ROLE',lw-G*14]],t1=t-800;g.font="11px 'JetBrains Mono',ui-monospace,monospace";
+ if(t1>0){g.fillStyle=RD+'.9)';g.fillText('DRAWING LIST  실무 · 활동',10,-10);var x=0;cols.forEach(function(cl,j){if(t1>j*60){g.fillStyle=LT+'.55)';g.fillText(cl[0],x+8,rh-8);}x+=cl[1];});g.strokeStyle=LT+'.5)';g.beginPath();g.moveTo(0,rh+.5);g.lineTo(lw*Math.min(1,t1/300),rh+.5);g.stroke();}
+ rows.forEach(function(r,ri){var tr=t1-350-ri*260;if(tr<=0)return;var y=rh*(ri+2),cells=[String(ri+1).padStart(2,'0'),r[0],r[1],r[2],r[3]],x=0;
+  cells.forEach(function(v,j){var cw=cols[j][1],s=fit(String(v),cw-12),n=Math.min(s.length,Math.floor(tr/22)-j*2);if(n>0){g.fillStyle=j==2?LT+'.95)':LT+'.7)';g.fillText(s.slice(0,n),x+8,y-8);}x+=cw;});
+  g.strokeStyle=LT+'.16)';g.beginPath();g.moveTo(0,y+.5);g.lineTo(lw,y+.5);g.stroke();
+  if(tr<260){g.fillStyle=RD+'.14)';g.fillRect(0,y-rh+1,lw,rh-1);}});
+ // 3. 표제란
+ var t2=t1-350-rows.length*260,F=[['PROJECT','실무 · 활동 '+rows.length+'건'],['OFFICE','정림 · 삶것 · SLA · 디어 · 우동우'],['DRAWN','한승현  Seunghyun Han'],['SCALE','1 : 100'],['DATE','2024.04 — 2026.11'],['SHEET','P-01 / 01']],fh=h/F.length;
+ F.forEach(function(f,j){var tf=t2-j*180;if(tf<=0)return;var y=j*fh;g.strokeStyle=LT+'.3)';if(j){g.beginPath();g.moveTo(lw,y+.5);g.lineTo(w,y+.5);g.stroke();}g.fillStyle=LT+'.45)';g.font="9px 'JetBrains Mono',ui-monospace,monospace";g.fillText(f[0],lw+8,y+13);
+  g.font="12px 'JetBrains Mono',ui-monospace,monospace";var s=f[1],n=Math.min(s.length,Math.floor(tf/26));g.fillStyle=LT+'.92)';g.fillText(s.slice(0,n),lw+8,y+fh-9);});
+ // 4. 도장 (쾅)
+ var t3=t2-F.length*180-500;if(t3>0){var sc=t3<120?1.8-0.8*(t3/120):1,cx=lw+tb*0.74,cy=fh*3.6;g.save();g.translate(cx,cy);g.rotate(-0.22);g.scale(sc,sc);g.globalAlpha=Math.min(1,t3/80)*0.9;g.strokeStyle=RD+'1)';g.lineWidth=2;g.beginPath();g.arc(0,0,30,0,7);g.stroke();g.lineWidth=1;g.beginPath();g.arc(0,0,25,0,7);g.stroke();
+  g.fillStyle=RD+'1)';g.textAlign='center';g.font="bold 13px 'Noto Sans KR',sans-serif";g.fillText('한승현',0,4);g.font="7px 'JetBrains Mono',monospace";g.fillText('CHECKED',0,-12);g.fillText('2026',0,17);g.restore();g.textAlign='left';
+  if(t3<180){g.fillStyle=RD+(0.12*(1-t3/180))+')';g.fillRect(-X0*G,-Y0*G,W,H);}}
+ if(t3<1000||!still)raf=requestAnimationFrame(frame);}
+function start(){cancelAnimationFrame(raf);size();t0=0;raf=requestAnimationFrame(frame);}
+function stop(){cancelAnimationFrame(raf);raf=0;g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,c.width,c.height);}
+new MutationObserver(function(){bg.classList.contains('on')?start():setTimeout(function(){if(!bg.classList.contains('on'))stop();},600);}).observe(bg,{attributes:true,attributeFilter:['class']});
+addEventListener('resize',function(){if(raf)size();});})();
 // 표지 Process 호버: 배경 그리드 위에 실험 도면(투라인 + 해치)이 칸에 맞춰 틱 단위로 생성됨
 (function(){var cv0=document.querySelector('.cv0');if(!cv0)return;var lk=document.querySelector('.cvm a[href$="process.html"]');if(!lk)return;
 var bgs=cv0.querySelectorAll('.bg'),bi=[].indexOf.call(document.querySelectorAll('.cvm a'),lk),bg=bgs[bi];if(!bg)return;
@@ -945,12 +1000,15 @@ def cover():
     INTRO=[use(i,thumb=True)[0] for i in [643,298,3101,280,2966,87,307]]
     feat=[i for i in PRACTICE if i.get('slug')]
     items=[('01','Projects','projects.html',f'설계 작업 {len(PROJECTS)}',use(PROJECTS[0]['hero'],thumb=True)[0]),
-           ('02','Publish','publish.html',f'책 {len(PUBLISH)}',use(PUBLISH[0]['img'],thumb=True)[0]),
-           ('03','Practice','practice.html',f'실무 · 활동 {len(PRACTICE)}',use(feat[0]['thumb'],thumb=True)[0] if feat else ''),
+           ('02','Publish','publish.html',f'책 {len(PUBLISH)}','PUB'),
+           ('03','Practice','practice.html',f'실무 · 활동 {len(PRACTICE)}','PRA'),
            ('04','Process','process.html','AI와 설계하기',''),
            ('05','About','about.html','소개 · 연락처','')]
+    import json as _j, html as _h
+    rows=[[i.get('year',''),i['title'],i.get('org',''),(i.get('role','') or '').split(' · ')[0]] for i in PRACTICE if not i.get('hide_in_list')]
+    PRA_BG='<div class="bg grid prag" data-r="'+_h.escape(_j.dumps(rows,ensure_ascii=False))+'"></div>'
     li=''.join(f'<li><a href="{h}" data-bg="{b}"><span class="n">{n}</span><span class="w">{t}</span></a></li>' for n,t,h,c,b in items)
-    return f'''<section class="cv0"><canvas class="cad" aria-hidden="true"></canvas><div class="cvo" aria-hidden="true"></div><div class="ifr" aria-hidden="true">{"".join(f'<img src="{u}" alt="">' for u in INTRO)}</div><div class="bgs">{"".join(f'<div class="bg" style="background-image:url({b})"></div>' if b else '<div class="bg grid"></div>' for k,(*_,b) in enumerate(items))}</div>
+    return f'''<section class="cv0"><canvas class="cad" aria-hidden="true"></canvas><div class="cvo" aria-hidden="true"></div><div class="ifr" aria-hidden="true">{"".join(f'<img src="{u}" alt="">' for u in INTRO)}</div><div class="bgs">{"".join(f'<div class="bg" style="background-image:url({b})"></div>' if b and b not in ('PUB','PRA') else (PRA_BG if b=='PRA' else '<div class="bg grid"></div>' if b!='PUB' else '<div class="bg pubg" data-a="book/from-city-to-earth/" data-n="72" data-b="book/unwashed/01.jpg" data-s="10,14,32,38,46,48,52,62"></div>') for k,(*_,b) in enumerate(items))}</div>
 <div class="cvh"><p>Portfolio 2021–2026</p><h1>{SITE["name_ko"]}<span>{SITE["name_en"]}</span></h1></div>
 <ol class="cvm">{li}</ol><p class="cvf"><a href="mailto:{SITE["email"]}">{SITE["email"]}</a><span class="cdr"></span><span>{SITE["school"]}</span></p></section><p class="iwd" aria-hidden="true"><span>Land</span><span>Material</span><span>Structure</span></p>'''
 open(f'{OUT}/index.html', 'w').write(page(f'{SITE["name_ko"]} — Portfolio', cover(), '', dark='coverpg', on=''))
