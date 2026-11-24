@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LAB 08 처마와 시선 · 바람 — 한승현</title>
+<meta name="description" content="해측 처마 높이와 지붕 경사를 바꾸면 앉은 눈높이에서 하늘이 잘리는 각, 남는 바다 띠, 작업 자리 천장고, 처마 끝 바람이 함께 바뀐다.">
+<meta property="og:title" content="LAB 08 처마와 시선 · 바람 — 한승현"><meta property="og:description" content="해측 처마 높이와 지붕 경사를 바꾸면 앉은 눈높이에서 하늘이 잘리는 각, 남는 바다 띠, 작업 자리 천장고, 처마 끝 바람이 함께 바뀐다.">
+<link rel="stylesheet" href="../style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%231d1c1a%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22%23f6f5f2%22 font-family=%22sans-serif%22%3EH%3C/text%3E%3C/svg%3E">
+<meta property="og:image" content="https://coin9563-max.github.io/img/t_307.jpg">
+</head><body class="dark labpg">
+<header class="top"><a class="name" href="../index.html">한승현<span>Seunghyun Han</span></a>
+<nav><a href="../projects.html" class="">Projects</a><a href="../publish.html" class="">Publish</a><a href="../practice.html" class="">Practice</a><a href="../process.html" class="on">Process</a><a href="../about.html" class="">About</a><a href="../about.html#contact">Contact</a></nav></header>
+<main>
+<section class="lab" id="lab-eave"><div class="lh"><p class="k"><a href="../process.html">← AI와 설계하기</a> · LAB 08 · SIGHT · WIND</p><h3>처마와 시선 · 바람</h3><p>굴 작업은 몇 시간씩 앉아 손끝을 보는 일이라, 시야에 밝은 하늘이 들어오면 눈이 부시다. 처마 끝과 눈을 잇는 선으로 하늘이 잘리는 각을 구하고, 안벽 모서리까지의 선으로 바다가 보이는 띠를 구한다. 처마를 낮출수록 바람을 받는 높이도 내려가지만 작업 자리의 천장고가 모자라지므로 경사와 자리를 함께 조정한다. 비어가는 마을 굴막 단면을 정할 때 쓴 논리다.</p></div><div class="app"></div></section><script>// 실험 앱 공통: 슬라이더 패널 만들기 + 임베드(모달) 모드
+(function(){
+  if(/[?&]embed/.test(location.search)) document.documentElement.classList.add('embed');
+  window.LabUI=function(box,ctl,onChange){
+    const groups={}; ctl.forEach((c,i)=>{c.i=i;(groups[c.g]=groups[c.g]||[]).push(c);});
+    box.innerHTML=Object.entries(groups).map(([g,cs])=>`<fieldset><legend>${g}</legend>${cs.map(c=>c.opts
+      ?`<label><span>${c.k}</span><select data-k="${c.i}">${c.opts.map((o,j)=>`<option value="${j}" ${j==c.get()?'selected':''}>${o}</option>`).join('')}</select><output></output></label>`
+      :`<label><span>${c.k}</span><input type="range" min="${c.min}" max="${c.max}" step="${c.step}" value="${c.get()}" data-k="${c.i}"><output>${c.fmt?c.fmt(c.get()):c.get()}</output></label>`).join('')}</fieldset>`).join('');
+    let tm=null;
+    box.addEventListener('input',e=>{const i=e.target.dataset.k; if(i===undefined) return; const c=ctl[i], v=parseFloat(e.target.value); c.set(v);
+      if(!c.opts) e.target.nextElementSibling.textContent=c.fmt?c.fmt(v):v; clearTimeout(tm); tm=setTimeout(onChange,40);});
+    const dec=c=>{const s=String(c.step||1).split('.')[1];return s?s.length:0;};
+    return function(){box.querySelectorAll('[data-k]').forEach(el=>{const c=ctl[el.dataset.k];let v=c.get();if(!c.opts){v=+(+v).toFixed(dec(c));c.set(v);}el.value=v;if(!c.opts)el.nextElementSibling.textContent=c.fmt?c.fmt(v):v;});};
+  };
+  window.LabRng=function(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}};
+})();
+// 공통 그리기 도구 (어두운 도면 시트)
+window.LD={INK:'#e6e3da',DIM:'#8a8a80',FAINT:'#3a3a35',BG:'#151513',RED:'#ff6b4a',BLUE:'#4da3ff',GREEN:'#9fd36b',MONO:'"JetBrains Mono",ui-monospace,monospace',
+  fit:function(cv){var r=cv.getBoundingClientRect(),d=devicePixelRatio||1;cv.width=r.width*d;cv.height=r.height*d;var g=cv.getContext('2d');g.setTransform(d,0,0,d,0,0);g.lineJoin='round';g.fillStyle='#151513';g.fillRect(0,0,r.width,r.height);return [g,r.width,r.height];},
+  path:function(g,p,close){g.beginPath();p.forEach(function(v,i){i?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1]);});if(close!==false)g.closePath();},
+  text:function(g,s,x,y,o){o=o||{};g.font=(o.w||'')+' '+(o.size||10)+'px '+LD.MONO;g.fillStyle=o.c||LD.DIM;g.textAlign=o.a||'left';g.fillText(s,x,y);},
+  dim:function(g,x1,y1,x2,y2,label,off,c){c=c||LD.BLUE;var dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy)||1,nx=-dy/L*off,ny=dx/L*off;g.strokeStyle=c;g.lineWidth=.7;g.beginPath();
+    g.moveTo(x1,y1);g.lineTo(x1+nx*1.15,y1+ny*1.15);g.moveTo(x2,y2);g.lineTo(x2+nx*1.15,y2+ny*1.15);g.moveTo(x1+nx,y1+ny);g.lineTo(x2+nx,y2+ny);g.stroke();
+    var mx=(x1+x2)/2+nx*1.6,my=(y1+y2)/2+ny*1.6;g.save();g.translate(mx,my);var a=Math.atan2(dy,dx);if(a>Math.PI/2||a<-Math.PI/2)a+=Math.PI;g.rotate(a);LD.text(g,label,0,3,{c:c,a:'center'});g.restore();},
+  stats:function(el,rows,hi,note){el.innerHTML=rows.map(function(r,i){return '<div class="'+(hi&&hi.indexOf(i)>=0?'hi':'')+(r[2]==='ng'?' ng':'')+'"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>';}).join('')+(note?'<p class="note">'+note+'</p>':'');}
+};
+
+// 실사용 도구줄: 좌표 · DXF 입력, PNG · CSV · DXF 내보내기, 링크로 조건 저장
+window.LabIO=function(app,o){
+  const bar=document.createElement('div'); bar.className='lio';
+  bar.innerHTML=(o.poly?`<details class="lin"><summary>대지 입력</summary><p>꼭짓점 좌표를 한 줄에 하나씩 <code>x, y</code> (m, 북쪽이 +y). 또는 DXF의 닫힌 폴리라인을 올리세요.</p><textarea rows="6"></textarea><div><button type="button" class="ap">좌표 적용</button><label class="up">DXF 열기<input type="file" accept=".dxf"></label><span class="msg"></span></div></details>`:'')+
+    `<button type="button" data-x="png">PNG</button><button type="button" data-x="csv">CSV</button>${o.dxf?'<button type="button" data-x="dxf">DXF</button>':''}<button type="button" data-x="link">링크 복사</button>`;
+  app.appendChild(bar);
+  const name=o.name||'lab', msg=bar.querySelector('.msg');
+  const save=(blob,fn)=>{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);};
+  const flash=(b,t)=>{const o2=b.textContent;b.textContent=t;setTimeout(()=>b.textContent=o2,1400);};
+  // 좌표 ↔ 내부 좌표 (내부는 y가 아래로 = 남쪽)
+  const toText=p=>p.map(q=>`${q[0].toFixed(2)}, ${(-q[1]).toFixed(2)}`).join('\n');
+  function setPoly(pts){ if(pts.length<3){msg.textContent='점이 3개 이상 필요해요';return;}
+    const xs=pts.map(p=>p[0]),ys=pts.map(p=>-p[1]),mx=Math.min(...xs),my=Math.min(...ys);
+    o.poly.set(pts.map(p=>[Math.round((p[0]-mx+3)*100)/100,Math.round((-p[1]-my+3)*100)/100])); msg.textContent=pts.length+'개 점 적용'; o.redraw(); }
+  if(o.poly){
+    const ta=bar.querySelector('textarea'); bar.querySelector('.lin').addEventListener('toggle',()=>{ta.value=toText(o.poly.get());});
+    bar.querySelector('.ap').onclick=()=>{const pts=ta.value.split(/\n/).map(l=>l.split(/[,\s\t]+/).filter(Boolean).map(Number)).filter(a=>a.length>=2&&a.every(isFinite)).map(a=>[a[0],a[1]]);setPoly(pts);};
+    bar.querySelector('input[type=file]').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{
+      const L=t.split(/\r?\n/).map(s=>s.trim()), polys=[]; let cur=null;
+      for(let i=0;i<L.length-1;i+=2){const c=L[i],v=L[i+1];
+        if(c==='0'){ if(cur&&cur.length>2) polys.push(cur); cur=(v==='LWPOLYLINE'||v==='POLYLINE')?[]:(v==='VERTEX'&&cur?cur:null); if(v==='VERTEX'&&polys.length&&!cur){} }
+        else if(cur&&c==='10') cur.push([+v,0]); else if(cur&&c==='20'&&cur.length) cur[cur.length-1][1]=+v; }
+      if(cur&&cur.length>2) polys.push(cur);
+      if(!polys.length){msg.textContent='닫힌 폴리라인을 찾지 못했어요';return;}
+      const ar=p=>Math.abs(p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a[0]*b[1]-b[0]*a[1];},0))/2;
+      let P=polys.sort((a,b)=>ar(b)-ar(a))[0]; const ext=Math.max(...P.map(p=>Math.abs(p[0])),...P.map(p=>Math.abs(p[1])));
+      const xs=P.map(p=>p[0]),ys=P.map(p=>p[1]),span=Math.max(Math.max(...xs)-Math.min(...xs),Math.max(...ys)-Math.min(...ys));
+      if(span>1000) P=P.map(p=>[p[0]/1000,p[1]/1000]); // mm → m
+      setPoly(P); ta.value=toText(o.poly.get());});};
+  }
+  bar.addEventListener('click',e=>{const x=e.target.dataset&&e.target.dataset.x;if(!x)return;
+    if(x==='png'){const cvs=[...app.querySelectorAll('canvas')],h=Math.max(...cvs.map(c=>c.height)),w=cvs.reduce((s,c)=>s+c.width,0);
+      const out=document.createElement('canvas');out.width=w;out.height=h;const g=out.getContext('2d');g.fillStyle='#151513';g.fillRect(0,0,w,h);let ox=0;cvs.forEach(c=>{g.drawImage(c,ox,0);ox+=c.width;});
+      out.toBlob(b=>save(b,name+'.png'));}
+    if(x==='csv'){const rows=[...app.querySelectorAll('.nls div')].map(d=>[d.querySelector('span').textContent,d.querySelector('b').textContent]);
+      const st=o.state();rows.push(['',''],['입력값','']);Object.entries(st.P||{}).forEach(([k,v])=>rows.push([k,v]));
+      if(o.poly) o.poly.get().forEach((p,i)=>rows.push(['대지 점 '+(i+1),p[0].toFixed(2)+' / '+(-p[1]).toFixed(2)]));
+      save(new Blob(['﻿'+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n')],{type:'text/csv'}),name+'.csv');}
+    if(x==='dxf'){const ents=o.dxf();let d='0\nSECTION\n2\nENTITIES\n';
+      ents.forEach(en=>{const p=en.pts,n=p.length,z=en.z||0;for(let i=0;i<(en.closed===false?n-1:n);i++){const a=p[i],b=p[(i+1)%n];
+        d+=`0\nLINE\n8\n${en.layer}\n10\n${a[0].toFixed(3)}\n20\n${(-a[1]).toFixed(3)}\n30\n${(a[2]!==undefined?a[2]:z).toFixed(3)}\n11\n${b[0].toFixed(3)}\n21\n${(-b[1]).toFixed(3)}\n31\n${(b[2]!==undefined?b[2]:z).toFixed(3)}\n`;}});
+      d+='0\nENDSEC\n0\nEOF\n'; save(new Blob([d],{type:'application/dxf'}),name+'.dxf');}
+    if(x==='link'){const u=location.href.split('#')[0]+'#s='+btoa(unescape(encodeURIComponent(JSON.stringify(o.state()))));
+      (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>flash(e.target,'복사됨'),()=>{prompt('이 링크를 복사하세요',u);});}
+  });
+  // 링크로 연 경우 조건 복원
+  const m=location.hash.match(/s=([^&]+)/); if(m){try{o.load(JSON.parse(decodeURIComponent(escape(atob(m[1])))));}catch(e){}}
+};
+// LAB 08 — 처마와 시선 · 바람
+// 해측 처마 높이 · 지붕 경사 · 작업 자리를 바꾸면, 앉은 눈높이에서 하늘이 잘리는 각도와 바다가 남는 띠,
+// 작업 자리 천장고, 처마 끝 풍속 · 들림 하중, 마을 지붕 경사와의 차이가 함께 다시 계산된다. (비어가는 마을 굴막 단면의 논리)
+(function(){
+  const root=document.getElementById('lab-eave'); if(!root) return;
+  const P={He:1.9,a:22,D:9,xw:2.6,o:0.9,eye:1.1,hs:2.4,sh:5,V0:40,town:22};
+  const app=root.querySelector('.app');
+  app.innerHTML=`<div class="lctl"></div>
+  <div class="nlv"><div class="cv sheet"><canvas class="sec"></canvas><p class="hint">빨간 처마 끝을 위아래로 = 처마 높이 · 앉은 사람을 좌우로 = 작업 자리</p></div>
+  <div class="cv sheet"><canvas class="vw"></canvas><p class="hint">앉은 눈높이에서 바다 쪽으로 본 세로 시야 (−45° ~ +45°)</p></div></div><div class="nls"></div>`;
+  const cS=app.querySelector('.sec'), cV=app.querySelector('.vw'), out=app.querySelector('.nls');
+  const refresh=LabUI(app.querySelector('.lctl'),[
+    {g:'지붕',k:'해측 처마 높이 m',min:1.3,max:3.6,step:.05,get:()=>P.He,set:v=>P.He=v},
+    {g:'지붕',k:'지붕 경사 °',min:8,max:40,step:1,get:()=>P.a,set:v=>P.a=v},
+    {g:'지붕',k:'처마 내밀기 m',min:0,max:2.5,step:.1,get:()=>P.o,set:v=>P.o=v},
+    {g:'자리',k:'작업 자리 (처마선에서) m',min:.6,max:7,step:.1,get:()=>P.xw,set:v=>P.xw=v},
+    {g:'자리',k:'눈높이',opts:['앉음 1.1m','선 자세 1.6m'],get:()=>P.eye>1.3?1:0,set:v=>P.eye=v?1.6:1.1},
+    {g:'대지',k:'바다 위 바닥 높이 m',min:.8,max:6,step:.1,get:()=>P.hs,set:v=>P.hs=v},
+    {g:'대지',k:'기본 풍속 m/s',min:26,max:46,step:1,get:()=>P.V0,set:v=>P.V0=v},
+  ],draw);
+  const R=Math.PI/180, deg=r=>r/R;
+  function compute(){
+    const t=Math.tan(P.a*R), ex=P.xw, ez=P.eye;
+    const tipX=-P.o, tipZ=P.He-P.o*t;            // 처마 끝 (내밀기만큼 바다 쪽, 경사 따라 낮아짐)
+    const thE=Math.atan2(tipZ-ez, ex-tipX);       // 처마 끝이 시야를 자르는 각 (위 +)
+    const thQ=-Math.atan2(ez+0, ex+P.sh);         // 안벽 모서리 (바다가 보이기 시작하는 아래 한계)
+    const seaTop=Math.min(0,thE), sea=Math.max(0,deg(seaTop-thQ)), sky=Math.max(0,deg(thE));
+    const gaze=-20*R, glareTop=gaze+35*R, glare=Math.max(0,deg(Math.min(thE,glareTop)-Math.max(0,gaze)));
+    const headroom=P.He+ex*t, back=P.He+P.D*t;
+    const zr=Math.max(tipZ,1), Vz=P.V0*Math.pow(zr/10,.10)*1.0, q=.5*1.225*Vz*Vz/1000; // 해안 노풍도 D, 높이 보정
+    const cpN=1.5+.8;                              // 처마 끝 윗면 흡인 + 아랫면 밀어올림 (내민 부분)
+    const lift=q*cpN*Math.max(P.o,.3)/Math.cos(P.a*R)*(1+Math.max(0,tipZ-1.5)*.12);
+    const dTown=P.a-P.town;
+    const checks=[['하늘 보임 0°',sky<=.5],['바다 띠 ≥ 8°',sea>=8],['작업 자리 천장고 ≥ 2.1m',headroom>=2.1],['마을 경사 ±6°',Math.abs(dTown)<=6],['처마 끝 ≥ 1.2m (통행)',tipZ>=1.2]];
+    return {t,tipX,tipZ,thE,thQ,sea,sky,glare,gaze,headroom,back,Vz,q,lift,dTown,checks};
+  }
+  let SS=null;
+  function drawSec(Z){
+    const [g,W,H]=LD.fit(cS), x0=-P.sh-9, x1=P.D+4, z0=-P.hs-1, z1=Math.max(Z.back,P.He)+1.6;
+    const k=Math.min((W-40)/(x1-x0),(H-40)/(z1-z0)), ox=20-x0*k, oy=H-20+z0*k, X=x=>ox+x*k, Y=z=>oy-z*k;
+    SS={k,ox,oy,X,Y};
+    // 바다 · 안벽 · 바닥 · 뒤 마을 지형
+    g.fillStyle='#1b2a33'; g.fillRect(X(x0),Y(-P.hs),(-P.sh-x0)*k,(P.hs+z0*-1)*k);
+    g.strokeStyle=LD.BLUE; g.lineWidth=.8; g.beginPath(); g.moveTo(X(x0),Y(-P.hs)); g.lineTo(X(-P.sh),Y(-P.hs)); g.stroke();
+    LD.path(g,[[X(-P.sh),Y(0)],[X(P.D+1),Y(0)],[X(P.D+1),Y(z0)],[X(-P.sh),Y(z0)]]); g.fillStyle='#2a2a26'; g.fill(); g.strokeStyle=LD.INK; g.lineWidth=1; g.stroke();
+    // 마을 지붕선 (뒤쪽, 흐리게)
+    g.strokeStyle=LD.FAINT; g.lineWidth=.8;
+    for(let i=0;i<3;i++){const bx=P.D+.6+i*2.4,bz=Z.back*.0+1.2+i*1.3,tw=1.2*Math.tan(P.town*R);
+      LD.path(g,[[X(bx),Y(bz-1.2)],[X(bx),Y(bz)],[X(bx+1.2),Y(bz+tw)],[X(bx+2.4),Y(bz)],[X(bx+2.4),Y(bz-1.2)]],false); g.stroke();}
+    // 시선 부채: 바다 (파랑), 하늘 (빨강), 지붕에 막힘 (회색)
+    const ex=X(P.xw), ey=Y(P.eye), Lr=(P.xw+P.sh+3)*k*1.4;
+    for(let a=-40;a<=60;a+=2.5){const r=a*R, c=r>Z.thE?LD.FAINT:(r>0?LD.RED:(r>Z.thQ?LD.BLUE:'#555'));
+      let len=Lr; if(r>Z.thE){len=Math.min(Lr,Math.hypot(P.xw-Z.tipX,Z.tipZ-P.eye)*k/Math.cos(r-Z.thE+1e-6)*.9);} if(r<=Z.thQ) len=Math.min(Lr,(P.eye/Math.max(.05,-Math.tan(r)))*k/Math.cos(r));
+      g.strokeStyle=c; g.globalAlpha=r>Z.thE?.35:.55; g.lineWidth=.7; g.beginPath(); g.moveTo(ex,ey); g.lineTo(ex-Math.cos(r)*len,ey-Math.sin(r)*len); g.stroke();}
+    g.globalAlpha=1;
+    // 지붕 (얇은 막 + 서까래 선)
+    const rx0=Z.tipX, rz0=Z.tipZ, rx1=P.D+.3, rz1=P.He+(P.D+.3)*Z.t;
+    g.strokeStyle=LD.INK; g.lineWidth=2; g.beginPath(); g.moveTo(X(rx0),Y(rz0)); g.lineTo(X(rx1),Y(rz1)); g.stroke();
+    g.lineWidth=1; g.beginPath(); g.moveTo(X(0),Y(0)); g.lineTo(X(0),Y(P.He)); g.moveTo(X(P.D),Y(0)); g.lineTo(X(P.D),Y(Z.back)); g.stroke();
+    // 사람 (앉음/선 자세)
+    g.fillStyle=LD.INK; g.beginPath(); g.arc(ex,ey-3,4,0,7); g.fill(); g.lineWidth=1.4; g.strokeStyle=LD.INK; g.beginPath();
+    if(P.eye<1.3){g.moveTo(ex,ey+2); g.lineTo(ex+2,Y(.45)); g.lineTo(ex-10,Y(.45)); g.lineTo(ex-10,Y(0));} else {g.moveTo(ex,ey+2); g.lineTo(ex,Y(.85)); g.lineTo(ex-3,Y(0)); g.moveTo(ex,Y(.85)); g.lineTo(ex+3,Y(0));} g.stroke();
+    // 처마 끝 핸들 · 치수
+    g.fillStyle=LD.RED; g.beginPath(); g.arc(X(Z.tipX),Y(Z.tipZ),5,0,7); g.fill(); SS.hx=X(Z.tipX); SS.hy=Y(Z.tipZ); SS.px=ex; SS.py=ey;
+    LD.dim(g,X(0),Y(0),X(0),Y(P.He),P.He.toFixed(2)+'m',-14);
+    LD.dim(g,X(P.xw),Y(0),X(P.xw),Y(Z.headroom),Z.headroom.toFixed(2)+'m',14,Z.headroom>=2.1?LD.BLUE:LD.RED);
+    LD.text(g,P.a+'°',X(P.D*.55),Y(P.He+P.D*.55*Z.t)-8,{c:LD.INK});
+    // 바람 화살표 (처마 끝 풍속 비례)
+    const wl=Z.Vz*1.1; g.strokeStyle='#cfc9b8'; g.lineWidth=1;
+    for(let i=0;i<3;i++){const yy=Y(Z.tipZ)+(-8+i*8); g.beginPath(); g.moveTo(X(x0)+6,yy); g.lineTo(X(x0)+6+wl,yy); g.lineTo(X(x0)+wl,yy-3); g.stroke();}
+    LD.text(g,'바람 '+Z.Vz.toFixed(1)+' m/s',X(x0)+6,Y(Z.tipZ)-14,{c:'#cfc9b8'});
+    LD.text(g,'바다',X(x0)+6,Y(-P.hs)+14,{c:LD.BLUE});
+  }
+  function drawView(Z){
+    const [g,W,H]=LD.fit(cV), m=24, top=m, bot=H-m, A=45*R, Y=r=>top+(A-r)/(2*A)*(bot-top), x0=m+40, x1=W-m;
+    const band=(r0,r1,c)=>{const a=Math.max(-A,Math.min(A,r0)),b=Math.max(-A,Math.min(A,r1));if(b<=a)return;g.fillStyle=c;g.fillRect(x0,Y(b),x1-x0,Y(a)-Y(b));};
+    band(Z.thE,A,'#3a342c');              // 지붕 아랫면
+    band(0,Z.thE,'#d9dde0');               // 하늘
+    band(Z.thQ,Math.min(0,Z.thE),'#2f5a73'); // 바다
+    band(-A,Z.thQ,'#55524b');              // 안벽 · 바닥
+    // 지붕 아랫면 서까래, 바다 물결
+    g.strokeStyle='#5a5246'; g.lineWidth=1; for(let i=1;i<9;i++){const yy=Y(Z.thE)-(Y(Z.thE)-top)*Math.pow(i/9,1.6); if(yy>top&&Z.thE<A){g.beginPath();g.moveTo(x0,yy);g.lineTo(x1,yy);g.stroke();}}
+    g.strokeStyle='#4f7c95'; for(let r=Z.thQ+1.5*R;r<Math.min(0,Z.thE);r+=1.8*R){const yy=Y(r);g.beginPath();for(let x=x0;x<x1;x+=6)g.lineTo(x,yy+Math.sin(x*.12+r*90)*1.2);g.stroke();}
+    // 눈부심 구간 (시선 −20° 위 35° 안에 보이는 하늘)
+    if(Z.glare>0){g.fillStyle='rgba(255,107,74,.35)';g.fillRect(x0,Y(Math.min(Z.thE,Z.gaze+35*R)),x1-x0,Y(Math.max(0,Z.gaze))-Y(Math.min(Z.thE,Z.gaze+35*R)));}
+    // 눈금
+    for(let a=-40;a<=40;a+=10){const yy=Y(a*R);g.strokeStyle=LD.FAINT;g.beginPath();g.moveTo(x0-6,yy);g.lineTo(x0,yy);g.stroke();LD.text(g,(a>0?'+':'')+a+'°',x0-10,yy+3,{a:'right'});}
+    const lab=(r,s,c)=>{if(r<-A||r>A)return;const yy=Y(r);g.strokeStyle=c;g.lineWidth=1;g.beginPath();g.moveTo(x0,yy);g.lineTo(x1,yy);g.stroke();LD.text(g,s,x1-6,yy-4,{c:c,a:'right'});};
+    lab(0,'수평선',LD.INK); lab(Z.thE,'처마 끝 '+deg(Z.thE).toFixed(1)+'°',LD.RED); lab(Z.thQ,'안벽 '+deg(Z.thQ).toFixed(1)+'°','#bbb');
+    // 손끝 (작업면) 시선
+    const gy=Y(Z.gaze); g.strokeStyle=LD.GREEN; g.setLineDash([4,4]); g.beginPath(); g.moveTo(x0,gy); g.lineTo(x1,gy); g.stroke(); g.setLineDash([]); LD.text(g,'손끝 시선 −20°',x0+6,gy-4,{c:LD.GREEN});
+  }
+  function stats(Z){
+    LD.stats(out,[
+      ['하늘 보임',Z.sky.toFixed(1)+'°',Z.sky>.5?'ng':''],['바다 띠',Z.sea.toFixed(1)+'°'],['눈부심 (시선 위 하늘)',Z.glare.toFixed(1)+'°',Z.glare>0?'ng':''],
+      ['작업 자리 천장고',Z.headroom.toFixed(2)+' m',Z.headroom<2.1?'ng':''],['처마 끝 높이',Z.tipZ.toFixed(2)+' m'],['처마 끝 풍속',Z.Vz.toFixed(1)+' m/s'],
+      ['처마 들림 하중',Z.lift.toFixed(2)+' kN/m'],['마을 경사와 차이',(Z.dTown>0?'+':'')+Z.dTown+'°',Math.abs(Z.dTown)>6?'ng':''],
+      ['판정',Z.checks.filter(c=>c[1]).length+' / '+Z.checks.length+' OK'],['NG',Z.checks.filter(c=>!c[1]).map(c=>c[0]).join(', ')||'없음',Z.checks.some(c=>!c[1])?'ng':'']
+    ],[0,1,9],'처마를 낮추면 하늘이 잘리고 바람을 받는 높이가 내려가지만, 작업 자리 천장고가 모자라면 경사를 세우거나 자리를 안쪽으로 옮겨야 한다. 풍속은 해안(노풍도 D) 높이 보정, 들림 하중은 내민 처마 윗면 흡인과 아랫면 밀어올림을 합친 근사값이다.');
+  }
+  function draw(){const Z=compute();drawSec(Z);drawView(Z);stats(Z);}
+  // 조작
+  let drag=null; const loc=(cv,e)=>{const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top];};
+  cS.addEventListener('pointerdown',e=>{const [x,y]=loc(cS,e);if(Math.hypot(x-SS.hx,y-SS.hy)<14)drag='e';else if(Math.hypot(x-SS.px,y-SS.py)<18)drag='p';if(drag)cS.setPointerCapture(e.pointerId);});
+  cS.addEventListener('pointermove',e=>{const [x,y]=loc(cS,e);if(!drag){cS.style.cursor=Math.hypot(x-SS.hx,y-SS.hy)<14?'ns-resize':Math.hypot(x-SS.px,y-SS.py)<18?'ew-resize':'default';return;}
+    if(drag==='e'){const z=(SS.oy-y)/SS.k+P.o*Math.tan(P.a*R);P.He=Math.max(1.3,Math.min(3.6,Math.round(z*20)/20));}
+    else P.xw=Math.max(.6,Math.min(7,Math.round((x-SS.ox)/SS.k*10)/10));
+    refresh();draw();});
+  cS.addEventListener('pointerup',()=>drag=null);
+  const wave=(t,a,b,sp,ph)=>a+(b-a)*(1-Math.cos(t*sp+(ph||0)))/2, q=(v,st)=>Math.round(v/st)*st;
+  app.demo={step:t=>{P.He=q(wave(t,1.4,3.2,.5),.05);P.a=q(wave(t,12,34,.23,1.3),1);P.xw=q(wave(t,1.2,4.5,.17,2),.1);draw();},stop:()=>refresh()};
+  LabIO(app,{name:'eave',state:()=>({P}),load:o=>{Object.assign(P,o.P||{});refresh();},redraw:draw});
+  addEventListener('resize',draw); draw();
+})();
+</script>
+<footer>© 2026 한승현 Seunghyun Han</footer>
+</main>
+<div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>
+<script>
+// 어디서든 About을 누르면: 화면 아래에서 명함이 올라오고 → 화면 가득 펼쳐진 뒤 About으로 이동
+(function(){var rm=matchMedia('(prefers-reduced-motion:reduce)').matches,k=null;
+function el(){if(k)return k;var n=document.querySelector('header.top .name'),nm=n?n.innerHTML.replace(/^←\s*/,''):'';k=document.createElement('div');k.className='bpk';k.setAttribute('aria-hidden','true');
+ k.innerHTML='<p class="k1">Portfolio 2021–2026</p><p class="k2">Architectural Designer<br>홍익대학교 건축학과</p><b class="k3">'+nm+'</b><i class="k4">韓</i><p class="k5">90 × 50 mm</p>';document.body.appendChild(k);return k;}
+function go(e,href){if(e&&(e.metaKey||e.ctrlKey||e.shiftKey||e.button>0))return;if(rm||document.body.classList.contains('cardpg'))return;e&&e.preventDefault();var c=el(),up=c.classList.contains('up');
+ if(!up){c.classList.add('up');void c.offsetWidth;}
+ setTimeout(function(){var r=c.getBoundingClientRect();c.classList.add('go');c.style.cssText='left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;right:auto;bottom:auto;transform:rotate(-3deg)';
+  requestAnimationFrame(function(){requestAnimationFrame(function(){c.style.cssText='left:0;top:0;width:100vw;height:100vh;right:auto;bottom:auto;transform:none;box-shadow:none';});});
+  try{sessionStorage.setItem('bcfly','1');}catch(x){}setTimeout(function(){location.href=href;},700);},up?0:520);}
+window.BCard={el:el,go:go};
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href$="about.html"]');if(!a||a.target==='_blank')return;go(e,a.href);});})();
+
+
+// 표지 인트로 (세션당 한 번, 누르면 건너뜀)
+(function(){var c=document.querySelector('.cv0'),f=document.querySelector('.ifr');if(!c||!f)return;var im=[].slice.call(f.querySelectorAll('img')),b=document.body,h=document.documentElement,v=document.querySelector('.cvv');
+var seen=false;try{seen=sessionStorage.getItem('intro');sessionStorage.setItem('intro','1');}catch(e){}
+if(seen||matchMedia('(prefers-reduced-motion:reduce)').matches){f.remove();return;}
+var r=c.getBoundingClientRect(),fw=Math.min(innerWidth*.22,innerHeight*.36),fh=innerHeight*.58,L0=innerWidth/2-fw/2-r.left,T0=innerHeight/2-fh/2-r.top;c.style.setProperty('--ic','inset('+T0+'px '+(r.width-L0-fw)+'px '+(r.height-T0-fh)+'px '+L0+'px)');
+b.classList.add('cvi');h.classList.add('introing');var T=[],done=false;function at(ms,fn){T.push(setTimeout(fn,ms));}
+function show(i){im.forEach(function(x,j){x.classList.toggle('on',j===i);});}
+function end(){if(done)return;done=true;T.forEach(clearTimeout);b.classList.add('open');setTimeout(function(){b.classList.remove('cvi','open','w1','w2','w3');h.classList.remove('introing');f.classList.add('out');im.forEach(function(x){x.classList.remove('on');});setTimeout(function(){f.remove();},1100);},1200);if(v){try{v.currentTime=0;v.play();}catch(e){}}}
+at(250,function(){b.classList.add('w1');});at(650,function(){b.classList.add('w2');});at(1050,function(){b.classList.add('w3');});
+var n=im.length,t0=400,step=230;for(var i=0;i<n;i++)(function(i){at(t0+i*step,function(){show(i);});})(i);
+at(t0+n*step+500,end);addEventListener('click',end,{once:true});addEventListener('keydown',end,{once:true});})();
+// 표지 기본 화면: 지적도. 커서가 지나간 필지에서 대지 분석 → 정북 사선 → 매스가 한 층씩 쌓인다.
+(function(){var cv=document.querySelector('.cv0 .cad');if(!cv)return;var g=cv.getContext('2d'),W,H,DP=1,P=[],B=[],hot=null,mx=-1,my=-1,auto=true,ax=0,ay=0,at=0,last=0,still=matchMedia('(prefers-reduced-motion:reduce)').matches,info=document.querySelector('.cdr');
+var M=0.42,FH=7,ROT=-0.12,CS=Math.cos(ROT),SN=Math.sin(ROT);
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function area(p){var s=0;for(var i=0;i<p.length;i++){var a=p[i],b=p[(i+1)%p.length];s+=a[0]*b[1]-b[0]*a[1];}return Math.abs(s)/2;}
+function cen(p){var x=0,y=0;p.forEach(function(q){x+=q[0];y+=q[1];});return [x/p.length,y/p.length];}
+function lerp(a,b,t){return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];}
+function inside(x,y,p){var c=false;for(var i=0,j=p.length-1;i<p.length;j=i++){var a=p[i],b=p[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])c=!c;}return c;}
+// 볼록 다각형을 선분 a-b 기준 안쪽으로 d만큼 들인 반평면으로 자르기
+function clipHalf(p,a,b,d,s){var dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy)||1,nx=-dy/L*s,ny=dx/L*s,f=function(q){return (q[0]-a[0])*nx+(q[1]-a[1])*ny-d;},o=[];
+ for(var i=0;i<p.length;i++){var P1=p[i],P2=p[(i+1)%p.length],f1=f(P1),f2=f(P2);if(f1>=0)o.push(P1);if((f1>=0)!==(f2>=0))o.push(lerp(P1,P2,f1/(f1-f2)));}return o;}
+function sgn(p){var s=0;for(var i=0;i<p.length;i++){var a=p[i],b=p[(i+1)%p.length];s+=a[0]*b[1]-b[0]*a[1];}return s>0?1:-1;}
+function inset(p,d){var s=sgn(p),o=p;for(var i=0;i<p.length&&o.length>2;i++)o=clipHalf(o,p[i],p[(i+1)%p.length],d,s);return o;}
+function clipY(p,yc){var o=[];for(var i=0;i<p.length;i++){var a=p[i],b=p[(i+1)%p.length],fa=a[1]-yc,fb=b[1]-yc;if(fa>=0)o.push(a);if((fa>=0)!==(fb>=0))o.push(lerp(a,b,fa/(fa-fb)));}return o;}
+function split(q,R,out){var A=area(q);if(A<(1400+R()*2600)||q.length!==4){out.push(q);return;}
+ var e0=Math.hypot(q[1][0]-q[0][0],q[1][1]-q[0][1])+Math.hypot(q[3][0]-q[2][0],q[3][1]-q[2][1]),e1=Math.hypot(q[2][0]-q[1][0],q[2][1]-q[1][1])+Math.hypot(q[0][0]-q[3][0],q[0][1]-q[3][1]),t=.32+R()*.36,u=t+(R()-.5)*.12;
+ if(e0>=e1){var m1=lerp(q[0],q[1],t),m2=lerp(q[3],q[2],u);split([q[0],m1,m2,q[3]],R,out);split([m1,q[1],q[2],m2],R,out);}
+ else{var n1=lerp(q[1],q[2],t),n2=lerp(q[0],q[3],u);split([q[0],q[1],n1,n2],R,out);split([n2,n1,q[2],q[3]],R,out);}}
+function size(){var r=cv.getBoundingClientRect();DP=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*DP;cv.height=H*DP;g.setTransform(DP,0,0,DP,0,0);
+ var R=rng(11),S=Math.max(120,Math.min(190,W/8)),cols=Math.ceil(W*1.3/S)+2,rows=Math.ceil(H*1.3/S)+2,L=[],ox=-W*.15-S,oy=-H*.15-S;
+ for(var j=0;j<=rows;j++){L[j]=[];for(var i=0;i<=cols;i++){var x=ox+i*S+(R()-.5)*S*.35,y=oy+j*S*.78+(R()-.5)*S*.3;L[j][i]=[W/2+(x-W/2)*CS-(y-H/2)*SN,H/2+(x-W/2)*SN+(y-H/2)*CS];}}
+ P=[];B=[];var no=1;for(j=0;j<rows;j++)for(i=0;i<cols;i++){var blk=[L[j][i],L[j][i+1],L[j+1][i+1],L[j+1][i]],road=(i%3===0||j%4===0)?9:5,q=inset(blk,road);if(q.length<4)continue;q=q.slice(0,4);var out=[];split(q,R,out);
+  out.forEach(function(p){var c=cen(p);if(c[0]<-60||c[0]>W+60||c[1]<-60||c[1]>H+60)return;P.push({p:p,c:c,a:area(p)*M*M,no:(100+((no*37)%900))+'-'+(1+no%23),b:null});no++;});}}
+function line(p,close){g.beginPath();p.forEach(function(v,i){i?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1]);});if(close!==false)g.closePath();}
+// 한 필지의 건물: 대지안의 공지 → 층마다 북쪽(화면 위)에서 정북 사선만큼 깎인 평면
+function plan(o){var R=rng(o.no.length*97+Math.round(o.a)),sb=inset(o.p,4+R()*3);if(sb.length<3)return null;var ys=sb.map(function(q){return q[1];}),y0=Math.min.apply(null,ys),y1=Math.max.apply(null,ys),n=Math.max(2,Math.min(14,Math.round(o.a/45+R()*5))),fl=[];
+ for(var f=0;f<n;f++){var cut=f<3?0:(f-2)*FH*.55,pl=clipY(sb,y0+cut);if(pl.length<3||area(pl)<area(sb)*.25)break;fl.push(pl);}return {fl:fl,y0:y0,y1:y1};}
+function drawB(b,now){var k=Math.min(b.pl.fl.length,Math.floor((now-b.t0)/70)),live=b===hot&&now-b.t0<b.pl.fl.length*70+900,fade=live?1:.62;if(k<=0)return;
+ for(var f=0;f<k;f++){var pl=b.pl.fl[f],z0=-f*FH,z1=-(f+1)*FH;
+  for(var i=0;i<pl.length;i++){var a=pl[i],c=pl[(i+1)%pl.length];
+   line([[a[0],a[1]+z0],[c[0],c[1]+z0],[c[0],c[1]+z1],[a[0],a[1]+z1]]);g.fillStyle='rgba(22,21,19,'+(.92*fade)+')';g.fill();g.strokeStyle='rgba(239,237,230,'+(.32*fade)+')';g.lineWidth=.7;g.stroke();}
+  line(pl.map(function(q){return [q[0],q[1]+z1];}));g.fillStyle=f===k-1&&live?'rgba(255,107,74,.20)':'rgba(46,44,40,'+(.95*fade)+')';g.fill();g.strokeStyle=f===k-1&&live?'#ff6b4a':'rgba(239,237,230,'+(.7*fade)+')';g.lineWidth=f===k-1?1.1:.8;g.stroke();}}
+function draw(now){g.clearRect(0,0,W,H);g.font='9px "JetBrains Mono",ui-monospace,monospace';g.textAlign='center';
+ P.forEach(function(o){line(o.p);g.strokeStyle='rgba(239,237,230,.16)';g.lineWidth=.8;g.stroke();if(o.a>260){g.fillStyle='rgba(239,237,230,.16)';g.fillText(o.no,o.c[0],o.c[1]+3);}});
+ if(hot){var o=hot.o,t=now-hot.t0;line(o.p);g.strokeStyle='#ff6b4a';g.lineWidth=1.4;g.stroke();g.fillStyle='rgba(255,107,74,.07)';g.fill();
+  var sb=inset(o.p,5);if(sb.length>2){g.setLineDash([4,4]);line(sb);g.strokeStyle='rgba(255,107,74,.7)';g.lineWidth=.8;g.stroke();g.setLineDash([]);}
+  g.textAlign='left';o.p.forEach(function(a,i){var c=o.p[(i+1)%o.p.length],L=Math.hypot(c[0]-a[0],c[1]-a[1])*M;if(L<9)return;g.fillStyle='rgba(77,163,255,.9)';g.fillText(L.toFixed(1),(a[0]+c[0])/2+4,(a[1]+c[1])/2-3);});
+  var sc=Math.min(1,t/500);g.strokeStyle='rgba(255,107,74,'+(.5*(1-sc))+')';g.beginPath();var ys=o.p.map(function(q){return q[1];}),ya=Math.min.apply(null,ys),yb=Math.max.apply(null,ys);g.moveTo(o.c[0]-60,ya+(yb-ya)*sc);g.lineTo(o.c[0]+60,ya+(yb-ya)*sc);g.stroke();}
+ B.sort(function(a,b){return a.pl.y1-b.pl.y1;}).forEach(function(b){drawB(b,now);});
+ if(hot&&info){var n=hot.pl.fl.length,k=Math.min(n,Math.max(0,Math.floor((now-hot.t0)/70))),bc=hot.pl.fl.length?Math.round(area(hot.pl.fl[0])/area(hot.o.p)*100):0;
+  info.textContent='지번 '+hot.o.no+' · 대지 '+Math.round(hot.o.a)+'㎡ · 건폐 '+bc+'% · '+k+'/'+n+'F';}}
+function pick(x,y,now){for(var i=0;i<P.length;i++){var o=P[i];if(inside(x,y,o.p)){if(hot&&hot.o===o)return;if(!o.b){var pl=plan(o);if(!pl||!pl.fl.length)return;o.b={o:o,pl:pl,t0:now+420};B.push(o.b);if(B.length>70){var old=B.shift();old.o.b=null;}}else{o.b.t0=now+200;}hot=o.b;return;}}}
+cv.parentNode.addEventListener('mousemove',function(e){var r=cv.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;auto=false;at=performance.now();});
+function loop(now){requestAnimationFrame(loop);if(now-last<30)return;last=now;
+ if(auto||now-at>6000){ax=W*(.5+.38*Math.sin(now/5200))+W*.08*Math.sin(now/1300);ay=H*(.32+.24*Math.sin(now/3700+1));if(!document.body.classList.contains('cvi'))pick(ax,ay,now);}else if(mx>=0)pick(mx,my,now);
+ draw(now);}
+addEventListener('resize',function(){size();});size();if(still){draw(performance.now());}else requestAnimationFrame(loop);})();
+// 표지 → About: 메뉴에 올리면 명함이 올라와 기다림 (누르는 동작은 공통 스크립트)
+addEventListener('DOMContentLoaded',function(){var a=document.querySelector('.cvm a[href="about.html"]'),cv=document.querySelector('.cv0');if(!a||!cv||!window.BCard)return;var k=BCard.el(),t;
+function on(){clearTimeout(t);cv.classList.add('pk');k.classList.add('up');}function off(){t=setTimeout(function(){if(k.classList.contains('go'))return;cv.classList.remove('pk');k.classList.remove('up');},120);}
+a.addEventListener('mouseenter',on);a.addEventListener('focus',on);a.addEventListener('mouseleave',off);a.addEventListener('blur',off);k.addEventListener('mouseenter',on);k.addEventListener('mouseleave',off);
+k.addEventListener('click',function(e){BCard.go(e,a.href);});});
+(function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a');
+a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
+m.addEventListener('mouseleave',function(){bg.forEach(function(b){b.classList.remove('on')});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});});})();
+(function(){var pv=document.querySelector('.lpv');if(!pv)return;document.querySelectorAll('.lr.f').forEach(function(r){
+r.addEventListener('mouseenter',function(){pv.src=r.dataset.img;pv.classList.add('on');});r.addEventListener('mouseleave',function(){pv.classList.remove('on');});
+r.addEventListener('mousemove',function(e){pv.style.transform='translate('+(e.clientX+28)+'px,'+(e.clientY-120)+'px)';});});})();
+(function(){var st=document.querySelector('.stg');if(!st)return;var sl=st.querySelectorAll('.sl'),li=document.querySelectorAll('.ixl li');
+li.forEach(function(l){l.addEventListener('mouseenter',function(){var i=+l.dataset.i;sl.forEach(function(x,k){x.classList.toggle('on',k===i)});li.forEach(function(o){o.classList.toggle('on',o===l)});});});})();
+
+const lb=document.getElementById('lb'),li=lb.querySelector('img'),lc=lb.querySelector('.c');let L=[],ix=0;
+function show(i){ix=(i+L.length)%L.length;li.src=L[ix].src;const f=L[ix].closest('figure').querySelector('figcaption');lc.textContent=(f?f.textContent:'')+'  '+(ix+1)+' / '+L.length;}
+document.addEventListener('click',e=>{
+ if(e.target.closest('#lb button')){show(ix+(e.target.classList.contains('n')?1:-1));return}
+ if(e.target.closest('#lb')){lb.classList.remove('on');return}
+ const im=e.target.closest('figure img');if(im){L=[...document.querySelectorAll('figure img')];show(L.indexOf(im));lb.classList.add('on')}});
+document.addEventListener('keydown',e=>{if(!lb.classList.contains('on'))return;if(e.key==='Escape')lb.classList.remove('on');if(e.key==='ArrowRight')show(ix+1);if(e.key==='ArrowLeft')show(ix-1)});
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.blk,.txt,.work').forEach(el=>{el.classList.add('fade');io.observe(el)})}
+</script>
+</body></html>

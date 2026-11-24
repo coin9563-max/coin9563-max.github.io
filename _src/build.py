@@ -558,7 +558,7 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .bcs .it em{font-style:normal;font-size:14px;color:#6f6a60;line-height:1.5}
 .bcs .sz{position:absolute;right:clamp(28px,6vw,96px);bottom:26px;font:10px var(--mono);letter-spacing:.12em;color:var(--pm)}
 .flyin .bcs>*{animation:bcin .7s .05s both}@keyframes bcin{from{opacity:0;transform:translateY(10px)}}
-.bpk{position:fixed;z-index:60;left:clamp(16px,5vw,72px);bottom:clamp(16px,5vh,56px);width:min(440px,80vw);aspect-ratio:9/5;background:#f1efe8;color:#1d1c1a;padding:22px 26px;display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 1fr auto;cursor:pointer;
+.bpk{position:fixed;z-index:120;left:clamp(16px,5vw,72px);bottom:clamp(16px,5vh,56px);width:min(440px,80vw);aspect-ratio:9/5;background:#f1efe8;color:#1d1c1a;padding:22px 26px;display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 1fr auto;cursor:pointer;
  transform:translateY(calc(100% + 80px)) rotate(4deg);opacity:0;box-shadow:0 30px 80px #000c;transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .3s,left .7s cubic-bezier(.7,0,.2,1),top .7s cubic-bezier(.7,0,.2,1),width .7s cubic-bezier(.7,0,.2,1),height .7s cubic-bezier(.7,0,.2,1),box-shadow .7s;pointer-events:none}
 .bpk.up{transform:translateY(0) rotate(-3deg);opacity:1;pointer-events:auto}
 .bpk.go{position:fixed;transition:all .7s cubic-bezier(.7,0,.2,1)}
@@ -570,7 +570,6 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .bpk .k5{grid-column:1/-1;font:9px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.12em;color:#8a857b}
 .bpk.go>*{opacity:0;transition:opacity .25s}
 .cv0 .cad,.cv0 .bgs{transition:opacity .5s,filter .5s}.cv0.pk .cad{opacity:.25}.cv0.pk .cvh{opacity:.25;transition:opacity .5s}
-@media (hover:none){.bpk{display:none}}
 .bfly{position:fixed;z-index:99;background:#f1efe8;transition:all .65s cubic-bezier(.7,0,.2,1);box-shadow:0 30px 80px #000a}
 @media (max-width:1100px){.bcs{grid-template-columns:1fr 1fr}.bcs .c1{grid-column:1/-1;margin-bottom:48px}}
 @media (max-width:700px){.bcs{grid-template-columns:1fr;padding:44px 22px 64px;row-gap:44px}.bcs h1{margin:24px 0 0}.bcs .seal{top:40px;width:46px;height:46px;font-size:23px}.bcs .c1{margin:0}}
@@ -585,6 +584,18 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 """
 
 JS = r"""
+// 어디서든 About을 누르면: 화면 아래에서 명함이 올라오고 → 화면 가득 펼쳐진 뒤 About으로 이동
+(function(){var rm=matchMedia('(prefers-reduced-motion:reduce)').matches,k=null;
+function el(){if(k)return k;var n=document.querySelector('header.top .name'),nm=n?n.innerHTML.replace(/^←\s*/,''):'';k=document.createElement('div');k.className='bpk';k.setAttribute('aria-hidden','true');
+ k.innerHTML='<p class="k1">Portfolio 2021–2026</p><p class="k2">Architectural Designer<br>홍익대학교 건축학과</p><b class="k3">'+nm+'</b><i class="k4">韓</i><p class="k5">90 × 50 mm</p>';document.body.appendChild(k);return k;}
+function go(e,href){if(e&&(e.metaKey||e.ctrlKey||e.shiftKey||e.button>0))return;if(rm||document.body.classList.contains('cardpg'))return;e&&e.preventDefault();var c=el(),up=c.classList.contains('up');
+ if(!up){c.classList.add('up');void c.offsetWidth;}
+ setTimeout(function(){var r=c.getBoundingClientRect();c.classList.add('go');c.style.cssText='left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;right:auto;bottom:auto;transform:rotate(-3deg)';
+  requestAnimationFrame(function(){requestAnimationFrame(function(){c.style.cssText='left:0;top:0;width:100vw;height:100vh;right:auto;bottom:auto;transform:none;box-shadow:none';});});
+  try{sessionStorage.setItem('bcfly','1');}catch(x){}setTimeout(function(){location.href=href;},700);},up?0:520);}
+window.BCard={el:el,go:go};
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href$="about.html"]');if(!a||a.target==='_blank')return;go(e,a.href);});})();
+
 
 // 표지 인트로 (세션당 한 번, 누르면 건너뜀)
 (function(){var c=document.querySelector('.cv0'),f=document.querySelector('.ifr');if(!c||!f)return;var im=[].slice.call(f.querySelectorAll('img')),b=document.body,h=document.documentElement,v=document.querySelector('.cvv');
@@ -644,17 +655,11 @@ function loop(now){requestAnimationFrame(loop);if(now-last<30)return;last=now;
  if(auto||now-at>6000){ax=W*(.5+.38*Math.sin(now/5200))+W*.08*Math.sin(now/1300);ay=H*(.32+.24*Math.sin(now/3700+1));if(!document.body.classList.contains('cvi'))pick(ax,ay,now);}else if(mx>=0)pick(mx,my,now);
  draw(now);}
 addEventListener('resize',function(){size();});size();if(still){draw(performance.now());}else requestAnimationFrame(loop);})();
-// 표지 → About: 메뉴에 올리면 화면 아래에서 명함이 올라와 기다리고, 누르면 그 명함이 화면 가득 펼쳐진 뒤 이동
-(function(){var a=document.querySelector('.cvm a[href="about.html"]'),cv=document.querySelector('.cv0');if(!a||!cv)return;var rm=matchMedia('(prefers-reduced-motion:reduce)').matches,nm=(document.querySelector('.cvh h1')||{}).innerHTML||'';
-var k=document.createElement('div');k.className='bpk';k.setAttribute('aria-hidden','true');
-k.innerHTML='<p class="k1">Portfolio 2021–2026</p><p class="k2">Architectural Designer<br>홍익대학교 건축학과</p><b class="k3">'+nm+'</b><i class="k4">韓</i><p class="k5">90 × 50 mm · 눌러서 열기</p>';document.body.appendChild(k);
-var t;function on(){clearTimeout(t);cv.classList.add('pk');k.classList.add('up');}function off(){t=setTimeout(function(){if(k.classList.contains('go'))return;cv.classList.remove('pk');k.classList.remove('up');},120);}
+// 표지 → About: 메뉴에 올리면 명함이 올라와 기다림 (누르는 동작은 공통 스크립트)
+addEventListener('DOMContentLoaded',function(){var a=document.querySelector('.cvm a[href="about.html"]'),cv=document.querySelector('.cv0');if(!a||!cv||!window.BCard)return;var k=BCard.el(),t;
+function on(){clearTimeout(t);cv.classList.add('pk');k.classList.add('up');}function off(){t=setTimeout(function(){if(k.classList.contains('go'))return;cv.classList.remove('pk');k.classList.remove('up');},120);}
 a.addEventListener('mouseenter',on);a.addEventListener('focus',on);a.addEventListener('mouseleave',off);a.addEventListener('blur',off);k.addEventListener('mouseenter',on);k.addEventListener('mouseleave',off);
-function go(e){if(e&&(e.metaKey||e.ctrlKey||e.shiftKey))return;if(rm)return;e&&e.preventDefault();var r=k.getBoundingClientRect();k.classList.add('go');
- k.style.cssText='left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;right:auto;bottom:auto;transform:rotate(-3deg)';
- requestAnimationFrame(function(){requestAnimationFrame(function(){k.style.cssText='left:0;top:0;width:100vw;height:100vh;right:auto;bottom:auto;transform:none;box-shadow:none';});});
- try{sessionStorage.setItem('bcfly','1');}catch(x){}setTimeout(function(){location.href=a.href;},700);}
-a.addEventListener('click',go);k.addEventListener('click',go);})();
+k.addEventListener('click',function(e){BCard.go(e,a.href);});});
 (function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a');
 a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
 m.addEventListener('mouseleave',function(){bg.forEach(function(b){b.classList.remove('on')});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});});})();
@@ -899,6 +904,9 @@ LABS = {
   'catenary': dict(no='07', cat='FORM FINDING', en='FORM FINDING', ko='현수선 형태 찾기', t='현수선 형태 찾기', js='lab_catenary.js',
     d='그물을 대지 경계에 매달아 자중으로 늘어뜨린 뒤 뒤집어, 압축만 받는 흙 셸을 얻는다.',
     long='대지 경계를 지점으로 삼아 그물을 매달고 힘 밀도법으로 반복 이완해 자중에 늘어진 형태를 찾는다. 이를 뒤집으면 같은 하중에 압축만 받는 셸이 된다. 지점과 천창을 옮기면 형태가 다시 계산되고, 셸 면적 · 흙 물량 · 무게가 나온다. MOSSCAPE 흙 셸을 찾을 때 쓴 방법이다.'),
+  'eave': dict(no='08', cat='SIGHT · WIND', en='EAVE · SIGHT · WIND', ko='처마와 시선 · 바람', t='처마와 시선 · 바람', js='lab_eave.js',
+    d='해측 처마 높이와 지붕 경사를 바꾸면 앉은 눈높이에서 하늘이 잘리는 각, 남는 바다 띠, 작업 자리 천장고, 처마 끝 바람이 함께 바뀐다.',
+    long='굴 작업은 몇 시간씩 앉아 손끝을 보는 일이라, 시야에 밝은 하늘이 들어오면 눈이 부시다. 처마 끝과 눈을 잇는 선으로 하늘이 잘리는 각을 구하고, 안벽 모서리까지의 선으로 바다가 보이는 띠를 구한다. 처마를 낮출수록 바람을 받는 높이도 내려가지만 작업 자리의 천장고가 모자라지므로 경사와 자리를 함께 조정한다. 비어가는 마을 굴막 단면을 정할 때 쓴 논리다.'),
   'parking': dict(no='05', cat='OPTIMIZATION', en='PARKING LAYOUT', ko='주차 배치', t='주차 배치', js='lab_parking.js',
     d='대지 꼭짓점을 끌면 주차 모듈을 36개 각도로 깔아 보고 가장 많이 들어가는 배치와 법정 대수 충족 여부가 나온다.',
     long='직각주차 모듈(구획 + 차로 + 구획)을 5° 간격 36개 각도, 오프셋, 세로 연결 차로 위치를 바꿔 가며 깔아 보고 가장 많이 들어가는 안을 고른다. 오른쪽 그래프는 각도별 최대 대수이고, 막대를 누르면 그 각도의 배치를 볼 수 있다. 용도별 시설면적으로 법정 대수와 비교한다.'),
@@ -913,7 +921,7 @@ def lab_page(k):
     body = head + L.get('body', '<div class="app"></div>') + '</section>'
     js = open(os.path.join(SRC, 'lab_ui.js')).read() + open(os.path.join(SRC, L['js'])).read()
     open(f'{OUT}/lab/{k}.html', 'w').write(page(f'LAB {L["no"]} {L["t"]} — {SITE["name_ko"]}', body + f'<script>{js}</script>', '../', dark='dark labpg', on='p', desc=L['d']))
-CARDS = ['catenary', 'northlight', 'sun', 'parking', 'frame', 'stair']
+CARDS = ['eave', 'catenary', 'northlight', 'sun', 'parking', 'frame', 'stair']
 def process_page():
     P = PROCESS
     os.makedirs(f'{OUT}/lab', exist_ok=True)
