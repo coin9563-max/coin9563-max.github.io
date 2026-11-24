@@ -19,6 +19,25 @@
 <div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>
 <script>
 
+// 표지 인트로 (세션당 한 번, 누르면 건너뜀)
+(function(){var c=document.querySelector('.cv0'),f=document.querySelector('.ifr');if(!c||!f)return;var im=[].slice.call(f.querySelectorAll('img')),b=document.body,h=document.documentElement,v=document.querySelector('.cvv');
+var seen=false;try{seen=sessionStorage.getItem('intro');sessionStorage.setItem('intro','1');}catch(e){}
+if(seen||matchMedia('(prefers-reduced-motion:reduce)').matches){f.remove();return;}
+var r=c.getBoundingClientRect(),fw=Math.min(innerWidth*.22,innerHeight*.36),fh=innerHeight*.58,L0=innerWidth/2-fw/2-r.left,T0=innerHeight/2-fh/2-r.top;c.style.setProperty('--ic','inset('+T0+'px '+(r.width-L0-fw)+'px '+(r.height-T0-fh)+'px '+L0+'px)');
+b.classList.add('cvi');h.classList.add('introing');var T=[],done=false;function at(ms,fn){T.push(setTimeout(fn,ms));}
+function show(i){im.forEach(function(x,j){x.classList.toggle('on',j===i);});}
+function end(){if(done)return;done=true;T.forEach(clearTimeout);b.classList.add('open');setTimeout(function(){b.classList.remove('cvi','open','w1','w2','w3');h.classList.remove('introing');f.classList.add('out');im.forEach(function(x){x.classList.remove('on');});setTimeout(function(){f.remove();},1100);},1200);if(v){try{v.currentTime=0;v.play();}catch(e){}}}
+at(250,function(){b.classList.add('w1');});at(650,function(){b.classList.add('w2');});at(1050,function(){b.classList.add('w3');});
+var n=im.length,t0=400,step=230;for(var i=0;i<n;i++)(function(i){at(t0+i*step,function(){show(i);});})(i);
+at(t0+n*step+500,end);addEventListener('click',end,{once:true});addEventListener('keydown',end,{once:true});})();
+// 영상 클립에 맞춰 분석 태그가 깜빡이며 붙는다 (클립 4.5초 간격)
+(function(){var v=document.querySelector('.cvv'),L=document.querySelector('.ctg'),d=document.getElementById('ctgd');if(!v||!L||!d)return;var D=JSON.parse(d.textContent),cur=-1,el=null,CH='▚▞▙▟░▒#/\\<>01';
+function scr(node,txt){var n=0,id=setInterval(function(){n++;var k=Math.floor(n/2);node.textContent=txt.slice(0,k)+(k<txt.length?Array.from({length:Math.min(4,txt.length-k)},function(){return CH[Math.floor(Math.random()*CH.length)];}).join(''):'');if(k>=txt.length)clearInterval(id);},28);}
+function tick(){requestAnimationFrame(tick);if(document.body.classList.contains('cvi'))return;var t=v.currentTime,i=Math.min(D.length-1,Math.floor(t/4.5)),p=t-i*4.5,want=(p>0.9&&p<4.3)?i:-1;if(want===cur)return;cur=want;
+ if(el){var o=el;o.classList.remove('on');setTimeout(function(){o.remove();},400);el=null;}
+ if(want<0)return;var q=D[want];el=document.createElement('div');el.className='tg';el.style.left=q.x+'%';el.style.top=q.y+'%';el.innerHTML='<i></i><u></u><b></b><small></small>';L.appendChild(el);
+ requestAnimationFrame(function(){el&&el.classList.add('on');});scr(el.querySelector('b'),'■ '+q.t);setTimeout(function(){if(el)scr(el.querySelector('small'),q.s);},260);}
+requestAnimationFrame(tick);})();
 // 표지 → About: 메뉴 자리에서 명함이 화면 가득 펼쳐진 뒤 이동
 (function(){var a=document.querySelector('.cvm a[href="about.html"]');if(!a||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
 a.addEventListener('click',function(e){if(e.metaKey||e.ctrlKey||e.shiftKey)return;e.preventDefault();var r=a.getBoundingClientRect(),h=r.width*5/9,d=document.createElement('div');d.className='bfly';

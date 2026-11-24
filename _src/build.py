@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """정적 사이트 생성기: python3 build.py <이미지폴더> <출력폴더>
 이미지폴더에는 <id>.jpg (포트폴리오 asset) 와 pg_<id>.jpg (페이지 렌더)가 있어야 함."""
-import os, sys, shutil, html, json
+import os, json, sys, shutil, html
 from PIL import Image
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from content import SITE, PROJECTS, ABOUT, PUBLISH, PRACTICE, PROCESS
@@ -512,6 +512,28 @@ pre.code.ask .f{color:var(--mute)}
 .lin textarea{width:calc(100% - 24px);margin:8px 12px;background:#0c0d0b;color:#e6e3da;border:1px solid var(--line);font:12px/1.5 var(--mono);padding:8px}
 .lin div{display:flex;gap:8px;align-items:center;padding:0 12px 12px}.lin .up input{display:none}.lin .msg{font-size:12px;color:var(--mute)}
 @media (max-width:600px){header.top .name span,header.top nav a[href$="#contact"]{display:none}header.top nav a{margin-left:12px;font-size:13px}}
+/* 표지 인트로: 가운데 작은 창에서 이미지가 빠르게 바뀌고, 창이 화면 가득 열린다 */
+.ifr{position:absolute;inset:0;z-index:0;pointer-events:none}.ifr img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0}
+.ifr img.on{opacity:1}.ifr.out img{transition:opacity 1s ease}
+.iwd{display:none}
+.cvi .cv0{clip-path:var(--ic,inset(21% 39% 21% 39%))}.cvi.open .cv0{clip-path:inset(0 0 0 0);transition:clip-path 1.15s cubic-bezier(.76,0,.2,1)}
+html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
+.cvi .cvh,.cvi .cvm,.cvi .cvf,.cvi .cvo,.cvi header.top{opacity:0}
+.cvh,.cvm,.cvf,.cvo,.coverpg header.top{transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+.cvi .cvh h1{transform:translateY(40px)}.cvi .cvm{transform:translateY(24px)}
+.cvi .iwd{display:flex;position:fixed;left:0;right:0;top:50%;z-index:60;justify-content:space-between;padding:0 2.6vw;margin-top:-.6em;font:600 13px/1 Pretendard,sans-serif;letter-spacing:-.01em;text-transform:uppercase;color:#efede6;mix-blend-mode:difference;pointer-events:none}
+.cvi .iwd span{opacity:0;transition:opacity .5s}.cvi.w1 .iwd span:nth-child(1),.cvi.w2 .iwd span:nth-child(-n+2),.cvi.w3 .iwd span{opacity:1}
+.cvi.open .iwd{opacity:0;transition:opacity .4s}
+/* 표지 영상 위 분석 태그 + 선 스크린 */
+.cv0 .cvo{background:repeating-linear-gradient(90deg,#0000002e 0 1px,transparent 1px 3px),linear-gradient(90deg,#0d0c0bcc 0%,#0d0c0b44 45%,#0d0c0b99 100%),linear-gradient(0deg,#0d0c0bb3 0%,transparent 40%)!important}
+.ctg{position:absolute;inset:0;z-index:0;pointer-events:none}
+.ctg .tg{position:absolute;transform:translate(-6px,-6px);font:11px/1.35 'JetBrains Mono',ui-monospace,monospace;color:#efede6;letter-spacing:.04em;opacity:0;transition:opacity .35s}
+.ctg .tg.on{opacity:1}
+.ctg .tg i{position:absolute;left:0;top:0;width:12px;height:12px;border:1px solid #ff6b4a}.ctg .tg i:after{content:'';position:absolute;left:5px;top:5px;width:2px;height:2px;background:#ff6b4a}
+.ctg .tg u{position:absolute;left:12px;top:6px;height:1px;width:0;background:#ff6b4a;transition:width .5s .1s;text-decoration:none}.ctg .tg.on u{width:48px}
+.ctg .tg b{position:absolute;left:60px;top:-4px;white-space:nowrap;background:#ff6b4a;color:#120f0d;font-weight:600;padding:3px 7px;text-transform:uppercase}
+.ctg .tg small{position:absolute;left:60px;top:18px;white-space:nowrap;font-size:10.5px;color:#d8d4ca;background:#0d0c0bb0;padding:2px 7px}
+@media (max-width:860px){.ctg .tg{display:none}}
 /* About: 명함 */
 .cardpg{--bg:#1c1b19;--fg:#ece9e1;--mute:#8d887e;--line:#34322e;--paper:#f1efe8;--ink:#1d1c1a;--pm:#8a857b;--mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 .cardpg header.top{background:var(--paper);backdrop-filter:none;color:var(--ink)}.cardpg header.top nav a{color:var(--pm)}.cardpg header.top nav a.on,.cardpg header.top nav a:hover{color:var(--ink)}.cardpg header.top .name span{color:var(--pm)}
@@ -550,6 +572,25 @@ pre.code.ask .f{color:var(--mute)}
 
 JS = r"""
 
+// 표지 인트로 (세션당 한 번, 누르면 건너뜀)
+(function(){var c=document.querySelector('.cv0'),f=document.querySelector('.ifr');if(!c||!f)return;var im=[].slice.call(f.querySelectorAll('img')),b=document.body,h=document.documentElement,v=document.querySelector('.cvv');
+var seen=false;try{seen=sessionStorage.getItem('intro');sessionStorage.setItem('intro','1');}catch(e){}
+if(seen||matchMedia('(prefers-reduced-motion:reduce)').matches){f.remove();return;}
+var r=c.getBoundingClientRect(),fw=Math.min(innerWidth*.22,innerHeight*.36),fh=innerHeight*.58,L0=innerWidth/2-fw/2-r.left,T0=innerHeight/2-fh/2-r.top;c.style.setProperty('--ic','inset('+T0+'px '+(r.width-L0-fw)+'px '+(r.height-T0-fh)+'px '+L0+'px)');
+b.classList.add('cvi');h.classList.add('introing');var T=[],done=false;function at(ms,fn){T.push(setTimeout(fn,ms));}
+function show(i){im.forEach(function(x,j){x.classList.toggle('on',j===i);});}
+function end(){if(done)return;done=true;T.forEach(clearTimeout);b.classList.add('open');setTimeout(function(){b.classList.remove('cvi','open','w1','w2','w3');h.classList.remove('introing');f.classList.add('out');im.forEach(function(x){x.classList.remove('on');});setTimeout(function(){f.remove();},1100);},1200);if(v){try{v.currentTime=0;v.play();}catch(e){}}}
+at(250,function(){b.classList.add('w1');});at(650,function(){b.classList.add('w2');});at(1050,function(){b.classList.add('w3');});
+var n=im.length,t0=400,step=230;for(var i=0;i<n;i++)(function(i){at(t0+i*step,function(){show(i);});})(i);
+at(t0+n*step+500,end);addEventListener('click',end,{once:true});addEventListener('keydown',end,{once:true});})();
+// 영상 클립에 맞춰 분석 태그가 깜빡이며 붙는다 (클립 4.5초 간격)
+(function(){var v=document.querySelector('.cvv'),L=document.querySelector('.ctg'),d=document.getElementById('ctgd');if(!v||!L||!d)return;var D=JSON.parse(d.textContent),cur=-1,el=null,CH='▚▞▙▟░▒#/\\<>01';
+function scr(node,txt){var n=0,id=setInterval(function(){n++;var k=Math.floor(n/2);node.textContent=txt.slice(0,k)+(k<txt.length?Array.from({length:Math.min(4,txt.length-k)},function(){return CH[Math.floor(Math.random()*CH.length)];}).join(''):'');if(k>=txt.length)clearInterval(id);},28);}
+function tick(){requestAnimationFrame(tick);if(document.body.classList.contains('cvi'))return;var t=v.currentTime,i=Math.min(D.length-1,Math.floor(t/4.5)),p=t-i*4.5,want=(p>0.9&&p<4.3)?i:-1;if(want===cur)return;cur=want;
+ if(el){var o=el;o.classList.remove('on');setTimeout(function(){o.remove();},400);el=null;}
+ if(want<0)return;var q=D[want];el=document.createElement('div');el.className='tg';el.style.left=q.x+'%';el.style.top=q.y+'%';el.innerHTML='<i></i><u></u><b></b><small></small>';L.appendChild(el);
+ requestAnimationFrame(function(){el&&el.classList.add('on');});scr(el.querySelector('b'),'■ '+q.t);setTimeout(function(){if(el)scr(el.querySelector('small'),q.s);},260);}
+requestAnimationFrame(tick);})();
 // 표지 → About: 메뉴 자리에서 명함이 화면 가득 펼쳐진 뒤 이동
 (function(){var a=document.querySelector('.cvm a[href="about.html"]');if(!a||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
 a.addEventListener('click',function(e){if(e.metaKey||e.ctrlKey||e.shiftKey)return;e.preventDefault();var r=a.getBoundingClientRect(),h=r.width*5/9,d=document.createElement('div');d.className='bfly';
@@ -695,6 +736,11 @@ open(f'{OUT}/practice.html', 'w').write(page(f'Practice — {SITE["name_ko"]}', 
 
 # ---- 표지
 def cover():
+    loc=lambda p:[m[1] for m in p['meta'] if m[0]=='Location'][0].split(' · ')[0]
+    PJ={p['slug']:p for p in PROJECTS}
+    TAGS=[(PJ[k], x, y) for k,x,y in [('mosscape-oreum',38,28),('mosscape-oreum',30,22),('alley-house',34,26),('spare-room',42,20),('in-between',36,30),('stopover',40,24),('emptying-village',30,34)]]
+    TJ=json.dumps([{'t':(f"{p['no']} " if p.get('no') else '')+p['title'],'s':f"{loc(p)} · {p['year']} · {p['kind']}",'x':x,'y':y,'u':'works/'+p['slug']+'.html'} for p,x,y in TAGS],ensure_ascii=False)
+    INTRO=[use(i,thumb=True)[0] for i in [643,298,3101,280,2966,87,307]]
     feat=[i for i in PRACTICE if i.get('slug')]
     items=[('01','Projects','projects.html',f'설계 작업 {len(PROJECTS)}',use(PROJECTS[0]['hero'],thumb=True)[0]),
            ('02','Publish','publish.html',f'책 {len(PUBLISH)}',use(PUBLISH[0]['img'],thumb=True)[0]),
@@ -702,9 +748,9 @@ def cover():
            ('04','Process','process.html','AI와 설계하기',''),
            ('05','About','about.html','소개 · 연락처','')]
     li=''.join(f'<li><a href="{h}" data-bg="{b}"><span class="n">{n}</span><span class="w">{t}</span></a></li>' for n,t,h,c,b in items)
-    return f'''<section class="cv0"><video class="cvv" src="vid/cover.mp4" poster="vid/cover.jpg" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video><div class="cvo" aria-hidden="true"></div><div class="bgs">{"".join(f'<div class="bg" style="background-image:url({b})"></div>' if b else '<div class="bg grid"></div>' for k,(*_,b) in enumerate(items))}</div>
+    return f'''<section class="cv0"><video class="cvv" src="vid/cover.mp4" poster="vid/cover.jpg" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video><div class="cvo" aria-hidden="true"></div><div class="ctg" aria-hidden="true"></div><div class="ifr" aria-hidden="true">{"".join(f'<img src="{u}" alt="">' for u in INTRO)}</div><div class="bgs">{"".join(f'<div class="bg" style="background-image:url({b})"></div>' if b else '<div class="bg grid"></div>' for k,(*_,b) in enumerate(items))}</div>
 <div class="cvh"><p>Portfolio 2021–2026</p><h1>{SITE["name_ko"]}<span>{SITE["name_en"]}</span></h1></div>
-<ol class="cvm">{li}</ol><p class="cvf"><a href="mailto:{SITE["email"]}">{SITE["email"]}</a><span>{SITE["school"]}</span></p></section>'''
+<script type="application/json" id="ctgd">{TJ}</script><ol class="cvm">{li}</ol><p class="cvf"><a href="mailto:{SITE["email"]}">{SITE["email"]}</a><span>{SITE["school"]}</span></p></section><p class="iwd" aria-hidden="true"><span>Land</span><span>Material</span><span>Structure</span></p>'''
 open(f'{OUT}/index.html', 'w').write(page(f'{SITE["name_ko"]} — Portfolio', cover(), '', dark='coverpg', on=''))
 
 # ---- projects / practice detail pages
