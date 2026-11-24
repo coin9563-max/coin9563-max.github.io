@@ -13,7 +13,7 @@ SITE = {
     'name_en': 'Seunghyun Han',
     'school': '홍익대학교 건축학과',
     'school_en': 'Hongik University, Architecture',
-    'email': 'james9563@naver.com',
+    'email': 'coin9563@gmail.com',
     'phone': '010-5619-4050',
 }
 
