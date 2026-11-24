@@ -572,7 +572,9 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .crl{position:absolute;inset:0;z-index:0;overflow:hidden;background:#121311}
 .crl figure{position:absolute;inset:0;margin:0;opacity:0;transition:opacity 2.2s ease}
 .crl figure.on{opacity:1}
-.crl img{width:100%;height:100%;object-fit:cover;filter:brightness(.38) saturate(.75);transform:scale(1.08);transition:transform 7s linear}
+.crl i{position:absolute;inset:-40px;background:center/cover no-repeat;filter:blur(28px) brightness(.28) saturate(.7)}
+.crl img{position:relative;width:100%;height:100%;object-fit:cover;filter:brightness(.38) saturate(.75);transform:scale(1.08);transition:transform 7s linear}
+@media (min-width:861px){.crl img{object-fit:contain;transform:scale(1.03)}.crl figure.on img{transform:scale(1)}}
 .crl figure.on img{transform:scale(1)}
 .crl figcaption{position:absolute;right:clamp(20px,4vw,64px);top:clamp(70px,10vh,110px);font:11px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.06em;color:#e9e4da;opacity:.75}
 .cv0.pk .crl,.cv0:has(.cvm.hov) .crl{opacity:.0;transition:opacity .5s}.crl{transition:opacity .5s}
@@ -1137,7 +1139,7 @@ def cover():
     phs.sort(key=lambda r: r[1].startswith('SLA'))
     PRA_BG='<div class="bg prag" data-p="'+_h.escape(_j.dumps(phs,ensure_ascii=False))+'" data-cam="'+_h.escape(open(os.path.join(os.path.dirname(__file__),'cover_cam.svg')).read())+'" data-pin="'+_h.escape(open(os.path.join(os.path.dirname(__file__),'cover_pin.svg')).read())+'"></div>'
     ABT_BG='<div class="bg grid abtg">'+open(os.path.join(os.path.dirname(__file__),'cover_seoul.svg')).read()+'</div>'
-    CRL='<div class="crl" aria-hidden="true">'+''.join(f'<figure style="--k:{k}"><img src="{use(p["hero"],thumb=True)[0]}" alt=""{" loading=lazy" if k else ""}><figcaption>{p["no"]} · {E(p["title"])} · {p["year"]}</figcaption></figure>' for k,p in enumerate(PROJECTS[:6]))+'</div>'
+    CRL='<div class="crl" aria-hidden="true">'+''.join(f'<figure style="--k:{k}"><i style="background-image:url({use(p["hero"],thumb=True)[0]})"></i><img src="{use(p["hero"],thumb=True)[0]}" alt=""{" loading=lazy" if k else ""}><figcaption>{p["no"]} · {E(p["title"])} · {p["year"]}</figcaption></figure>' for k,p in enumerate(PROJECTS[:6]))+'</div>'
     li=''.join(f'<li><a href="{h}" data-bg="{b}"><span class="n">{n}</span><span class="w">{t}</span></a></li>' for n,t,h,c,b in items)
     return f'''<section class="cv0">{CRL}<div class="cvo" aria-hidden="true"></div><div class="ifr" aria-hidden="true">{"".join(f'<img src="{u}" alt="">' for u in INTRO)}</div><div class="bgs">{"".join(f'<div class="bg" style="background-image:url({b})"></div>' if b and b not in ('PUB','PRA','PRJ','ABT') else (PRJ_BG if b=='PRJ' else PRA_BG if b=='PRA' else ABT_BG if b=='ABT' else '<div class="bg grid"></div>' if b!='PUB' else PUB_BG) for k,(*_,b) in enumerate(items))}</div>
 <div class="cvh"><p>Portfolio 2021–2026</p><h1>{SITE["name_ko"]}<span>{SITE["name_en"]}</span></h1></div>
