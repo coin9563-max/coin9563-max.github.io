@@ -536,27 +536,27 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .ctg .tg small{position:absolute;left:60px;top:18px;white-space:nowrap;font-size:10.5px;color:#d8d4ca;background:#0d0c0bb0;padding:2px 7px}
 @media (max-width:860px){.ctg .tg{display:none}}
 /* About: 명함 */
-.cardpg{--bg:#1c1b19;--fg:#ece9e1;--mute:#8d887e;--line:#34322e;--paper:#f1efe8;--ink:#1d1c1a;--pm:#8a857b;--mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.cardpg{--bg:#1c1b19;--fg:#ece9e1;--mute:#8d887e;--line:#34322e;--paper:#a04d35;--ink:#f8eee5;--pm:#ecc2ae;--sub:#f3d9cb;--rule:#bd6c52;--mkf:#a04d35;--mka:#ffd9c4;--mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 .cardpg header.top{background:var(--paper);backdrop-filter:none;color:var(--ink)}.cardpg header.top nav a{color:var(--pm)}.cardpg header.top nav a.on,.cardpg header.top nav a:hover{color:var(--ink)}.cardpg header.top .name span{color:var(--pm)}
 .cardpg main{padding:0}
 .cm{position:absolute;inset:14px;pointer-events:none;--c:var(--pm);background:linear-gradient(var(--c),var(--c)) 0 0/14px 1px,linear-gradient(var(--c),var(--c)) 0 0/1px 14px,linear-gradient(var(--c),var(--c)) 100% 0/14px 1px,linear-gradient(var(--c),var(--c)) 100% 0/1px 14px,linear-gradient(var(--c),var(--c)) 0 100%/14px 1px,linear-gradient(var(--c),var(--c)) 0 100%/1px 14px,linear-gradient(var(--c),var(--c)) 100% 100%/14px 1px,linear-gradient(var(--c),var(--c)) 100% 100%/1px 14px;background-repeat:no-repeat;opacity:.7}
 .bc{min-height:calc(100svh - 64px);background:var(--paper);display:flex}
 .bcs{position:relative;flex:1;color:var(--ink);padding:clamp(40px,5vw,72px) clamp(28px,6vw,96px) clamp(56px,6vw,88px);display:grid;grid-template-columns:4fr 4.4fr 3.6fr;grid-template-rows:auto auto 1fr;column-gap:clamp(32px,5vw,88px)}
-.bcs .t1{grid-column:1/-1;font:12px var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--pm);display:flex;gap:28px;flex-wrap:wrap}.bcs .t1 span{letter-spacing:.08em;text-transform:none;font-size:13px;color:#5d5951}
-.bcs .seal{position:absolute;right:clamp(28px,6vw,96px);top:clamp(30px,4vw,58px);color:var(--ink);font-style:normal}.bcs .seal .mk{width:clamp(64px,6vw,92px);height:auto}
+.bcs .t1{grid-column:1/-1;font:12px var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--pm);display:flex;gap:28px;flex-wrap:wrap}.bcs .t1 span{letter-spacing:.08em;text-transform:none;font-size:13px;color:var(--sub)}
+.bcs .seal{position:absolute;right:clamp(28px,6vw,96px);top:clamp(30px,4vw,58px);color:var(--ink);font-style:normal}.bcs .seal .kh{width:clamp(150px,14vw,220px);height:auto;display:block}
 .bcs>.cl{position:absolute;inset:0;width:100%;height:100%;color:var(--ink);opacity:.035;pointer-events:none}.bcs>*{position:relative}.bcs>.seal,.bcs>.sz{position:absolute}
 .bcs h1{grid-column:1/-1;font-size:clamp(64px,8.4vw,140px);font-weight:600;letter-spacing:-.05em;line-height:.95;margin:clamp(28px,4vh,48px) 0 20px;display:flex;align-items:baseline;gap:.35em;flex-wrap:wrap}
-.bcs h1 span{font-size:.24em;font-weight:400;letter-spacing:-.01em;color:#5d5951}
+.bcs h1 span{font-size:.24em;font-weight:400;letter-spacing:-.01em;color:var(--pm)}
 .bcs .c1{display:flex;flex-direction:column;justify-content:space-between;gap:36px}
-.bcs .lead{font-size:clamp(17px,1.35vw,20px);line-height:1.75;color:#2f2d28;letter-spacing:-.01em}
-.bcs .ct{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px 28px;font:15px var(--mono);margin:-12px 0 clamp(36px,6vh,60px);padding-top:12px;border-top:1.5px solid var(--ink)}.bcs .ct div{display:flex;gap:10px}.bcs .ct dt{color:#c8462e}.bcs .ct dt{color:var(--pm)}.bcs .ct a{color:inherit;text-decoration:none;border-bottom:1px solid #cfcabf}
+.bcs .lead{font-size:clamp(17px,1.35vw,20px);line-height:1.75;color:var(--ink);letter-spacing:-.01em}
+.bcs .ct{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px 28px;font:15px var(--mono);margin:-12px 0 clamp(36px,6vh,60px);padding-top:12px;border-top:1.5px solid var(--ink)}.bcs .ct div{display:flex;gap:10px}.bcs .ct dt{color:var(--pm)}.bcs .ct dt{color:var(--pm)}.bcs .ct a{color:inherit;text-decoration:none;border-bottom:1px solid var(--rule)}
 .bcs .c3,.bcs .c1s{display:flex;flex-direction:column;gap:30px}.bcs .c1{justify-content:flex-start}
 .bcs h3{display:flex;gap:10px;align-items:baseline;font:12px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--ink);font-weight:500;padding-bottom:10px;margin-bottom:6px;border-bottom:1.5px solid var(--ink)}
-.bcs h3 b{color:#c8462e;font-weight:500;letter-spacing:.05em}
-.bcs .it{padding:9px 0;border-bottom:1px solid #dcd8cf;display:flex;flex-direction:column;gap:1px}.bcs section .it:last-child{border-bottom:0}
+.bcs h3 b{color:var(--pm);font-weight:500;letter-spacing:.05em}
+.bcs .it{padding:9px 0;border-bottom:1px solid var(--rule);display:flex;flex-direction:column;gap:1px}.bcs section .it:last-child{border-bottom:0}
 .bcs .it span{font:12.5px var(--mono);color:var(--pm);letter-spacing:.02em}
 .bcs .it strong{font-size:17px;font-weight:600;letter-spacing:-.01em;line-height:1.4}
-.bcs .it em{font-style:normal;font-size:14px;color:#6f6a60;line-height:1.5}
+.bcs .it em{font-style:normal;font-size:14px;color:var(--sub);line-height:1.5}
 .bcs .sz{position:absolute;right:clamp(28px,6vw,96px);bottom:26px;font:10px var(--mono);letter-spacing:.12em;color:var(--pm)}
 .flyin .bcs>*{animation:bcin .7s .05s both}@keyframes bcin{from{opacity:0;transform:translateY(10px)}}
 .bst{position:fixed;inset:0;z-index:120;display:grid;place-items:center;pointer-events:none;perspective:1600px}
@@ -569,18 +569,17 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .bst.flat .ly{opacity:0;transform:translateZ(-60px)}
 .bpk{position:absolute;inset:0;background:#f1efe8;color:#1d1c1a;display:grid;cursor:pointer;transform:translateZ(0);transition:transform .24s cubic-bezier(.2,.8,.2,1),box-shadow .24s;box-shadow:inset 0 0 0 1px #d4cec2}
 .bst.lift .bpk{transform:translateZ(70px);box-shadow:0 30px 50px #0006}.bst.flat .bpk{transform:translateZ(0)}
-.bpk{overflow:hidden;padding:24px 28px 22px;grid-template-columns:1fr auto;grid-template-rows:auto 1fr auto}
-.bpk .cl{position:absolute;inset:0;width:100%;height:100%;color:#1d1c1a;opacity:.07;pointer-events:none}
-.bpk>*{position:relative}
-.bpk .k1{font-size:12px;line-height:1.45;color:#1d1c1a;font-weight:500}.bpk .k1 span{color:#8a857b;font-weight:400}
-.bpk .mk{color:#1d1c1a;width:52px;height:52px;justify-self:end}
-.bpk .k3{grid-column:1/-1;align-self:end;font-size:clamp(40px,4.4vw,60px);font-weight:600;letter-spacing:-.05em;line-height:.95;margin-bottom:16px}
-.bpk .k3 span{display:inline;font-size:.3em;font-weight:400;letter-spacing:-.01em;color:#5d5951;margin-left:.6em}
-.bpk .k5{grid-column:1/-1;font:11px/1.7 'JetBrains Mono',ui-monospace,monospace;color:#1d1c1a;border-top:1px solid #1d1c1a;padding-top:8px}.bpk .k5 span{color:#c8462e;margin-right:4px}
+.bpk{overflow:hidden;padding:20px 24px 18px;background:#a04d35;color:#f6ebe1;grid-template-rows:auto auto 1fr auto auto;justify-items:center;text-align:center;font-family:Inter,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.24em;box-shadow:inset 0 0 0 1px #8b412b}
+.bpk .k1{font-size:13px;font-weight:600;letter-spacing:.22em}.bpk .k1 span{color:#f0cdbb;font-weight:500;margin-left:.6em}
+.bpk .k2{font-size:9.5px;font-weight:500;color:#f0cdbb;margin-top:5px}
+.bpk .km{align-self:center;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;width:100%}.bpk .km span{font-size:10px;font-weight:600;writing-mode:vertical-rl;transform:rotate(180deg);color:#f0cdbb}
+.bpk .kh{width:100%;height:auto}
+.bpk .k5{font-size:11.5px;font-weight:600;letter-spacing:.2em}.bpk .k6{font-size:9px;color:#f0cdbb;margin-top:4px;letter-spacing:.18em}
+.bsk .ly{background:#97462f!important;box-shadow:inset 0 0 0 1px #7e3a26!important}.bsk .ly:nth-child(odd){background:#8d412b!important}.bsk .ly:first-child{box-shadow:inset 0 0 0 1px #6e3120,0 40px 70px #000b!important}
 .cv0 .cad,.cv0 .bgs{transition:opacity .5s,filter .5s}.cv0.pk .cad{opacity:.25}.cv0.pk .cvh{opacity:.25;transition:opacity .5s}
-.bfly{position:fixed;z-index:130;overflow:hidden;background:#f1efe8;transition:all .65s cubic-bezier(.7,0,.2,1);box-shadow:0 30px 80px #000a}
+.bfly{position:fixed;z-index:130;overflow:hidden;background:#a04d35;transition:all .65s cubic-bezier(.7,0,.2,1);box-shadow:0 30px 80px #000a}
 @media (max-width:1100px){.bcs{grid-template-columns:1fr 1fr}.bcs .c1{grid-column:1/-1;margin-bottom:48px}}
-@media (max-width:700px){.bcs{grid-template-columns:1fr;padding:44px 22px 64px;row-gap:44px}.bcs h1{margin:24px 0 0}.bcs .seal .mk{width:52px}.bcs .c1{margin:0}}
+@media (max-width:700px){.bcs{grid-template-columns:1fr;padding:44px 22px 64px;row-gap:44px}.bcs h1{margin:24px 0 0}.bcs .seal .kh{width:120px}.bcs .c1{margin:0}}
 .acard .lio{display:none}
 .acard .dmo{margin-left:auto;background:none;border:0;padding:0;font:11px var(--mono);color:var(--mute);cursor:pointer;display:flex;align-items:center;gap:6px}.acard .dmo:hover{color:#e6e3da}
 .acard .dmo i{font-style:normal}.acard[data-mode=auto] .dmo i{width:6px;height:6px;border-radius:50%;background:#e0a15a;animation:dmo 1.4s ease-in-out infinite}
@@ -598,12 +597,12 @@ def _pts(ps): return ' '.join(f'{x:.1f},{y:.1f}' for x, y in ps)
 def card_mark(size=64):
     P=[(6,16),(52,9),(58,50),(9,56)]; S=[(14,22),(45,17),(50,44),(17,48)]
     out=[f'<polygon points="{_pts(P)}" fill="none" stroke="currentColor" stroke-width="1.6"/>',
-         f'<polygon points="{_pts(S)}" fill="none" stroke="#c8462e" stroke-width="1" stroke-dasharray="2.5 2"/>']
+         f'<polygon points="{_pts(S)}" fill="none" style="stroke:var(--mka,#c8462e)" stroke-width="1" stroke-dasharray="2.5 2"/>']
     base=[(19,34),(41,31),(43,43),(21,46)]
     for i in range(4):
         dy=-i*5.2; q=[(x,y+dy) for x,y in base]
         if i: out.append(''.join(f'<line x1="{x:.1f}" y1="{y+5.2:.1f}" x2="{x:.1f}" y2="{y:.1f}" stroke="currentColor" stroke-width=".8"/>' for x,y in q))
-        out.append(f'<polygon points="{_pts(q)}" fill="#f1efe8" stroke="{"#c8462e" if i==3 else "currentColor"}" stroke-width="{1.4 if i==3 else 1}"/>')
+        out.append(f'<polygon points="{_pts(q)}" style="fill:var(--mkf,#f1efe8);stroke:{"var(--mka,#c8462e)" if i==3 else "currentColor"}" stroke-width="{1.4 if i==3 else 1}"/>')
     return f'<svg class="mk" viewBox="0 0 64 64" width="{size}" height="{size}" aria-hidden="true">{"".join(out)}</svg>'
 def card_lines(seed=7, w=900, h=500):
     R=_rnd.Random(seed); L=[]
@@ -612,6 +611,16 @@ def card_lines(seed=7, w=900, h=500):
     for i in range(10):
         x=i*w/9+R.uniform(-30,30); L.append(f'M{x:.0f} -20 L{x+R.uniform(-80,80):.0f} {h+20}')
     return f'<svg class="cl" viewBox="0 0 {w} {h}" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="{" ".join(L)}" fill="none" stroke="currentColor" stroke-width="1"/></svg>'
+
+def card_holes():
+    H=[[(50,14),(96,8),(100,54),(54,60)],[(128,10),(174,14),(170,58),(124,54)],[(202,8),(250,12),(246,60),(206,56)]]
+    o=[]
+    for q in H:
+        o.append(f'<polygon points="{_pts(q)}" fill="#3b170e"/>')
+        o.append(f'<polyline points="{_pts([q[0],q[1],q[2]])}" fill="none" stroke="#260d07" stroke-width="5" opacity=".7"/>')
+        o.append(f'<polyline points="{_pts([q[2],q[3],q[0]])}" fill="none" stroke="#c97a5e" stroke-width="1.2"/>')
+    return f'<svg class="kh" viewBox="0 0 300 68" aria-hidden="true">{"".join(o)}</svg>'
+HOLES=card_holes()
 MARK=card_mark(); LINES=card_lines()
 
 JS = r"""
@@ -619,7 +628,7 @@ JS = r"""
 (function(){var rm=matchMedia('(prefers-reduced-motion:reduce)').matches,S=null,busy=false;
 function el(){if(S)return S;var n=document.querySelector('header.top .name'),nm=n?n.innerHTML.replace(/^←\s*/,''):'',ly='';for(var i=22;i>=1;i--)ly+='<i class="ly" style="--z:'+i+'"></i>';
  S=document.createElement('div');S.className='bst';S.setAttribute('aria-hidden','true');
- S.innerHTML='<div class="bsk">'+ly+'<div class="bpk">__LINES__<p class="k1">Architectural Designer<br><span>홍익대학교 건축학과</span></p>__MARK__<b class="k3">'+nm+'</b><p class="k5"><span>E</span> __EMAIL__ <span>T</span> __PHONE__<br><span>W</span> coin9563-max.github.io</p></div></div>';
+ S.innerHTML='<div class="bsk">'+ly+'<div class="bpk"><p class="k1">'+nm+'</p><p class="k2">Architectural Designer</p><div class="km"><span>S · H</span>__HOLES__<span>2 0 2 6</span></div><p class="k5">__EMAIL__</p><p class="k6">__PHONE__ · coin9563-max.github.io</p></div></div>';
  document.body.appendChild(S);return S;}
 function go(e,href){if(e&&(e.metaKey||e.ctrlKey||e.shiftKey||e.button>0))return;if(rm||document.body.classList.contains('cardpg'))return;e&&e.preventDefault();if(busy)return;busy=true;
  var s=el(),up=s.classList.contains('up');if(!up){s.classList.add('up');void s.offsetWidth;}
@@ -715,7 +724,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('keydown',e=>{if(!lb.classList.contains('on'))return;if(e.key==='Escape')lb.classList.remove('on');if(e.key==='ArrowRight')show(ix+1);if(e.key==='ArrowLeft')show(ix-1)});
 if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{rootMargin:'0px 0px -8% 0px'});
 document.querySelectorAll('.blk,.txt,.work').forEach(el=>{el.classList.add('fade');io.observe(el)})}
-""".replace('__LINES__',LINES).replace('__MARK__',MARK).replace('__EMAIL__',SITE['email']).replace('__PHONE__',SITE['phone'])
+""".replace('__HOLES__',HOLES).replace('__EMAIL__',SITE['email']).replace('__PHONE__',SITE['phone'])
 
 def page(title, body, root, dark=False, on='', desc='', og='img/t_307.jpg'):
     return f"""<!doctype html>
@@ -885,7 +894,7 @@ lead = f'<p class="lead">{E(A["intro"])}</p>' if A.get('intro') else ''
 def bc_sec(no, label, rows):
     return f'<section><h3><b>{no}</b>{label}</h3>' + ''.join(f'<div class="it">' + (f'<span>{E(a)}</span>' if a else '') + f'<strong>{E(b)}</strong>' + (f'<em>{E(c)}</em>' if c else '') + '</div>' for a, b, c in rows) + '</section>'
 body = f'''<section class="bc" aria-label="명함"><div class="bcs">
-<p class="t1">Portfolio 2021–2026<span>Architectural Designer · {SITE["school"]}</span></p><i class="seal" aria-hidden="true">{MARK}</i>{LINES}
+<p class="t1">Portfolio 2021–2026<span>Architectural Designer · {SITE["school"]}</span></p><i class="seal" aria-hidden="true">{HOLES}</i>{LINES}
 <h1>{SITE["name_ko"]}<span>{SITE["name_en"]}</span></h1>
 <dl class="ct" id="contact"><div><dt>E</dt><dd><a href="mailto:{SITE["email"]}">{SITE["email"]}</a></dd></div><div><dt>T</dt><dd><a href="tel:{SITE["phone"].replace("-","")}">{SITE["phone"]}</a></dd></div><div><dt>W</dt><dd><a href="index.html">coin9563-max.github.io</a></dd></div></dl>
 <div class="c1"><p class="lead">{E(A.get("intro",""))}</p><div class="c1s">{bc_sec('01','Education',A['education'])}{bc_sec('02','Interests',[('',A.get('interests',''),'')])}</div></div>
