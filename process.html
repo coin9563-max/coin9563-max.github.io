@@ -1142,24 +1142,29 @@ function lay(){var R=bg.getBoundingClientRect(),W=R.width,H=R.height,narrow=W<86
  var d='M'+x0+','+y0+' Q'+cx+','+cy+' '+x1+','+y1;bg.querySelector('.r1').setAttribute('d',d);bg.querySelector('.r2').setAttribute('d',d);
  var pw=Math.min(132,(x1-x0)/n*.92);ps.forEach(function(p,i){var t=(i+.5)/n,x=(1-t)*(1-t)*x0+2*(1-t)*t*cx+t*t*x1,y=(1-t)*(1-t)*y0+2*(1-t)*t*cy+t*t*y1;p.style.width=pw+'px';p.style.left=(x-pw/2)+'px';p.style.top=(y-6)+'px';p.dataset.x=x;p.dataset.y=y;});return {W:W,H:H};}
 function stop(){tm.forEach(clearTimeout);tm=[];anims.forEach(function(a){a.cancel();});anims=[];}
-function run(){stop();var S=lay();ps.forEach(function(p){p.classList.add('hung');p.style.clipPath='';p.style.opacity='';p.style.transition='';});bg.querySelector('.rope').style.opacity='';
+function run(){stop();var S=lay();ps.forEach(function(p){p.classList.add('hung');p.style.clipPath='';p.style.opacity='';p.style.transition='';p.style.zIndex='';});bg.querySelector('.rope').style.opacity='';
  scn.style.transition='none';scn.style.transform='';
- if(rm)return;
- // 슬롯 위치(장면 좌표) — 카메라 svg viewBox 320x260, 슬롯 중심 (168,207)
- var cw=cam.offsetWidth,ch=cw*260/320,sx=cam.offsetLeft+cw*168/320,sy=cam.offsetTop+ch*207/260,Z=S.W<860?1.8:2.2;
- scn.style.transformOrigin=sx+'px '+sy+'px';scn.style.transform='translate('+(S.W*.34-sx)+'px,'+(S.H*.5-sy)+'px) scale('+Z+')';
- var hx=+hero.dataset.x,hy=+hero.dataset.y,w=hero.offsetWidth,h=hero.offsetHeight,dx=sx-hx,dy0=sy-hy-h,dy1=sy-hy-h*.12;
- hero.classList.remove('hung');hero.style.opacity=1;ps.forEach(function(p){if(p!==hero){p.style.transition='none';p.style.opacity=0;}});bg.querySelector('.rope').style.opacity=0;
- // 1) 슬롯에서 천천히 나옴: 사진 아랫단부터 보이게
- var e=hero.animate([{transform:'translate('+dx+'px,'+dy0+'px)',clipPath:'inset('+h+'px -40px -40px -40px)'},{transform:'translate('+dx+'px,'+dy1+'px)',clipPath:'inset('+(h*.12)+'px -40px -40px -40px)'}],{duration:2300,delay:350,easing:'cubic-bezier(.35,.1,.45,1)',fill:'both'});anims.push(e);
+ if(rm){cam.style.opacity=0;return;}
+ // 슬롯 위치(장면 좌표): 카메라 svg의 data-sx/sy(슬롯), data-ex/ey(배출 방향)
+ var sv=cam.querySelector('svg'),cw=cam.offsetWidth,ch=cam.offsetHeight,sx=cam.offsetLeft+cw*(+sv.dataset.sx),sy=cam.offsetTop+ch*(+sv.dataset.sy),Z=S.W<860?1.5:1.6;
+ var ex=+sv.dataset.ex,ey=+sv.dataset.ey,el=Math.hypot(ex,ey);ex/=el;ey/=el;var D=sv.dataset,ax=cam.offsetLeft+cw*(+D.ax),ay=cam.offsetTop+ch*(+D.ay),bx=cam.offsetLeft+cw*(+D.bx),by=cam.offsetTop+ch*(+D.by);
+ scn.style.transformOrigin=sx+'px '+sy+'px';scn.style.transform='translate('+(S.W*.36-sx)+'px,'+(S.H*.5-sy)+'px) scale('+Z+')';
+ cam.style.transition='none';cam.style.opacity='';
+ var hx=+hero.dataset.x,hy=+hero.dataset.y,w=hero.offsetWidth,h=hero.offsetHeight,L0=hx-w/2,T0=hy-6;
+ function pose(sd){var cx=sx+ex*sd,cy=sy+ey*sd,tx=cx-w/2-L0,ty=cy-h/2-T0,ox=L0+tx,oy=T0+ty,K=2000;
+  return {tx:tx,ty:ty,clip:'polygon('+[[ax-ox,ay-oy],[bx-ox,by-oy],[bx-ox+ex*K,by-oy+ey*K],[ax-ox+ex*K,ay-oy+ey*K]].map(function(q){return q[0].toFixed(1)+'px '+q[1].toFixed(1)+'px';}).join(',')+')'};}
+ var A=pose(-h*.7),B=pose(h*.5),dx=B.tx,dy1=B.ty;
+ hero.classList.remove('hung');hero.style.opacity=1;hero.style.zIndex=1;ps.forEach(function(p){if(p!==hero){p.style.transition='none';p.style.opacity=0;}});bg.querySelector('.rope').style.opacity=0;
+ // 1) 슬롯에서 천천히 밀려 나옴(슬롯 선 뒤쪽은 잘림)
+ var e=hero.animate([{transform:'translate('+A.tx+'px,'+A.ty+'px)',clipPath:A.clip},{transform:'translate('+B.tx+'px,'+B.ty+'px)',clipPath:B.clip}],{duration:2300,delay:350,easing:'cubic-bezier(.35,.1,.45,1)',fill:'both'});anims.push(e);
  // 2) 바람에 날리듯 오른쪽 위로 → 줄에 걸림
  at(2900,function(){var f=hero.animate([
-   {transform:'translate('+dx+'px,'+dy1+'px) rotate(0)',clipPath:'inset(0 -40px -40px -40px)'},
+   {transform:'translate('+dx+'px,'+dy1+'px) rotate(0)'},
    {transform:'translate('+(dx*.62)+'px,'+(dy1-90)+'px) rotate(-16deg)',offset:.3},
    {transform:'translate('+(dx*.28)+'px,'+(dy1*.35-60)+'px) rotate(14deg)',offset:.6},
    {transform:'translate('+(-14)+'px,-26px) rotate(-7deg)',offset:.85},
-   {transform:'translate(0,0) rotate(0)',clipPath:'inset(-40px -40px -40px -40px)'}],{duration:1500,easing:'cubic-bezier(.35,.05,.3,1)',fill:'forwards'});anims.push(f);
-  e.cancel();f.onfinish=function(){f.cancel();hero.classList.add('hung');};
+   {transform:'translate(0,0) rotate(0)'}],{duration:1500,easing:'cubic-bezier(.35,.05,.3,1)',fill:'forwards'});anims.push(f);
+  e.cancel();hero.style.zIndex=6;f.onfinish=function(){f.cancel();hero.classList.add('hung');};cam.style.transition='opacity 1s .2s';cam.style.opacity=0;
   // 3) 줌아웃
   scn.style.transition='transform 1.7s cubic-bezier(.45,.05,.25,1)';scn.style.transform='';var rp=bg.querySelector('.rope');rp.style.transition='opacity .8s .3s';rp.style.opacity='';ps.forEach(function(p,i){if(p!==hero){p.style.transition='opacity .6s '+(.45+i*.12)+'s';p.style.opacity='';}});});}
 var wason=false;new MutationObserver(function(){var on=bg.classList.contains('on');if(on===wason)return;wason=on;if(on){build();run();}else stop();}).observe(bg,{attributes:true,attributeFilter:['class']});
