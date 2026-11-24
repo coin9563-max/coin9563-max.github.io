@@ -57,35 +57,60 @@ if(!document.body.classList.contains('cardpg')&&matchMedia('(hover:hover)').matc
 })();
 
 
-// Process: 올리면 실험 도면이 그려진 트레이싱지 더미가 하단 가운데에서 올라오고, 누르면 맨 윗장이 펼쳐지며 이동
-(function(){var rm=matchMedia('(prefers-reduced-motion:reduce)').matches,S=null,busy=false;
-function P(a){return a.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' ');}
-function draw(i){var o='',k;switch(i){
- case 0: for(k=0;k<9;k++){var y=40+k*24;o+='<path d="M30 '+y+' Q200 '+(y+70-Math.abs(k-4)*12)+' 370 '+y+'"/>';}for(k=0;k<9;k++){var x=30+k*42.5;o+='<path d="M'+x+' 40 Q'+(x+(k-4)*6)+' 150 '+x+' 232"/>';}o+='<text x="30" y="270">LAB 07  현수선 형태 찾기</text>';break;
- case 1: o+='<polyline points="'+P([[60,250],[60,90],[150,90],[150,120],[200,120],[200,150],[250,150],[250,180],[300,180],[300,250]])+'"/><line x1="60" y1="40" x2="330" y2="250" stroke-dasharray="6 5"/><line x1="20" y1="250" x2="380" y2="250"/><text x="30" y="285">LAB 02  정북일조사선</text>';break;
- case 2: for(k=0;k<4;k++)o+='<path d="M40 240 Q200 '+(40+k*34)+' 360 240"/>';o+='<polygon points="'+P([[180,200],[230,200],[300,250],[250,250]])+'" class="f"/><rect x="180" y="150" width="50" height="50"/><text x="30" y="285">LAB 06  동지 일조 시간</text>';break;
- case 3: for(k=0;k<7;k++){o+='<rect x="'+(40+k*46)+'" y="50" width="40" height="70"/><rect x="'+(40+k*46)+'" y="170" width="40" height="70"/>';}o+='<line x1="30" y1="145" x2="370" y2="145" stroke-dasharray="10 6"/><text x="30" y="285">LAB 05  주차 배치</text>';break;
- case 4: o+='<polyline points="'+P([[80,170],[330,90]])+'"/><line x1="96" y1="165" x2="96" y2="240"/><line x1="40" y1="240" x2="360" y2="240"/>';for(k=-3;k<=6;k++){var a=k*7*Math.PI/180;o+='<line x1="200" y1="205" x2="'+(200-170*Math.cos(a)).toFixed(1)+'" y2="'+(205-170*Math.sin(a)).toFixed(1)+'" class="t"/>';}o+='<circle cx="200" cy="205" r="5" class="f"/><text x="30" y="285">LAB 08  처마와 시선 · 바람</text>';break;
- case 5: o+='<line x1="40" y1="240" x2="360" y2="240"/><line x1="40" y1="60" x2="40" y2="240"/>';var d='M40 70';for(k=1;k<=32;k++){d+=' L'+(40+k*10)+' '+(240-170*Math.exp(-k/7)).toFixed(1);}o+='<path d="'+d+'"/><rect x="40" y="200" width="110" height="40" class="f"/><text x="30" y="285">LAB 09  오피스 빛 · 열</text>';break;
- default: for(k=0;k<5;k++)for(var j=0;j<4;j++){var x=80+k*55-j*22,y=70+j*40+k*8;o+='<rect x="'+x+'" y="'+y+'" width="45" height="30"/>';}o+='<text x="30" y="285">LAB 03  그리드 → 프레임</text>';}
- return '<svg viewBox="0 0 400 300" aria-hidden="true">'+o+'</svg>';}
-function el(){if(S)return S;S=document.createElement('div');S.className='tst';S.setAttribute('aria-hidden','true');var h='';
- for(var i=6;i>=0;i--){var r=(i%2?1:-1)*(1.2+i*.9),x=(i%3-1)*14,y=-i*9;h+='<div class="ts" style="--r:'+r+'deg;--x:'+x+'px;--y:'+y+'px;--d:'+(i*40)+'ms">'+draw(i)+(i===0?'<p class="tl">PROCESS<span>실험으로 판단하기 · LAB 01–09</span></p>':'')+'</div>';}
- S.innerHTML='<div class="tsk">'+h+'</div>';document.body.appendChild(S);return S;}
-function go(e,href){if(e&&(e.metaKey||e.ctrlKey||e.shiftKey||e.button>0))return;if(rm||document.body.classList.contains('labpg'))return;e&&e.preventDefault();if(busy)return;busy=true;
- var s=el(),up=s.classList.contains('up');if(!up){s.classList.add('up');void s.offsetWidth;}
- setTimeout(function(){s.classList.add('lift');setTimeout(function(){var c=s.querySelector('.ts:last-child'),r=c.getBoundingClientRect(),d=document.createElement('div');d.className='tfly';
-  d.style.cssText='left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px';document.body.appendChild(d);c.style.visibility='hidden';
-  requestAnimationFrame(function(){requestAnimationFrame(function(){d.classList.add('go');d.style.cssText='left:0;top:0;width:100vw;height:100vh';});});
-  setTimeout(function(){location.href=href;},620);},260);},up?0:520);}
-document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href$="process.html"]');if(!a||a.target==='_blank')return;go(e,a.href);});
-if(!document.body.classList.contains('labpg')&&matchMedia('(hover:hover)').matches){var t,last=null,cv=function(){return document.querySelector('.cv0');};
- function on(a){clearTimeout(t);if(a)last=a;el().classList.add('up');var v=cv();v&&v.classList.add('pk');}
- function off(){t=setTimeout(function(){if(busy)return;el().classList.remove('up');var v=cv();v&&v.classList.remove('pk');},160);}
- document.addEventListener('mouseover',function(e){var a=e.target.closest&&e.target.closest('a[href$="process.html"]');if(a)on(a);else if(e.target.closest&&e.target.closest('.tsk'))on(null);});
- document.addEventListener('mouseout',function(e){var a=e.target.closest&&(e.target.closest('a[href$="process.html"]')||e.target.closest('.tsk'));if(a&&!(e.relatedTarget&&a.contains(e.relatedTarget)))off();});
- document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.tsk')&&last)go(e,last.href);});}
-})();
+// 표지 Process 호버: 배경 그리드 위에 실험 도면이 칸에 맞춰 자동으로 그려짐
+(function(){var cv0=document.querySelector('.cv0');if(!cv0)return;var lk=document.querySelector('.cvm a[href$="process.html"]');if(!lk)return;
+var bgs=cv0.querySelectorAll('.bg'),i=[].indexOf.call(document.querySelectorAll('.cvm a'),lk),bg=bgs[i];if(!bg)return;
+var c=document.createElement('canvas');c.className='pdr';bg.appendChild(c);var g=c.getContext('2d'),W,H,DP,G=48,raf=0,t0=0,still=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function L(){var o=[];for(var k=0;k<arguments.length;k++)o.push(arguments[k]);return o;}
+// 각 도면: 칸 단위 좌표의 선 목록 [type,points], type: 0 기본선 1 빨강 2 파랑 3 점선
+function D(){var d=[],k,j;
+ // LAB 08 처마와 시선
+ var e=[[0,[[0,4],[8,4]]],[0,[[1,4],[1,1.5],[5,0.5]]],[0,[[1.6,4],[1.6,2.2]]]];for(k=-2;k<=4;k++){var a=k*8*Math.PI/180;e.push([2,[[1.8,2.6],[1.8+6*Math.cos(a),2.6-6*Math.sin(a)]]]);}e.push([1,[[5,0.5],[1.8,2.6]]]);d.push({x:2,y:2,w:8,h:4,l:'LAB 08  처마와 시선 · 바람',s:e});
+ // LAB 02 정북일조사선
+ d.push({x:12,y:2,w:6,h:4,l:'LAB 02  정북일조사선',s:[[0,[[0,4],[6,4]]],[3,[[0.5,0],[5,4]]],[0,[[0.5,4],[0.5,1],[2,1],[2,1.8],[3,1.8],[3,2.6],[4,2.6],[4,3.4],[5,3.4],[5,4]]],[1,[[0.5,1],[2,1]]]]});
+ // LAB 07 현수선
+ var m=[];for(k=0;k<6;k++){var p=[];for(j=0;j<=12;j++){var x=j/12;p.push([x*7,0.4+k*0.7+ (1.2-Math.abs(k-2.5)*0.25)*Math.sin(Math.PI*x)]);}m.push([k==2?1:0,p]);}for(j=0;j<=7;j++){var q=[];for(k=0;k<=10;k++){var y=k/10;q.push([j+(j-3.5)*0.08*Math.sin(Math.PI*y),0.4+y*3.5+0.5*Math.sin(Math.PI*j/7)]);}m.push([0,q]);}d.push({x:2,y:8,w:7,h:4,l:'LAB 07  현수선 형태 찾기',s:m});
+ // LAB 06 일조
+ var sp=[];for(k=0;k<3;k++){var r=[];for(j=0;j<=20;j++){var t=j/20;r.push([t*7,4-(1.2+k*0.9)*Math.sin(Math.PI*t)]);}sp.push([k==0?2:3,r]);}sp.push([0,[[2.5,4],[2.5,2.8],[3.5,2.8],[3.5,4]]]);sp.push([1,[[3.5,4],[5.6,4],[3.5,2.8]]]);d.push({x:11,y:8,w:7,h:4,l:'LAB 06  동지 일조 시간',s:sp});
+ // LAB 05 주차
+ var pk=[[0,[[0,0],[7,0]]],[0,[[0,4],[7,4]]],[3,[[0,2],[7,2]]]];for(k=0;k<=7;k++){pk.push([0,[[k,0],[k,1.2]]]);pk.push([0,[[k,2.8],[k,4]]]);}pk.push([1,[[0.2,2.2],[2.2,2.2],[3,1.4]]]);d.push({x:2,y:14,w:7,h:4,l:'LAB 05  주차 배치',s:pk});
+ // LAB 09 오피스 빛·열
+ var cu=[];for(k=0;k<=28;k++)cu.push([k*0.25,4-3.4*Math.exp(-k*0.25/1.6)]);d.push({x:11,y:14,w:7,h:4,l:'LAB 09  오피스 주광률 · 부하',s:[[0,[[0,0],[0,4],[7,4]]],[1,cu],[3,[[0,3.3],[7,3.3]]],[2,[[0,0.6],[1.6,0.6]]]]});
+ return d;}
+var DR=D();function len(p){var s=0;for(var k=1;k<p.length;k++)s+=Math.hypot(p[k][0]-p[k-1][0],p[k][1]-p[k-1][1]);return s;}
+DR.forEach(function(d){d.L=0;d.s.forEach(function(z){z.L=len(z[1]);d.L+=z.L;});});
+// 띠디디딕: 진행이 연속이 아니라 틱 단위로 끊겨 튀고, 펜 끝 칸이 깜박이며 좌표가 찍힘
+var OX=0,OY=0,SCAN=420,DRAW=2300,TK=34,PER=3,HOLD=1600,CLR=420,slots=[],cells=[];
+function rnd(n){var x=Math.sin(n*127.1+311.7)*43758.5453;return x-Math.floor(x);}
+function size(){var r=bg.getBoundingClientRect();DP=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;c.width=W*DP;c.height=H*DP;c.style.width=W+'px';c.style.height=H+'px';
+ var cols=Math.floor(W/G),n=cols>=28?3:cols>=19?2:1,sw=8,x0=Math.max(1,Math.floor((cols-(n*sw+(n-1)))/2));slots=[];for(var k=0;k<n;k++)slots.push({x:x0+k*(sw+1),y:2,w:sw,h:5});PER=n;OX=(W/2)%G;OY=(H/2)%G;}
+function col(t,a){return t==1?'rgba(255,110,80,'+a+')':t==2?'rgba(110,175,255,'+a+')':'rgba(236,232,222,'+a+')';}
+function prog(u,id){if(u<=0)return 0;if(u>=DRAW)return 1;var n=Math.floor(u/TK),p=0;for(var k=0;k<=n;k++){var r=rnd(id*997+k);p+=r<.18?0:r<.85?1:r<.96?3:7;}var T=0;for(k=0;k<Math.ceil(DRAW/TK);k++){var r2=rnd(id*997+k);T+=r2<.18?0:r2<.85?1:r2<.96?3:7;}return Math.min(1,p/T);}
+function frame(now){if(!t0)t0=now;var t=now-t0,pages=Math.ceil(DR.length/PER),PG=PER*(SCAN+DRAW)+HOLD+CLR,pg=Math.floor(t/PG)%pages,u=t%PG,gl=u>PG-CLR?(Math.floor((u-(PG-CLR))/70)%2?0:1)*(1-(u-(PG-CLR))/CLR):1;
+ g.setTransform(DP,0,0,DP,0,0);g.clearRect(0,0,W,H);g.translate(OX-G,OY-G);g.lineCap='round';g.lineJoin='round';g.font="11px 'JetBrains Mono',ui-monospace,monospace";
+ var live=null;
+ slots.forEach(function(sl,si){var n=pg*PER+si;if(n>=DR.length)return;var d=DR[n],st=si*(SCAN+DRAW),v=u-st;if(v<0&&!still)return;
+  var S=Math.min(sl.w/d.w,sl.h/d.h)*G,ox=sl.x*G+Math.round((sl.w*G-d.w*S)/2/G*4)/4*G,oy=sl.y*G,fw=sl.w*G,fh=sl.h*G,X=sl.x*G;
+  // 스캔: 칸들이 무작위로 깜박이며 자리 잡기
+  if(!still&&v<SCAN){var q=Math.floor(v/40);for(var k=0;k<10;k++){var cx=Math.floor(rnd(n*31+q*7+k)*sl.w),cy=Math.floor(rnd(n*53+q*11+k)*sl.h);g.fillStyle=col(k%3?0:1,.07+.08*rnd(q+k));g.fillRect(X+cx*G+1,oy+cy*G+1,G-1,G-1);}
+   var cw=Math.floor(v/SCAN*sl.w*4)/4;g.strokeStyle=col(0,.5);g.setLineDash([2,4]);g.strokeRect(X+.5,oy+.5,cw*G,fh);g.setLineDash([]);g.fillStyle=col(1,.9);g.fillText('SCAN '+String(Math.floor(v/SCAN*100)).padStart(2,'0')+'%',X,oy-10);return;}
+  var pr=still?1:prog(v-SCAN,n);
+  g.save();g.globalAlpha=gl;g.strokeStyle=col(0,.28);g.strokeRect(X+.5,oy+.5,fw,fh);g.beginPath();g.rect(X,oy,fw,fh);g.clip();
+  var want=pr*d.L,tip=null,tc=0;d.s.forEach(function(z){if(want<=0)return;var pp=z[1],dl=Math.min(want,z.L);want-=dl;g.beginPath();g.setLineDash(z[0]==3?[5,5]:[]);g.strokeStyle=col(z[0],z[0]?.92:.8);g.lineWidth=z[0]==1?1.6:1.1;
+   g.moveTo(ox+pp[0][0]*S,oy+pp[0][1]*S);var acc=0;for(var k=1;k<pp.length;k++){var L1=Math.hypot(pp[k][0]-pp[k-1][0],pp[k][1]-pp[k-1][1]);if(acc+L1>=dl){var f=L1?(dl-acc)/L1:0,x=pp[k-1][0]+(pp[k][0]-pp[k-1][0])*f,y=pp[k-1][1]+(pp[k][1]-pp[k-1][1])*f;g.lineTo(ox+x*S,oy+y*S);tip=[ox+x*S,oy+y*S];tc=z[0];break;}g.lineTo(ox+pp[k][0]*S,oy+pp[k][1]*S);acc+=L1;}g.stroke();});
+  g.setLineDash([]);
+  if(pr<1&&tip){var gx=Math.floor(tip[0]/G),gy=Math.floor(tip[1]/G);g.fillStyle=col(1,.16);g.fillRect(gx*G+1,gy*G+1,G-1,G-1);
+   g.strokeStyle=col(1,.55);g.beginPath();g.moveTo(X,tip[1]+.5);g.lineTo(X+fw,tip[1]+.5);g.moveTo(tip[0]+.5,oy);g.lineTo(tip[0]+.5,oy+fh);g.stroke();
+   g.fillStyle=col(1,1);g.fillRect(tip[0]-2.5,tip[1]-2.5,5,5);live={x:tip[0],y:tip[1],d:d,pr:pr,ox:ox,oy:oy,S:S};}
+  g.restore();
+  g.globalAlpha=gl;var nl=Math.round(d.l.length*Math.min(1,pr*1.5));g.fillStyle=col(0,.85);g.fillText(d.l.slice(0,nl)+(pr<1&&Math.floor(t/120)%2?'▌':''),X,oy+fh+20);
+  g.fillStyle=col(pr<1?1:0,pr<1?.9:.45);g.fillText(pr<1?'GEN '+String(Math.floor(pr*100)).padStart(2,'0')+'%':'DONE',X+fw-(pr<1?48:32),oy+fh+20);g.globalAlpha=1;});
+ if(live){g.fillStyle=col(1,.95);var tx='x '+((live.x-live.ox)/live.S).toFixed(2)+'  y '+((live.y-live.oy)/live.S).toFixed(2);g.fillText(tx,live.x+8,live.y-8);}
+ raf=requestAnimationFrame(frame);}
+function start(){if(raf)return;size();t0=0;raf=requestAnimationFrame(frame);}
+function stop(){cancelAnimationFrame(raf);raf=0;g&&g.clearRect(0,0,c.width,c.height);}
+new MutationObserver(function(){bg.classList.contains('on')?start():setTimeout(function(){if(!bg.classList.contains('on'))stop();},600);}).observe(bg,{attributes:true,attributeFilter:['class']});
+addEventListener('resize',function(){if(raf)size();});})();
 
 // 표지 인트로 (세션당 한 번, 누르면 건너뜀)
 (function(){var c=document.querySelector('.cv0'),f=document.querySelector('.ifr');if(!c||!f)return;var im=[].slice.call(f.querySelectorAll('img')),b=document.body,h=document.documentElement,v=document.querySelector('.cvv');
