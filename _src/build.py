@@ -569,6 +569,13 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .cvi .iwd span{opacity:0;transition:opacity .5s}.cvi.w1 .iwd span:nth-child(1),.cvi.w2 .iwd span:nth-child(-n+2),.cvi.w3 .iwd span{opacity:1}
 .cvi.open .iwd{opacity:0;transition:opacity .4s}
 /* 표지 영상 위 분석 태그 + 선 스크린 */
+.crl{position:absolute;inset:0;z-index:0;overflow:hidden;background:#121311}
+.crl figure{position:absolute;inset:0;margin:0;opacity:0;transition:opacity 2.2s ease}
+.crl figure.on{opacity:1}
+.crl img{width:100%;height:100%;object-fit:cover;filter:brightness(.38) saturate(.75);transform:scale(1.08);transition:transform 9s linear}
+.crl figure.on img{transform:scale(1)}
+.crl figcaption{position:absolute;right:clamp(20px,4vw,64px);top:clamp(70px,10vh,110px);font:11px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.06em;color:#e9e4da;opacity:.75}
+.cv0.pk .crl,.cv0:has(.cvm.hov) .crl{opacity:.0;transition:opacity .5s}.crl{transition:opacity .5s}
 .cv0 .cvo{pointer-events:none;background:radial-gradient(120% 80% at 20% 85%,#0d0c0bd9 0%,#0d0c0b00 45%),radial-gradient(60% 70% at 85% 80%,#0d0c0bcc 0%,#0d0c0b00 60%)!important}
 .ctg{position:absolute;inset:0;z-index:0;pointer-events:none}
 .ctg .tg{position:absolute;transform:translate(-6px,-6px);font:11px/1.35 'JetBrains Mono',ui-monospace,monospace;color:#efede6;letter-spacing:.04em;opacity:0;transition:opacity .35s}
@@ -810,6 +817,9 @@ function run(){stop();var S=lay();ps.forEach(function(p){p.classList.add('hung')
   scn.style.transition='transform 1.7s cubic-bezier(.45,.05,.25,1)';scn.style.transform='';var rp=bg.querySelector('.rope');rp.style.transition='opacity .8s .3s';rp.style.opacity='';ps.forEach(function(p,i){if(p!==hero){p.style.transition='opacity .6s '+(.45+i*.12)+'s';p.style.opacity='';}});});}
 var wason=false;new MutationObserver(function(){var on=bg.classList.contains('on');if(on===wason)return;wason=on;if(on){build();run();}else stop();}).observe(bg,{attributes:true,attributeFilter:['class']});
 addEventListener('resize',function(){if(built&&wason)lay();});})();
+// 표지 기본 배경: 대표 렌더 6장이 천천히 교차
+(function(){var f=document.querySelectorAll('.cv0 .crl figure');if(!f.length)return;var i=0,rm=matchMedia('(prefers-reduced-motion:reduce)').matches;f[0].classList.add('on');if(rm)return;
+setInterval(function(){if(document.hidden)return;var n=(i+1)%f.length,im=f[n].querySelector('img');if(im.loading==='lazy')im.loading='eager';f[i].classList.remove('on');f[n].classList.add('on');i=n;},7000);})();
 // 표지 Process 호버: 배경 그리드 위에 실험 도면(투라인 + 해치)이 칸에 맞춰 틱 단위로 생성됨
 (function(){var cv0=document.querySelector('.cv0');if(!cv0)return;var lk=document.querySelector('.cvm a[href$="process.html"]');if(!lk)return;
 var bgs=cv0.querySelectorAll('.bg'),bi=[].indexOf.call(document.querySelectorAll('.cvm a'),lk),bg=bgs[bi];if(!bg)return;
@@ -1125,10 +1135,11 @@ def cover():
     phs.sort(key=lambda r: r[1].startswith('SLA'))
     PRA_BG='<div class="bg prag" data-p="'+_h.escape(_j.dumps(phs,ensure_ascii=False))+'" data-cam="'+_h.escape(open(os.path.join(os.path.dirname(__file__),'cover_cam.svg')).read())+'" data-pin="'+_h.escape(open(os.path.join(os.path.dirname(__file__),'cover_pin.svg')).read())+'"></div>'
     ABT_BG='<div class="bg grid abtg">'+open(os.path.join(os.path.dirname(__file__),'cover_seoul.svg')).read()+'</div>'
+    CRL='<div class="crl" aria-hidden="true">'+''.join(f'<figure style="--k:{k}"><img src="{use(p["hero"],thumb=True)[0]}" alt=""{" loading=lazy" if k else ""}><figcaption>{p["no"]} · {E(p["title"])} · {p["year"]}</figcaption></figure>' for k,p in enumerate(PROJECTS[:6]))+'</div>'
     li=''.join(f'<li><a href="{h}" data-bg="{b}"><span class="n">{n}</span><span class="w">{t}</span></a></li>' for n,t,h,c,b in items)
-    return f'''<section class="cv0"><canvas class="cad" aria-hidden="true"></canvas><div class="cvo" aria-hidden="true"></div><div class="ifr" aria-hidden="true">{"".join(f'<img src="{u}" alt="">' for u in INTRO)}</div><div class="bgs">{"".join(f'<div class="bg" style="background-image:url({b})"></div>' if b and b not in ('PUB','PRA','PRJ','ABT') else (PRJ_BG if b=='PRJ' else PRA_BG if b=='PRA' else ABT_BG if b=='ABT' else '<div class="bg grid"></div>' if b!='PUB' else PUB_BG) for k,(*_,b) in enumerate(items))}</div>
+    return f'''<section class="cv0">{CRL}<div class="cvo" aria-hidden="true"></div><div class="ifr" aria-hidden="true">{"".join(f'<img src="{u}" alt="">' for u in INTRO)}</div><div class="bgs">{"".join(f'<div class="bg" style="background-image:url({b})"></div>' if b and b not in ('PUB','PRA','PRJ','ABT') else (PRJ_BG if b=='PRJ' else PRA_BG if b=='PRA' else ABT_BG if b=='ABT' else '<div class="bg grid"></div>' if b!='PUB' else PUB_BG) for k,(*_,b) in enumerate(items))}</div>
 <div class="cvh"><p>Portfolio 2021–2026</p><h1>{SITE["name_ko"]}<span>{SITE["name_en"]}</span></h1></div>
-<ol class="cvm">{li}</ol><p class="cvf"><a href="mailto:{SITE["email"]}">{SITE["email"]}</a><span class="cdr"></span><span>{SITE["school"]}</span></p></section><p class="iwd" aria-hidden="true"><span>Land</span><span>Material</span><span>Structure</span></p>'''
+<ol class="cvm">{li}</ol><p class="cvf"><a href="mailto:{SITE["email"]}">{SITE["email"]}</a><span class="cdr0"></span><span>{SITE["school"]}</span></p></section><p class="iwd" aria-hidden="true"><span>Land</span><span>Material</span><span>Structure</span></p>'''
 open(f'{OUT}/index.html', 'w').write(page(f'{SITE["name_ko"]} — Portfolio', cover(), '', dark='coverpg', on=''))
 
 # ---- projects / practice detail pages

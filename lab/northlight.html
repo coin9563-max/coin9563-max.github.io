@@ -310,6 +310,9 @@ function run(){stop();var S=lay();ps.forEach(function(p){p.classList.add('hung')
   scn.style.transition='transform 1.7s cubic-bezier(.45,.05,.25,1)';scn.style.transform='';var rp=bg.querySelector('.rope');rp.style.transition='opacity .8s .3s';rp.style.opacity='';ps.forEach(function(p,i){if(p!==hero){p.style.transition='opacity .6s '+(.45+i*.12)+'s';p.style.opacity='';}});});}
 var wason=false;new MutationObserver(function(){var on=bg.classList.contains('on');if(on===wason)return;wason=on;if(on){build();run();}else stop();}).observe(bg,{attributes:true,attributeFilter:['class']});
 addEventListener('resize',function(){if(built&&wason)lay();});})();
+// 표지 기본 배경: 대표 렌더 6장이 천천히 교차
+(function(){var f=document.querySelectorAll('.cv0 .crl figure');if(!f.length)return;var i=0,rm=matchMedia('(prefers-reduced-motion:reduce)').matches;f[0].classList.add('on');if(rm)return;
+setInterval(function(){if(document.hidden)return;var n=(i+1)%f.length,im=f[n].querySelector('img');if(im.loading==='lazy')im.loading='eager';f[i].classList.remove('on');f[n].classList.add('on');i=n;},7000);})();
 // 표지 Process 호버: 배경 그리드 위에 실험 도면(투라인 + 해치)이 칸에 맞춰 틱 단위로 생성됨
 (function(){var cv0=document.querySelector('.cv0');if(!cv0)return;var lk=document.querySelector('.cvm a[href$="process.html"]');if(!lk)return;
 var bgs=cv0.querySelectorAll('.bg'),bi=[].indexOf.call(document.querySelectorAll('.cvm a'),lk),bg=bgs[bi];if(!bg)return;
