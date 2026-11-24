@@ -517,35 +517,23 @@ pre.code.ask .f{color:var(--mute)}
 .cardpg header.top{background:var(--paper);backdrop-filter:none;color:var(--ink)}.cardpg header.top nav a{color:var(--pm)}.cardpg header.top nav a.on,.cardpg header.top nav a:hover{color:var(--ink)}.cardpg header.top .name span{color:var(--pm)}
 .cardpg main{padding:0}
 .cm{position:absolute;inset:14px;pointer-events:none;--c:var(--pm);background:linear-gradient(var(--c),var(--c)) 0 0/14px 1px,linear-gradient(var(--c),var(--c)) 0 0/1px 14px,linear-gradient(var(--c),var(--c)) 100% 0/14px 1px,linear-gradient(var(--c),var(--c)) 100% 0/1px 14px,linear-gradient(var(--c),var(--c)) 0 100%/14px 1px,linear-gradient(var(--c),var(--c)) 0 100%/1px 14px,linear-gradient(var(--c),var(--c)) 100% 100%/14px 1px,linear-gradient(var(--c),var(--c)) 100% 100%/1px 14px;background-repeat:no-repeat;opacity:.7}
-.bc{height:calc(100svh - 64px);min-height:520px;perspective:2200px;background:var(--bg)}
-.bcf{position:relative;height:100%;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.6,.05,.25,1);cursor:pointer;outline:none}
-.bcf.flip{transform:rotateY(180deg)}
-.bcs{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--paper);color:var(--ink);padding:clamp(32px,6vw,88px) clamp(28px,6vw,96px);display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 1fr auto;gap:20px}
-.bcs.back{transform:rotateY(180deg);grid-template-columns:1fr;grid-template-rows:auto;align-content:center;background:#e9e6dd}
+.bc{min-height:calc(100svh - 64px);background:var(--paper);display:flex}
+.bcs{position:relative;flex:1;color:var(--ink);padding:clamp(40px,5.5vw,84px) clamp(28px,6vw,96px);display:grid;grid-template-columns:5fr 6fr;gap:clamp(32px,6vw,110px)}
+.bcs .bl{display:flex;flex-direction:column;position:relative}
 .bcs .t1{font:11px var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--pm)}
-.bcs .t2{text-align:right;font-size:14px;line-height:1.6;color:#4a4740}
-.bcs h1{grid-column:1/-1;align-self:center;font-size:clamp(72px,14vw,220px);font-weight:600;letter-spacing:-.05em;line-height:.9}
-.bcs h1 span{display:block;font-size:.2em;font-weight:400;letter-spacing:-.01em;color:#5d5951;margin:.6em 0 0 .3em}
-.bcs .seal{position:absolute;right:clamp(28px,6vw,96px);top:46%;width:64px;height:64px;border:2px solid #c8462e;color:#c8462e;display:grid;place-items:center;font:600 34px 'Noto Serif KR',serif;font-style:normal;border-radius:4px;transform:rotate(-4deg);opacity:.85}
-.bcs .ct{display:grid;grid-template-columns:auto 1fr;gap:2px 14px;font:13px var(--mono);align-self:end}.bcs .ct dt{color:var(--pm)}
-.bcs .sz{align-self:end;justify-self:end;font:10px var(--mono);letter-spacing:.12em;color:var(--pm)}
-.bcs.back .lead{font-size:clamp(20px,2.4vw,32px);line-height:1.6;max-width:30em;letter-spacing:-.01em}
-.bcs.back .int{font-size:15px;color:#4a4740}.bcs.back .int b{display:block;font:11px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--pm);font-weight:400;margin-bottom:6px}
-.bcs.back .sz{justify-self:start}
-.bcf>.cm{transform:translateZ(1px)}
-.flyin .bcs.front>*{animation:bcin .7s .05s both}@keyframes bcin{from{opacity:0;transform:translateY(10px)}}
-.bcg{max-width:1240px;margin:0 auto;padding:12vh clamp(16px,4vw,48px) 16vh;display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(18px,3vw,40px);align-items:start}
-.bct{position:relative;background:var(--paper);color:var(--ink);aspect-ratio:9/5;padding:clamp(22px,2.6vw,36px);display:flex;flex-direction:column;box-shadow:0 1px 0 #0000000d,0 24px 50px -24px #000c;transition:transform .4s}
-.bct:hover{transform:translateY(-4px) rotate(-.4deg)}
-.bct.tall{grid-row:span 2;aspect-ratio:auto;align-self:stretch}
-.bct header{display:flex;justify-content:space-between;gap:12px;font:10px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--pm);padding-bottom:22px}
-.bct .bci{font-size:14px;line-height:1.55}.bct table{border-collapse:collapse;width:100%}.bct td{padding:6px 0;vertical-align:top;border-top:1px solid #d9d5cc}.bct tr:first-child td{border-top:0}
-.bct td:first-child{font:12px var(--mono);color:var(--pm);width:36%;padding-right:12px}.bct td .r{color:var(--pm)}.bct a{color:inherit}
-.bct dl{display:grid;grid-template-columns:28px 1fr;gap:4px 10px;font:14px var(--mono)}.bct dt{color:var(--pm)}
-.bct.ph{padding:0;overflow:hidden}.bct.ph img{width:100%;height:100%;object-fit:cover;filter:grayscale(.3)}.bct.ph span{position:absolute;left:22px;bottom:18px;font:10px var(--mono);letter-spacing:.12em;color:#fff;text-shadow:0 1px 4px #000}
-.bct.ph .cm{--c:#fff}
+.bcs h1{font-size:clamp(64px,9vw,150px);font-weight:600;letter-spacing:-.05em;line-height:.9;margin-top:auto}
+.bcs h1 span{display:block;font-size:.22em;font-weight:400;letter-spacing:-.01em;color:#5d5951;margin:.5em 0 0 .25em}
+.bcs .seal{position:absolute;right:0;top:0;width:58px;height:58px;border:2px solid #c8462e;color:#c8462e;display:grid;place-items:center;font:600 30px 'Noto Serif KR',serif;font-style:normal;border-radius:4px;transform:rotate(-4deg);opacity:.85}
+.bcs .lead{font-size:15px;line-height:1.75;color:#3d3a34;max-width:30em;margin:28px 0 auto}
+.bcs .ct{display:grid;grid-template-columns:22px 1fr;gap:3px 12px;font:13px var(--mono);margin-top:32px}.bcs .ct dt{color:var(--pm)}.bcs .ct a{color:inherit}
+.bcs .br{display:flex;flex-direction:column;justify-content:center;gap:18px;font-size:13px;line-height:1.5}
+.bcs .br h3{font:10px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--pm);font-weight:400;padding-bottom:6px;margin-bottom:4px;border-bottom:1px solid #d6d2c8}
+.bcs .br p{display:grid;grid-template-columns:118px 1fr;column-gap:14px;padding:2px 0}
+.bcs .br p span{font:11px var(--mono);color:var(--pm);padding-top:1px}.bcs .br p b{font-weight:500}.bcs .br p i{font-style:normal}.bcs .br p em{font-style:normal;color:var(--pm);font-size:12px}
+.bcs .sz{position:absolute;right:clamp(28px,6vw,96px);bottom:26px;font:10px var(--mono);letter-spacing:.12em;color:var(--pm)}
+.flyin .bcs>div{animation:bcin .7s .05s both}@keyframes bcin{from{opacity:0;transform:translateY(10px)}}
 .bfly{position:fixed;z-index:99;background:#f1efe8;transition:all .65s cubic-bezier(.7,0,.2,1);box-shadow:0 30px 80px #000a}
-@media (max-width:860px){.bcg{grid-template-columns:1fr}.bct{aspect-ratio:auto;min-height:56vw}.bct.tall{grid-row:auto}.bcs{grid-template-columns:1fr}.bcs .t2{text-align:left}.bcs .seal{top:auto;bottom:42%;width:48px;height:48px;font-size:26px}}
+@media (max-width:860px){.bcs{grid-template-columns:1fr;padding:48px 24px 64px}.bcs h1{margin-top:40px}.bcs .seal{top:100px;bottom:auto;width:48px;height:48px;font-size:24px}.bcs .br p{grid-template-columns:100px 1fr;column-gap:10px}.bcs .br p span{font-size:10px}}
 .acard .lio{display:none}
 .acard .dmo{margin-left:auto;background:none;border:0;padding:0;font:11px var(--mono);color:var(--mute);cursor:pointer;display:flex;align-items:center;gap:6px}.acard .dmo:hover{color:#e6e3da}
 .acard .dmo i{font-style:normal}.acard[data-mode=auto] .dmo i{width:6px;height:6px;border-radius:50%;background:#e0a15a;animation:dmo 1.4s ease-in-out infinite}
@@ -775,26 +763,18 @@ def tbl(rows):
     return '<table>' + ''.join(f'<tr><td>{E(a)}</td><td>{nm(b)}' + (f' <span class="r">· {E(c)}</span>' if c else '') + '</td></tr>' for a, b, c in rows) + '</table>'
 LINKS={'D5 Render Student Ambassador':'https://www.d5render.com/ko/d5-campus-ambassador'}
 lead = f'<p class="lead">{E(A["intro"])}</p>' if A.get('intro') else ''
-src, w, h = use(405)
-def bc_tile(no, label, inner, extra='', idattr=''):
-    return f'<article class="bct{extra}"{idattr}><header><span>{no} / {label}</span><span>{SITE["name_ko"]} {SITE["name_en"]}</span></header><div class="bci">{inner}</div><i class="cm" aria-hidden="true"></i></article>'
-tiles = ''.join([
-  bc_tile('01','Contact',f'<dl><dt>E</dt><dd><a href="mailto:{SITE["email"]}">{SITE["email"]}</a></dd><dt>T</dt><dd><a href="tel:{SITE["phone"].replace("-","")}">{SITE["phone"]}</a></dd><dt>W</dt><dd><a href="index.html">coin9563-max.github.io</a></dd><dt>A</dt><dd>{SITE["school"]}</dd></dl>',idattr=' id="contact"'),
-  bc_tile('02','Education',tbl(A["education"])),
-  bc_tile('03','Experience',tbl(A["experience"])),
-  bc_tile('04','Awards &amp; Activities',tbl(A["activities"])),
-  bc_tile('05','Skills','<table>'+"".join(f"<tr><td>{E(a)}</td><td>{E(b)}</td></tr>" for a,b in A["skills"])+'</table>'),
-  f'<article class="bct ph"><img src="{src}" width="{w}" height="{h}" alt="D5 Render 공개 강연" loading="lazy"><i class="cm" aria-hidden="true"></i><span>D5 Render Student Ambassador · 공개 강연</span></article>',
-])
-body = f'''<section class="bc" aria-label="명함"><div class="bcf" tabindex="0" role="button" aria-label="명함 뒤집기">
-<div class="bcs front"><p class="t1">Portfolio 2021–2026</p><p class="t2">Architectural Designer<br>{SITE["school"]}</p>
+def bc_sec(label, rows):
+    return f'<section><h3>{label}</h3>' + ''.join(f'<p><span>{E(a)}</span><i><b>{E(b)}</b>' + (f' <em>· {E(c)}</em>' if c else '') + '</i></p>' for a, b, c in rows) + '</section>'
+info = (bc_sec('Education', A['education']) + bc_sec('Experience', A['experience']) + bc_sec('Awards &amp; Activities', A['activities'])
+        + bc_sec('Skills', [(a, b, '') for a, b in A['skills']]) + bc_sec('Interests', [('', A.get('interests', ''), '')]))
+body = f'''<section class="bc" aria-label="명함"><div class="bcs">
+<div class="bl"><p class="t1">Portfolio 2021–2026 · Architectural Designer</p>
 <h1>{SITE["name_ko"]}<span>{SITE["name_en"]}</span></h1><i class="seal" aria-hidden="true">韓</i>
-<dl class="ct"><dt>E</dt><dd>{SITE["email"]}</dd><dt>T</dt><dd>{SITE["phone"]}</dd><dt>W</dt><dd>coin9563-max.github.io</dd></dl><p class="sz">90 × 50 mm · 눌러서 뒤집기</p></div>
-<div class="bcs back"><p class="t1">About</p><p class="lead">{E(A.get("intro",""))}</p><p class="int"><b>Areas of Interest</b>{E(A.get("interests",""))}</p><p class="sz">↓ 아래로 이력 보기</p></div>
+<p class="lead">{E(A.get("intro",""))}</p>
+<dl class="ct" id="contact"><dt>E</dt><dd><a href="mailto:{SITE["email"]}">{SITE["email"]}</a></dd><dt>T</dt><dd><a href="tel:{SITE["phone"].replace("-","")}">{SITE["phone"]}</a></dd><dt>W</dt><dd><a href="index.html">coin9563-max.github.io</a></dd><dt>A</dt><dd>{SITE["school"]}</dd></dl></div>
+<div class="br">{info}<p class="sz">90 × 50 mm</p></div>
 <i class="cm" aria-hidden="true"></i></div></section>
-<section class="bcg">{tiles}</section>
-<script>(function(){{var f=document.querySelector('.bcf');function t(){{f.classList.toggle('flip');}}f.addEventListener('click',function(e){{if(e.target.closest('a'))return;t();}});f.addEventListener('keydown',function(e){{if(e.key==='Enter'||e.key===' '){{e.preventDefault();t();}}}});
-try{{if(sessionStorage.getItem('bcfly')){{sessionStorage.removeItem('bcfly');document.body.classList.add('flyin');}}}}catch(x){{}}}})();</script>'''
+<script>try{{if(sessionStorage.getItem('bcfly')){{sessionStorage.removeItem('bcfly');document.body.classList.add('flyin');}}}}catch(x){{}}</script>'''
 open(f'{OUT}/about.html', 'w').write(page(f'About — {SITE["name_ko"]}', body, '', dark='cardpg', on='a', desc=A.get('intro','')))
 print('ok', len(os.listdir(OUT + '/img')), 'images')
 
