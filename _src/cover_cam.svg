@@ -1,0 +1,18 @@
+<svg class="camsvg" viewBox="0 0 320 260" aria-hidden="true"><defs><filter id="wob"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2.4"/></filter></defs>
+<g filter="url(#wob)" fill="none" stroke="#ece8de" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+<path class="sd" d="M72 122 L44 132 Q31 137 32 150 L37 214 Q39 228 53 230 L72 230"/>
+<path d="M72 122 L230 113 Q245 112 246 127 L251 222 Q252 238 236 238 L86 242 Q71 242 70 228 Z" fill="#141513"/>
+<path d="M88 130 L226 123 Q233 123 233 130 L235 186 L93 192 Q86 192 86 185 Z"/>
+<path d="M60 58 L80 42 M52 100 L52 64 Q52 56 60 56" />
+<path d="M80 42 L230 31 Q241 31 241 42 L243 92 Q243 98 236 98 L86 104 Q79 104 79 97 Z" fill="#141513"/>
+<path d="M86 104 L95 121 M236 98 L231 113 M52 100 L80 104"/>
+<path d="M98 52 L178 47 L180 82 L100 87 Z"/>
+<path d="M104 60 L174 56 L175 76 L105 80 Z" stroke-width="1.4"/>
+<path d="M190 47 L191 80 M198 46 L199 79 M206 46 L207 79 M214 45 L215 78 M222 45 L223 78" stroke-width="1.5"/>
+<circle cx="152" cy="160" r="27" fill="#141513"/><circle cx="152" cy="160" r="19"/><path d="M140 150 Q146 143 156 143 M138 158 Q139 153 142 150" stroke-width="1.4"/>
+<path d="M196 134 L220 133 L221 154 L197 155 Z"/><path d="M201 139 L216 138 L216 150 L202 151 Z" stroke-width="1.3"/><path d="M203 166 L213 166 L213 176 L203 176 Z" stroke-width="1.5"/>
+<path d="M98 178 L132 177 M100 183 L124 182" stroke-width="1.3"/><path d="M102 171 l3 -4 l3 4 M118 170 l2 4 l2 -4" stroke-width="1.1"/>
+<path d="M100 206 L236 200 L236 209 L100 215 Z" stroke-width="1.8"/>
+<path d="M58 140 L60 150 Q61 156 67 156 L72 156 L71 140 Z" stroke-width="1.6"/>
+<path d="M44 132 Q30 175 40 214" stroke-width="1.2" opacity=".6"/>
+</g></svg>
