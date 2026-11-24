@@ -402,6 +402,7 @@ pre.code.ask .f{color:var(--mute)}
 .bgs{position:absolute;inset:0;z-index:0}
 .bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity .6s ease,transform 1.6s ease;transform:scale(1.04);filter:brightness(.42) saturate(.85)}
 .bg.on{opacity:1;transform:none}
+.abtg canvas{position:absolute;inset:0}
 .bg.grid{background-color:#121311;background-image:linear-gradient(#ffffff10 1px,transparent 1px),linear-gradient(90deg,#ffffff10 1px,transparent 1px);background-size:48px 48px;filter:none}
 .cvh,.cvm,.cvf{position:relative;z-index:1}
 .cvh{align-self:end}
