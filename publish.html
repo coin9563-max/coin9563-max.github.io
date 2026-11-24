@@ -9,7 +9,7 @@
 <meta property="og:image" content="https://coin9563-max.github.io/og-card.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 </head><body class="pubpg">
 <header class="top"><a class="name" href="index.html">한승현<span>Seunghyun Han</span></a>
-<nav><a href="projects.html" class="">Projects</a><a href="publish.html" class="on">Publish</a><a href="practice.html" class="">Practice</a><a href="process.html" class="">Process</a><a href="about.html" class="">About</a></nav></header>
+<nav><a href="projects.html" class="">Projects</a><a href="publish.html" class="on">Publish</a><a href="practice.html" class="">Practice</a><a href="process.html" class="">Lab</a><a href="about.html" class="">About</a></nav></header>
 <main>
 <section class="shelfh"><p class="pk">02 — Publish</p><h1>Books</h1><p>졸업전시를 위해 만든 책 두 권과 학술대회 논문 한 편. 표지를 누르면 실제 책처럼 넘겨 볼 수 있다.</p></section><section class="shelf"><a class="bk" href="publish/from-city-to-earth.html"><div class="obj"><img src="img/t_2069.jpg" width="988" height="1400" alt="FROM CITY TO EARTH"><i></i></div>
 <div class="meta"><span>졸업전시 책자 · 2026</span><b>FROM CITY TO EARTH</b><em>MOSSCAPE OREUM 졸업전시 책자</em><u>펼쳐 읽기 →</u></div></a><a class="bk" href="publish/unwashed.html"><div class="obj"><img src="img/t_2071.jpg" width="988" height="1400" alt="UNWASHED"><i></i></div>
@@ -248,9 +248,14 @@ function loop(now){requestAnimationFrame(loop);if(now-last<30)return;last=now;
  if(auto||now-at>6000){ax=W*(.5+.38*Math.sin(now/5200))+W*.08*Math.sin(now/1300);ay=H*(.32+.24*Math.sin(now/3700+1));if(!document.body.classList.contains('cvi'))pick(ax,ay,now);}else if(mx>=0)pick(mx,my,now);
  draw(now);}
 addEventListener('resize',function(){size();});size();if(still){draw(performance.now());}else requestAnimationFrame(loop);})();
-(function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a');
-a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
-m.addEventListener('mouseleave',function(){bg.forEach(function(b){b.classList.remove('on')});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});});})();
+(function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a'),TCH=matchMedia('(hover:none)').matches;
+if(!TCH)a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
+function off(){bg.forEach(function(b){b.classList.remove('on')});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});}
+if(!TCH)m.addEventListener('mouseleave',off);
+// 터치 기기: 첫 탭 = 배경 효과 미리보기, 같은 항목을 한 번 더 누르면 이동
+if(TCH){m.classList.add('tch');
+ var armed=null;m.addEventListener('click',function(e){var x=e.target.closest('a');if(!x)return;if(armed===x)return;armed=x;e.preventDefault();e.stopPropagation();var i=[].indexOf.call(a,x);bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});},true);
+ document.addEventListener('click',function(e){if(!m.contains(e.target)){armed=null;off();}});}})();
 (function(){var pv=document.querySelector('.lpv');if(!pv)return;document.querySelectorAll('.lr.f').forEach(function(r){
 r.addEventListener('mouseenter',function(){pv.src=r.dataset.img;pv.classList.add('on');});r.addEventListener('mouseleave',function(){pv.classList.remove('on');});
 r.addEventListener('mousemove',function(e){pv.style.transform='translate('+(e.clientX+28)+'px,'+(e.clientY-120)+'px)';});});})();

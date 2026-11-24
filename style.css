@@ -430,7 +430,7 @@ pre.code.ask .f{color:var(--mute)}
 .abtg .mlb{position:absolute;left:30px;top:-96px;display:grid;gap:3px;padding-left:12px;border-left:1px solid #e0603a;white-space:nowrap;opacity:0;transform:translateX(-6px)}
 .abtg.on .mlb{opacity:1;transform:none;transition:opacity .5s 3s,transform .5s 3s}
 .mlb{text-shadow:0 0 4px #121311,0 0 8px #121311,0 0 12px #121311}.mlb b{font:600 17px/1.2 'Wanted Sans','Pretendard',system-ui,sans-serif;color:#ece8de;letter-spacing:0}.mlb span{font:13px/1.3 'Wanted Sans','Pretendard',system-ui,sans-serif;color:#cfc9bc;letter-spacing:0}.mlb em{font:normal 11px 'JetBrains Mono',ui-monospace,monospace;color:#e0603a;letter-spacing:.04em}
-@media (max-width:860px){.abtg .mplane{--w:170vw;left:calc(48% - var(--fx) * var(--w))}}
+@media (max-width:860px){.abtg .mplane{--w:150vw;left:calc(30% - var(--fx) * var(--w))}.mlb b{font-size:14px}.mlb span{font-size:11px}.mlb em{font-size:10px}}
 .bg.grid{background-color:#121311;background-image:linear-gradient(#ffffff10 1px,transparent 1px),linear-gradient(90deg,#ffffff10 1px,transparent 1px);background-size:48px 48px;filter:none}
 .cvh,.cvm,.cvf{position:relative;z-index:1}
 .cvh{align-self:end}
@@ -441,6 +441,7 @@ pre.code.ask .f{color:var(--mute)}
 .cvm{list-style:none;align-self:end;justify-self:end;width:min(100%,520px)}
 .cvm a{display:grid;grid-template-columns:40px 1fr auto;align-items:baseline;gap:12px;padding:10px 0;border-top:1px solid #ffffff22;color:inherit;text-decoration:none;transition:opacity .3s,padding .3s}
 .cvm li:last-child a{border-bottom:1px solid #ffffff22}
+.cvm.tch a{position:relative}.cv0:has(.cvm.tch.hov) .cvh{opacity:.12;transition:opacity .4s}.cvm.tch a.on::after{content:'한 번 더 누르면 열려요 →';position:absolute;right:0;bottom:12px;font:12px 'Wanted Sans','Pretendard',system-ui,sans-serif;color:#e0603a;letter-spacing:0;text-transform:none}
 .cvm .n{font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
 .cvm .w{font-size:clamp(30px,3.6vw,54px);font-weight:500;letter-spacing:-.03em;line-height:1.1}
 .cvm .c{font-size:13px;color:var(--mute)}

@@ -9,13 +9,13 @@
 <meta property="og:image" content="https://coin9563-max.github.io/img/t_ra_07.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 </head><body class="">
 <header class="top"><a class="name" href="../index.html">한승현<span>Seunghyun Han</span></a>
-<nav><a href="../projects.html" class="">Projects</a><a href="../publish.html" class="">Publish</a><a href="../practice.html" class="on">Practice</a><a href="../process.html" class="">Process</a><a href="../about.html" class="">About</a></nav></header>
+<nav><a href="../projects.html" class="">Projects</a><a href="../publish.html" class="">Publish</a><a href="../practice.html" class="on">Practice</a><a href="../process.html" class="">Lab</a><a href="../about.html" class="">About</a></nav></header>
 <main>
-<div class="hero"><img class="" src="../img/ra_07.jpg" width="2400" height="1598" loading="lazy" decoding="async" alt="문경시 체육시설 설계공모"></div>
+<div class="hero"><img class="" src="../img/ra_07.jpg" srcset="../img/s720_ra_07.jpg 720w, ../img/s1100_ra_07.jpg 1100w, ../img/ra_07.jpg 2400w" sizes="(max-width:860px) 70vw, min(92vw,1400px)" width="2400" height="1598" loading="lazy" decoding="async" alt="문경시 체육시설 설계공모"></div>
 <section class="phead"><div><div class="no">이진미 교수 RA</div><h1>문경시 체육시설 설계공모</h1><dl><dt>Lab</dt><dd>이진미 교수 연구실 (RA)</dd><dt>Year</dt><dd>2025</dd><dt>Site</dt><dd>경북 문경시</dd><dt>Role</dt><dd>RA — 모델링 · 렌더링</dd></dl></div>
-<div><p class="st">목재 매스 안의 렌더링</p><div class="body"><p>이진미 교수 연구실 RA로 참여한 문경시 설계공모 작업. 대지와 주변 맥락 속에서 목재 매스를 여러 시점으로 렌더링했다.</p></div></div></section><figure class="blk "><img class="" src="../img/ra_06.jpg" width="2400" height="1598" loading="lazy" decoding="async" alt=""></figure>
-<figure class="blk"><div class="row " style="grid-template-columns:1.502fr 1.502fr"><div><img class="" src="../img/ra_08.jpg" width="2400" height="1598" loading="lazy" decoding="async" alt=""></div><div><img class="" src="../img/ra_09.jpg" width="2400" height="1598" loading="lazy" decoding="async" alt=""></div></div></figure>
-<figure class="blk"><div class="row " style="grid-template-columns:1.502fr 1.502fr"><div><img class="" src="../img/ra_10.jpg" width="2400" height="1598" loading="lazy" decoding="async" alt=""></div><div><img class="" src="../img/ra_11.jpg" width="2400" height="1598" loading="lazy" decoding="async" alt=""></div></div></figure><nav class="pnav"><a href="mvsf-neom.html"><span>← 이전</span>MVSF in NEOM</a><a href="d5-seminar.html"><span>다음 →</span>D5 Render 세미나</a></nav>
+<div><p class="st">목재 매스 안의 렌더링</p><div class="body"><p>이진미 교수 연구실 RA로 참여한 문경시 설계공모 작업. 대지와 주변 맥락 속에서 목재 매스를 여러 시점으로 렌더링했다.</p></div></div></section><figure class="blk "><img class="" src="../img/ra_06.jpg" srcset="../img/s720_ra_06.jpg 720w, ../img/s1100_ra_06.jpg 1100w, ../img/ra_06.jpg 2400w" sizes="(max-width:860px) 70vw, min(92vw,1400px)" width="2400" height="1598" loading="lazy" decoding="async" alt=""></figure>
+<figure class="blk"><div class="row " style="grid-template-columns:1.502fr 1.502fr"><div><img class="" src="../img/ra_08.jpg" srcset="../img/s720_ra_08.jpg 720w, ../img/s1100_ra_08.jpg 1100w, ../img/ra_08.jpg 2400w" sizes="(max-width:860px) 50vw, 46vw" width="2400" height="1598" loading="lazy" decoding="async" alt=""></div><div><img class="" src="../img/ra_09.jpg" srcset="../img/s720_ra_09.jpg 720w, ../img/s1100_ra_09.jpg 1100w, ../img/ra_09.jpg 2400w" sizes="(max-width:860px) 50vw, 46vw" width="2400" height="1598" loading="lazy" decoding="async" alt=""></div></div></figure>
+<figure class="blk"><div class="row " style="grid-template-columns:1.502fr 1.502fr"><div><img class="" src="../img/ra_10.jpg" srcset="../img/s720_ra_10.jpg 720w, ../img/s1100_ra_10.jpg 1100w, ../img/ra_10.jpg 2400w" sizes="(max-width:860px) 50vw, 46vw" width="2400" height="1598" loading="lazy" decoding="async" alt=""></div><div><img class="" src="../img/ra_11.jpg" srcset="../img/s720_ra_11.jpg 720w, ../img/s1100_ra_11.jpg 1100w, ../img/ra_11.jpg 2400w" sizes="(max-width:860px) 50vw, 46vw" width="2400" height="1598" loading="lazy" decoding="async" alt=""></div></div></figure><nav class="pnav"><a href="mvsf-neom.html"><span>← 이전</span>MVSF in NEOM</a><a href="d5-seminar.html"><span>다음 →</span>D5 Render 세미나</a></nav>
 <footer>© 2026 한승현 Seunghyun Han</footer>
 </main>
 <div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>
@@ -249,9 +249,14 @@ function loop(now){requestAnimationFrame(loop);if(now-last<30)return;last=now;
  if(auto||now-at>6000){ax=W*(.5+.38*Math.sin(now/5200))+W*.08*Math.sin(now/1300);ay=H*(.32+.24*Math.sin(now/3700+1));if(!document.body.classList.contains('cvi'))pick(ax,ay,now);}else if(mx>=0)pick(mx,my,now);
  draw(now);}
 addEventListener('resize',function(){size();});size();if(still){draw(performance.now());}else requestAnimationFrame(loop);})();
-(function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a');
-a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
-m.addEventListener('mouseleave',function(){bg.forEach(function(b){b.classList.remove('on')});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});});})();
+(function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a'),TCH=matchMedia('(hover:none)').matches;
+if(!TCH)a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
+function off(){bg.forEach(function(b){b.classList.remove('on')});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});}
+if(!TCH)m.addEventListener('mouseleave',off);
+// 터치 기기: 첫 탭 = 배경 효과 미리보기, 같은 항목을 한 번 더 누르면 이동
+if(TCH){m.classList.add('tch');
+ var armed=null;m.addEventListener('click',function(e){var x=e.target.closest('a');if(!x)return;if(armed===x)return;armed=x;e.preventDefault();e.stopPropagation();var i=[].indexOf.call(a,x);bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});},true);
+ document.addEventListener('click',function(e){if(!m.contains(e.target)){armed=null;off();}});}})();
 (function(){var pv=document.querySelector('.lpv');if(!pv)return;document.querySelectorAll('.lr.f').forEach(function(r){
 r.addEventListener('mouseenter',function(){pv.src=r.dataset.img;pv.classList.add('on');});r.addEventListener('mouseleave',function(){pv.classList.remove('on');});
 r.addEventListener('mousemove',function(e){pv.style.transform='translate('+(e.clientX+28)+'px,'+(e.clientY-120)+'px)';});});})();

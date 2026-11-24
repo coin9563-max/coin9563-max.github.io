@@ -9,9 +9,9 @@
 <meta property="og:image" content="https://coin9563-max.github.io/og-card.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 </head><body class="dark labpg">
 <header class="top"><a class="name" href="../index.html">한승현<span>Seunghyun Han</span></a>
-<nav><a href="../projects.html" class="">Projects</a><a href="../publish.html" class="">Publish</a><a href="../practice.html" class="">Practice</a><a href="../process.html" class="on">Process</a><a href="../about.html" class="">About</a></nav></header>
+<nav><a href="../projects.html" class="">Projects</a><a href="../publish.html" class="">Publish</a><a href="../practice.html" class="">Practice</a><a href="../process.html" class="on">Lab</a><a href="../about.html" class="">About</a></nav></header>
 <main>
-<section class="lab" id="lab-office"><div class="lh"><p class="k"><a href="../process.html">← AI와 설계하기</a> · LAB 09 · DAYLIGHT · ENERGY</p><h3>오피스 빛 · 열</h3><p>창을 키우면 안쪽까지 밝아지지만 일사로 냉방 피크가 오른다. 단면에서는 BRE 평균 주광률식으로 깊이별 주광률과 DF 2% 이상인 주광 영역을, 오른쪽에서는 서울 7월 맑은 날의 태양 위치로 창면 일사와 차양 그림자를 30분마다 구해 일사 · 전도 · 내부 발열 부하를 쌓는다. 오피스 평면 깊이와 입면 창 비율을 정할 때 쓰는 판단이다.</p></div><div class="app"></div></section><script>// 실험 앱 공통: 슬라이더 패널 만들기 + 임베드(모달) 모드
+<section class="lab" id="lab-office"><div class="lh"><p class="k"><a href="../process.html">← Lab</a> · LAB 09 · DAYLIGHT · ENERGY</p><h3>오피스 빛 · 열</h3><p>창을 키우면 안쪽까지 밝아지지만 일사로 냉방 피크가 오른다. 단면에서는 BRE 평균 주광률식으로 깊이별 주광률과 DF 2% 이상인 주광 영역을, 오른쪽에서는 서울 7월 맑은 날의 태양 위치로 창면 일사와 차양 그림자를 30분마다 구해 일사 · 전도 · 내부 발열 부하를 쌓는다. 오피스 평면 깊이와 입면 창 비율을 정할 때 쓰는 판단이다.</p></div><div class="app"></div></section><script>// 실험 앱 공통: 슬라이더 패널 만들기 + 임베드(모달) 모드
 (function(){
   if(/[?&]embed/.test(location.search)) document.documentElement.classList.add('embed');
   window.LabUI=function(box,ctl,onChange){
@@ -430,9 +430,14 @@ function loop(now){requestAnimationFrame(loop);if(now-last<30)return;last=now;
  if(auto||now-at>6000){ax=W*(.5+.38*Math.sin(now/5200))+W*.08*Math.sin(now/1300);ay=H*(.32+.24*Math.sin(now/3700+1));if(!document.body.classList.contains('cvi'))pick(ax,ay,now);}else if(mx>=0)pick(mx,my,now);
  draw(now);}
 addEventListener('resize',function(){size();});size();if(still){draw(performance.now());}else requestAnimationFrame(loop);})();
-(function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a');
-a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
-m.addEventListener('mouseleave',function(){bg.forEach(function(b){b.classList.remove('on')});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});});})();
+(function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a'),TCH=matchMedia('(hover:none)').matches;
+if(!TCH)a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
+function off(){bg.forEach(function(b){b.classList.remove('on')});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});}
+if(!TCH)m.addEventListener('mouseleave',off);
+// 터치 기기: 첫 탭 = 배경 효과 미리보기, 같은 항목을 한 번 더 누르면 이동
+if(TCH){m.classList.add('tch');
+ var armed=null;m.addEventListener('click',function(e){var x=e.target.closest('a');if(!x)return;if(armed===x)return;armed=x;e.preventDefault();e.stopPropagation();var i=[].indexOf.call(a,x);bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});},true);
+ document.addEventListener('click',function(e){if(!m.contains(e.target)){armed=null;off();}});}})();
 (function(){var pv=document.querySelector('.lpv');if(!pv)return;document.querySelectorAll('.lr.f').forEach(function(r){
 r.addEventListener('mouseenter',function(){pv.src=r.dataset.img;pv.classList.add('on');});r.addEventListener('mouseleave',function(){pv.classList.remove('on');});
 r.addEventListener('mousemove',function(e){pv.style.transform='translate('+(e.clientX+28)+'px,'+(e.clientY-120)+'px)';});});})();

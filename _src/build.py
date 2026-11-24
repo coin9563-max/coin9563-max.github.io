@@ -33,9 +33,21 @@ def use(i, thumb=False):
     w, h = Image.open(dst).size
     return f'img/{name}', w, h
 
-def pic(i, root, cls='', alt=''):
+def small(i, W):
+    # 모바일용 축소본 img/s{W}_{i}.jpg
+    name = f'{i}.jpg'; dst = f'{OUT}/img/s{W}_{name}'
+    if not os.path.exists(dst):
+        im = Image.open(f'{SRC}/{name}'); im.thumbnail((W, W * 3)); im.save(dst, quality=80, optimize=True, progressive=True)
+    return f'img/s{W}_{name}', Image.open(dst).size[0]
+
+def pic(i, root, cls='', alt='', sizes='(max-width:860px) 70vw, min(92vw,1400px)'):
     p, w, h = use(i)
-    return f'<img class="{cls}" src="{root}{p}" width="{w}" height="{h}" loading="lazy" decoding="async" alt="{E(alt)}">'
+    ss = []
+    for W in (720, 1100):
+        if w > W * 1.15:
+            sp, sw = small(i, W); ss.append(f'{root}{sp} {sw}w')
+    srcset = f' srcset="{", ".join(ss + [f"{root}{p} {w}w"])}" sizes="{sizes}"' if ss else ''
+    return f'<img class="{cls}" src="{root}{p}"{srcset} width="{w}" height="{h}" loading="lazy" decoding="async" alt="{E(alt)}">'
 
 CSS = r"""
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
@@ -469,7 +481,7 @@ pre.code.ask .f{color:var(--mute)}
 .abtg .mlb{position:absolute;left:30px;top:-96px;display:grid;gap:3px;padding-left:12px;border-left:1px solid #e0603a;white-space:nowrap;opacity:0;transform:translateX(-6px)}
 .abtg.on .mlb{opacity:1;transform:none;transition:opacity .5s 3s,transform .5s 3s}
 .mlb{text-shadow:0 0 4px #121311,0 0 8px #121311,0 0 12px #121311}.mlb b{font:600 17px/1.2 'Wanted Sans','Pretendard',system-ui,sans-serif;color:#ece8de;letter-spacing:0}.mlb span{font:13px/1.3 'Wanted Sans','Pretendard',system-ui,sans-serif;color:#cfc9bc;letter-spacing:0}.mlb em{font:normal 11px 'JetBrains Mono',ui-monospace,monospace;color:#e0603a;letter-spacing:.04em}
-@media (max-width:860px){.abtg .mplane{--w:170vw;left:calc(48% - var(--fx) * var(--w))}}
+@media (max-width:860px){.abtg .mplane{--w:150vw;left:calc(30% - var(--fx) * var(--w))}.mlb b{font-size:14px}.mlb span{font-size:11px}.mlb em{font-size:10px}}
 .bg.grid{background-color:#121311;background-image:linear-gradient(#ffffff10 1px,transparent 1px),linear-gradient(90deg,#ffffff10 1px,transparent 1px);background-size:48px 48px;filter:none}
 .cvh,.cvm,.cvf{position:relative;z-index:1}
 .cvh{align-self:end}
@@ -480,6 +492,7 @@ pre.code.ask .f{color:var(--mute)}
 .cvm{list-style:none;align-self:end;justify-self:end;width:min(100%,520px)}
 .cvm a{display:grid;grid-template-columns:40px 1fr auto;align-items:baseline;gap:12px;padding:10px 0;border-top:1px solid #ffffff22;color:inherit;text-decoration:none;transition:opacity .3s,padding .3s}
 .cvm li:last-child a{border-bottom:1px solid #ffffff22}
+.cvm.tch a{position:relative}.cv0:has(.cvm.tch.hov) .cvh{opacity:.12;transition:opacity .4s}.cvm.tch a.on::after{content:'한 번 더 누르면 열려요 →';position:absolute;right:0;bottom:12px;font:12px 'Wanted Sans','Pretendard',system-ui,sans-serif;color:#e0603a;letter-spacing:0;text-transform:none}
 .cvm .n{font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
 .cvm .w{font-size:clamp(30px,3.6vw,54px);font-weight:500;letter-spacing:-.03em;line-height:1.1}
 .cvm .c{font-size:13px;color:var(--mute)}
@@ -949,9 +962,14 @@ function loop(now){requestAnimationFrame(loop);if(now-last<30)return;last=now;
  if(auto||now-at>6000){ax=W*(.5+.38*Math.sin(now/5200))+W*.08*Math.sin(now/1300);ay=H*(.32+.24*Math.sin(now/3700+1));if(!document.body.classList.contains('cvi'))pick(ax,ay,now);}else if(mx>=0)pick(mx,my,now);
  draw(now);}
 addEventListener('resize',function(){size();});size();if(still){draw(performance.now());}else requestAnimationFrame(loop);})();
-(function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a');
-a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
-m.addEventListener('mouseleave',function(){bg.forEach(function(b){b.classList.remove('on')});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});});})();
+(function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a'),TCH=matchMedia('(hover:none)').matches;
+if(!TCH)a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
+function off(){bg.forEach(function(b){b.classList.remove('on')});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});}
+if(!TCH)m.addEventListener('mouseleave',off);
+// 터치 기기: 첫 탭 = 배경 효과 미리보기, 같은 항목을 한 번 더 누르면 이동
+if(TCH){m.classList.add('tch');
+ var armed=null;m.addEventListener('click',function(e){var x=e.target.closest('a');if(!x)return;if(armed===x)return;armed=x;e.preventDefault();e.stopPropagation();var i=[].indexOf.call(a,x);bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});},true);
+ document.addEventListener('click',function(e){if(!m.contains(e.target)){armed=null;off();}});}})();
 (function(){var pv=document.querySelector('.lpv');if(!pv)return;document.querySelectorAll('.lr.f').forEach(function(r){
 r.addEventListener('mouseenter',function(){pv.src=r.dataset.img;pv.classList.add('on');});r.addEventListener('mouseleave',function(){pv.classList.remove('on');});
 r.addEventListener('mousemove',function(e){pv.style.transform='translate('+(e.clientX+28)+'px,'+(e.clientY-120)+'px)';});});})();
@@ -981,7 +999,7 @@ def page(title, body, root, dark=False, on='', desc='', og='og-card.jpg'):
 <meta property="og:image" content="https://coin9563-max.github.io/{og}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 </head><body class="{dark if isinstance(dark, str) else ('dark' if dark else '')}">
 <header class="top"><a class="name" href="{root}index.html">{SITE['name_ko']}<span>{SITE['name_en']}</span></a>
-<nav><a href="{root}projects.html" class="{'on' if on=='w' else ''}">Projects</a><a href="{root}publish.html" class="{'on' if on=='b' else ''}">Publish</a><a href="{root}practice.html" class="{'on' if on=='r' else ''}">Practice</a><a href="{root}process.html" class="{'on' if on=='p' else ''}">Process</a><a href="{root}about.html" class="{'on' if on=='a' else ''}">About</a></nav></header>
+<nav><a href="{root}projects.html" class="{'on' if on=='w' else ''}">Projects</a><a href="{root}publish.html" class="{'on' if on=='b' else ''}">Publish</a><a href="{root}practice.html" class="{'on' if on=='r' else ''}">Practice</a><a href="{root}process.html" class="{'on' if on=='p' else ''}">Lab</a><a href="{root}about.html" class="{'on' if on=='a' else ''}">About</a></nav></header>
 <main>
 {body}
 <footer>© 2026 {SITE['name_ko']} {SITE['name_en']}</footer>
@@ -1009,7 +1027,7 @@ def block(b, root):
             tmpl = ' '.join(f'{r:.3f}fr' for r in rs)
         else:
             tmpl = f'repeat({cols},1fr)'
-        imgs = ''.join(f'<div>{pic(i, root)}</div>' for i in ids)
+        imgs = ''.join(f'<div>{pic(i, root, sizes="(max-width:860px) 50vw, 46vw")}</div>' for i in ids)
         cap = f'<figcaption>{E(b[2])}</figcaption>' if b[2] else ''
         return f'<figure class="blk"><div class="row {"g" if k=="grid" else ""}" style="grid-template-columns:{tmpl}">{imgs}</div>{cap}</figure>'
     if k == 'video':
@@ -1093,7 +1111,7 @@ def cover():
     items=[('01','Projects','projects.html',f'설계 작업 {len(PROJECTS)}','PRJ'),
            ('02','Publish','publish.html',f'책 {sum(1 for x in PUBLISH if not x.get("paper"))} · 논문 {sum(1 for x in PUBLISH if x.get("paper"))}','PUB'),
            ('03','Practice','practice.html',f'실무 · 활동 {len(PRACTICE)}','PRA'),
-           ('04','Process','process.html','AI와 설계하기',''),
+           ('04','Lab','process.html','설계 판단 도구',''),
            ('05','About','about.html','소개 · 연락처','ABT')]
     import json as _j, html as _h
     rows=[[i.get('year',''),i['title'],i.get('org',''),(i.get('role','') or '').split(' · ')[0]] for i in PRACTICE if not i.get('hide_in_list')]
@@ -1224,7 +1242,7 @@ LABS = {
 STEPT = {}
 def lab_page(k):
     L = LABS[k]; st = L['stage']
-    head = f'<section class="lab" id="lab-{k}"><div class="lh"><p class="k"><a href="../process.html">← AI와 설계하기</a> · LAB {L["no"]} · {L["cat"]}</p><h3>{E(L["t"])}</h3><p>{E(L["long"])}</p></div>'
+    head = f'<section class="lab" id="lab-{k}"><div class="lh"><p class="k"><a href="../process.html">← Lab</a> · LAB {L["no"]} · {L["cat"]}</p><h3>{E(L["t"])}</h3><p>{E(L["long"])}</p></div>'
     body = head + L.get('body', '<div class="app"></div>') + '</section>'
     js = open(os.path.join(SRC, 'lab_ui.js')).read() + open(os.path.join(SRC, L['js'])).read()
     open(f'{OUT}/lab/{k}.html', 'w').write(page(f'LAB {L["no"]} {L["t"]} — {SITE["name_ko"]}', body + f'<script>{js}</script>', '../', dark='dark labpg', on='p', desc=L['d']))
@@ -1237,7 +1255,7 @@ def process_page():
     cards = ''.join(f'''<article class="acard lab" id="lab-{k}"><header><b>{E(LABS[k]["en"])}</b><span>{E(LABS[k]["ko"])}</span><a href="lab/{k}.html" title="크게 열기 · 조절하기">↗</a></header><div class="app"></div></article>''' for k in CARDS)
     js = open(os.path.join(SRC, 'lab_ui.js')).read() + ''.join(open(os.path.join(SRC, LABS[k]['js'])).read() for k in CARDS)
     DEMO = "\n// 카드 자동 시연: 보이는 카드만 매개변수가 혼자 움직이고, 누르면 멈추고 직접 조절\n(function(){var still=matchMedia('(prefers-reduced-motion:reduce)').matches,vis=new Set(),cards=[].slice.call(document.querySelectorAll('.acard.lab'));\nvar io=new IntersectionObserver(function(es){es.forEach(function(e){e.isIntersecting?vis.add(e.target):vis.delete(e.target);});},{rootMargin:'80px'});\ncards.forEach(function(c){io.observe(c);var app=c.querySelector('.app'),h=c.querySelector('header'),b=document.createElement('button');b.type='button';b.className='dmo';h.insertBefore(b,h.querySelector('a'));c._t=0;\n function set(m){c.dataset.mode=m;c.classList.toggle('live',m==='live');b.innerHTML=m==='live'?'<i>▶</i> 자동 재생':'<i></i> 자동 재생 중 · 눌러서 직접 조절';if(m==='live'&&app.demo)app.demo.stop();}\n set(still||!app.demo?'live':'auto');\n app.addEventListener('pointerdown',function(){if(c.dataset.mode==='auto')set('live');},true);\n b.addEventListener('click',function(){set(c.dataset.mode==='live'?'auto':'live');});});\nif(still)return;var last=0;function loop(ts){requestAnimationFrame(loop);var dt=ts-last;if(dt<40)return;last=ts;dt=Math.min(dt,100)/1000;\n cards.forEach(function(c){var a=c.querySelector('.app');if(c.dataset.mode!=='auto'||!vis.has(c)||!a.demo)return;c._t+=dt;a.demo.step(c._t);});}\nrequestAnimationFrame(loop);})();\n"
-    body = f'''<section class="phd"><p class="k">LAB — 설계를 스킬로</p><h1>{E(P["title"])}<small>{E(P["sub"])}</small></h1><p class="lead">{E(P["lead"])}</p></section>
+    body = f'''<section class="phd"><p class="k">04 — LAB</p><h1>{E(P["title"])}<small>{E(P["sub"])}</small></h1><p class="lead">{E(P["lead"])}</p></section>
 <section class="agrid">{cards}</section><script>{js}{DEMO}</script>'''
-    open(f'{OUT}/process.html', 'w').write(page(f'Process — {SITE["name_ko"]}', body, '', dark='dark labpg', on='p', desc=P['lead']))
+    open(f'{OUT}/process.html', 'w').write(page(f'Lab — {SITE["name_ko"]}', body, '', dark='dark labpg', on='p', desc=P['lead']))
 process_page()
