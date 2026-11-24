@@ -202,19 +202,19 @@ window.LabIO=function(app,o){
 <div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>
 <script>
 // 어디서든 About: 올리면 쌓인 명함 더미가 화면 가운데로 탁 올라오고, 누르면 맨 윗장이 떠올라 화면 가득 펼쳐진 뒤 이동
-(function(){var rm=matchMedia('(prefers-reduced-motion:reduce)').matches,S=null,busy=false;
+(function(){var rm=matchMedia('(prefers-reduced-motion:reduce)').matches,TC=matchMedia('(hover:none)').matches,S=null,busy=false;
 function el(){if(S)return S;var n=document.querySelector('header.top .name'),nm=n?n.innerHTML.replace(/^←\s*/,''):'',ly='';for(var i=34;i>=1;i--)ly+='<i class="ly" style="--z:'+i+'"></i>';
  S=document.createElement('div');S.className='bst';S.setAttribute('aria-hidden','true');
  S.innerHTML='<div class="bsk">'+ly+'<div class="bpk"><p class="k1">'+nm+'</p><p class="k2">Architectural Designer</p><div class="km"><span>S · H</span><svg class="kh" viewBox="0 0 300 68" aria-hidden="true"><polygon points="50.0,14.0 96.0,8.0 100.0,54.0 54.0,60.0" fill="#3b170e"/><polyline points="50.0,14.0 96.0,8.0 100.0,54.0" fill="none" stroke="#260d07" stroke-width="5" opacity=".7"/><polyline points="100.0,54.0 54.0,60.0 50.0,14.0" fill="none" stroke="#c97a5e" stroke-width="1.2"/><polygon points="128.0,10.0 174.0,14.0 170.0,58.0 124.0,54.0" fill="#3b170e"/><polyline points="128.0,10.0 174.0,14.0 170.0,58.0" fill="none" stroke="#260d07" stroke-width="5" opacity=".7"/><polyline points="170.0,58.0 124.0,54.0 128.0,10.0" fill="none" stroke="#c97a5e" stroke-width="1.2"/><polygon points="202.0,8.0 250.0,12.0 246.0,60.0 206.0,56.0" fill="#3b170e"/><polyline points="202.0,8.0 250.0,12.0 246.0,60.0" fill="none" stroke="#260d07" stroke-width="5" opacity=".7"/><polyline points="246.0,60.0 206.0,56.0 202.0,8.0" fill="none" stroke="#c97a5e" stroke-width="1.2"/></svg><span>2 0 2 6</span></div><p class="k5">james9563@naver.com</p><p class="k6">010-5619-4050 · coin9563-max.github.io</p></div></div>';
- document.body.appendChild(S);void S.querySelector('.bsk').getBoundingClientRect();return S;}
+ document.body.appendChild(S);if(TC)void S.querySelector('.bsk').getBoundingClientRect();return S;}
 function go(e,href){if(e&&(e.metaKey||e.ctrlKey||e.shiftKey||e.button>0))return;if(rm||document.body.classList.contains('cardpg'))return;e&&e.preventDefault();if(busy)return;busy=true;
- var s=el(),up=s.classList.contains('up');if(!up){void s.offsetWidth;s.classList.add('up');}
+ var s=el(),up=s.classList.contains('up');if(!up){if(TC)void s.offsetWidth;s.classList.add('up');if(!TC)void s.offsetWidth;}
  setTimeout(function(){s.classList.add('lift');
   setTimeout(function(){s.classList.add('flat');
    setTimeout(function(){var c=s.querySelector('.bpk'),r=c.getBoundingClientRect(),d=document.createElement('div');d.className='bfly';
     d.style.cssText='left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px';var cc=c.cloneNode(true);cc.style.cssText='position:absolute;inset:0;transform:none;box-shadow:none;transition:opacity .3s';d.appendChild(cc);document.body.appendChild(d);c.style.visibility='hidden';setTimeout(function(){cc.style.opacity=0;},120);
     requestAnimationFrame(function(){requestAnimationFrame(function(){d.style.cssText='left:0;top:0;width:100vw;height:100vh;box-shadow:none';});});
-    try{sessionStorage.setItem('bcfly','1');}catch(x){}setTimeout(function(){location.href=href;},600);},360);},240);},up?0:1050);}
+    try{sessionStorage.setItem('bcfly','1');}catch(x){}setTimeout(function(){location.href=href;},600);},360);},240);},up?0:(TC?1050:560));}
 window.BCard={el:el,go:go};
 document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href$="about.html"]');if(!a||a.target==='_blank')return;go(e,a.href);});
 if(!document.body.classList.contains('cardpg')&&matchMedia('(hover:hover)').matches){var t,last=null,cv=function(){return document.querySelector('.cv0');};
