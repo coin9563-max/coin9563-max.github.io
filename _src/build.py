@@ -726,16 +726,16 @@ if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.fo
 document.querySelectorAll('.blk,.txt,.work').forEach(el=>{el.classList.add('fade');io.observe(el)})}
 """.replace('__HOLES__',HOLES).replace('__EMAIL__',SITE['email']).replace('__PHONE__',SITE['phone'])
 
-def page(title, body, root, dark=False, on='', desc='', og='img/t_307.jpg'):
+def page(title, body, root, dark=False, on='', desc='', og='og-card.jpg'):
     return f"""<!doctype html>
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(title)}</title>
 <meta name="description" content="{E(desc or SITE['name_ko']+' — 건축 포트폴리오')}">
-<meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc or '')}">
+<meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc or '건축 포트폴리오 2021–2026 · Architectural Designer · 홍익대학교 건축학과')}"><meta property="og:type" content="website"><meta property="og:site_name" content="{SITE['name_ko']} — Portfolio"><meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="{root}style.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%231d1c1a%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22%23f6f5f2%22 font-family=%22sans-serif%22%3EH%3C/text%3E%3C/svg%3E">
-<meta property="og:image" content="https://coin9563-max.github.io/{og}">
+<meta property="og:image" content="https://coin9563-max.github.io/{og}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 </head><body class="{dark if isinstance(dark, str) else ('dark' if dark else '')}">
 <header class="top"><a class="name" href="{root}index.html">{SITE['name_ko']}<span>{SITE['name_en']}</span></a>
 <nav><a href="{root}projects.html" class="{'on' if on=='w' else ''}">Projects</a><a href="{root}publish.html" class="{'on' if on=='b' else ''}">Publish</a><a href="{root}practice.html" class="{'on' if on=='r' else ''}">Practice</a><a href="{root}process.html" class="{'on' if on=='p' else ''}">Process</a><a href="{root}about.html" class="{'on' if on=='a' else ''}">About</a></nav></header>
