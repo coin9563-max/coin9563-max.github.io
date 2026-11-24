@@ -565,13 +565,14 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .shf::before{content:'';position:absolute;left:-10px;right:-10px;top:-20px;bottom:-14px;border:1px solid #ffffff10;border-bottom:0;pointer-events:none}
 .sp{position:relative;flex:none;display:flex;align-items:center;justify-content:center;box-shadow:inset 2px 0 0 #ffffff14,inset -2px 0 0 #00000040;transform-origin:50% 100%}
 .sp b{writing-mode:vertical-rl;font:600 9px/1 Inter,system-ui,sans-serif;letter-spacing:.18em;white-space:nowrap;overflow:hidden;max-height:86%}.sp b.ko{text-orientation:upright;letter-spacing:.08em}
-.pubg.shk .shf{animation:shk .42s cubic-bezier(.3,0,.3,1)}
-@keyframes shk{0%{transform:translateX(-50%)}15%{transform:translateX(calc(-50% - 7px)) rotate(-.8deg)}35%{transform:translateX(calc(-50% + 6px)) rotate(.6deg)}55%{transform:translateX(calc(-50% - 4px))}75%{transform:translateX(calc(-50% + 2px))}100%{transform:translateX(-50%)}}
-.pubg.shk .sp:not(.f1):not(.f2){animation:wob .5s ease-out}.pubg.shk .sp:nth-child(odd){animation-delay:.04s}
-@keyframes wob{30%{transform:rotate(-2.5deg)}60%{transform:rotate(1.5deg)}100%{transform:none}}
-.sp.f1,.sp.f2{transition:transform .5s cubic-bezier(.5,0,.9,.6),opacity .2s .32s}
-.pubg.drop .sp.f1{transform:translate(-30px,190%) rotate(-38deg);opacity:0}
-.pubg.drop .sp.f2{transform:translate(40px,190%) rotate(32deg);opacity:0;transition-delay:.08s,.4s}
+.pubg.shk .shf{animation:shk .34s cubic-bezier(.3,0,.3,1)}
+@keyframes shk{0%{transform:translateX(-50%)}25%{transform:translateX(-50%) translateY(4px)}55%{transform:translateX(-50%) translateY(-1px)}100%{transform:translateX(-50%)}}
+.pubg.shk .sp:not(.f1):not(.f2){animation:wob .4s ease-out}
+@keyframes wob{35%{transform:rotate(-1deg)}100%{transform:none}}
+.shf{perspective:700px}
+.sp.f1,.sp.f2{transition:transform .42s cubic-bezier(.55,0,.85,.4),opacity .15s .3s}
+.pubg.drop .sp.f1{transform:rotateX(-70deg) translateY(10%);opacity:0}
+.pubg.drop .sp.f2{transform:rotateX(-70deg) translateY(10%);opacity:0;transition-delay:.07s,.37s}
 .flr{position:absolute;left:0;right:0;top:58%;bottom:0;perspective:1100px;perspective-origin:45% 10%;border-top:1px solid #ffffff12;background:linear-gradient(#ffffff06,transparent 60%)}
 .fb{position:absolute;top:0;height:min(28vh,250px);aspect-ratio:.705;background:#1d1c1a center/cover no-repeat;box-shadow:1px 1px 0 #cfc9bd,2px 2px 0 #9c968a,3px 3px 0 #cfc9bd,4px 4px 0 #8a8478,14px 22px 30px #000d;opacity:0;transform-origin:50% 100%}
 .fb.b1{left:37%;transform:rotateX(66deg) translateY(-420px) translateZ(220px) rotateZ(-50deg)}
@@ -581,11 +582,13 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .pubg.land .fb.b2{transform:rotateX(66deg) translate(10px,30px) rotateZ(14deg);transition-delay:.09s}
 .pubg.thud .flr{animation:thd .3s ease-out}@keyframes thd{30%{transform:translateY(4px)}100%{transform:none}}
 @media (max-width:860px){.shf{left:50%}.fb.b1{left:14%}.fb.b2{left:50%}}
-.ptop{position:absolute;inset:0;opacity:0;transform:scale(1.25);transition:opacity .45s,transform 1.1s cubic-bezier(.2,.8,.2,1);background:repeating-linear-gradient(90deg,#1a1815 0 118px,#14120f 118px 120px),#171512;pointer-events:none}
+.ptop{position:absolute;inset:0;opacity:0;transition:opacity .18s;background:repeating-linear-gradient(90deg,#1a1815 0 118px,#14120f 118px 120px),#171512;pointer-events:none}
 .ptop::before{content:'';position:absolute;inset:0;background:radial-gradient(60% 60% at 40% 42%,#00000000 0%,#000000aa 100%)}
-.pubg.top .ptop{opacity:1;transform:none}.pubg.top .shf,.pubg.top .flr{opacity:0;transition:opacity .3s}
+.pubg.top .ptop{opacity:1}
+.tb{opacity:0}.pubg.top .tb{animation:tland .42s cubic-bezier(.3,1.4,.5,1) forwards}.pubg.top .tb.t2{animation-delay:.09s}
+@keyframes tland{0%{opacity:1;transform:translateY(-6px) scale(1.12) rotate(var(--r));box-shadow:40px 60px 60px #0008}100%{opacity:1;transform:rotate(var(--r))}}.pubg.top .shf,.pubg.top .flr{opacity:0;transition:opacity .3s}
 .tb{position:absolute;height:min(46vh,420px);aspect-ratio:.705;background:#1d1c1a center/cover no-repeat;box-shadow:2px 2px 0 #d8d2c6,4px 4px 0 #a39d90,6px 6px 0 #d8d2c6,8px 8px 0 #8a8478,26px 34px 40px #000c}
-.tb.t1{left:22%;top:12%;transform:rotate(-13deg)}.tb.t2{left:38%;top:20%;transform:rotate(17deg)}
+.tb.t1{left:22%;top:12%;--r:-13deg;transform:rotate(-13deg)}.tb.t2{left:38%;top:20%;--r:17deg;transform:rotate(17deg)}
 .tcap{position:absolute;left:22%;top:5%;margin:0;font:11px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.08em;color:#cfc6b6;opacity:.7}
 @media (max-width:860px){.tb.t1{left:6%}.tb.t2{left:36%}.tcap{left:8%}}
 .bg.prag{background:radial-gradient(90% 70% at 34% 30%,#1b1c1a 0%,#121311 70%);filter:none}
@@ -690,7 +693,7 @@ function build(){if(built)return;built=true;var C=['#2a2724','#3b3632','#d8d0c2'
  bg.innerHTML='<div class="shf">'+h+'</div><div class="flr"><div class="fb b1" style="background-image:url('+bg.dataset.a+')"></div><div class="fb b2" style="background-image:url('+bg.dataset.b+')"></div></div><div class="ptop"><div class="tb t1" style="background-image:url('+bg.dataset.a+')"></div><div class="tb t2" style="background-image:url('+bg.dataset.b+')"></div><p class="tcap">FROM CITY TO EARTH · UNWASHED — 졸업전시 책자 2026</p></div>';}
 function at(ms,fn){tm.push(setTimeout(fn,ms));}
 function run(){tm.forEach(clearTimeout);tm=[];bg.classList.remove('shk','drop','land','thud','top');if(rm){bg.classList.add('drop','land','top');return;}
- void bg.offsetWidth;at(260,function(){bg.classList.add('shk');});at(420,function(){bg.classList.add('drop');});at(900,function(){bg.classList.add('land');});at(1130,function(){bg.classList.add('thud');});at(1750,function(){bg.classList.add('top');});}
+ void bg.offsetWidth;at(250,function(){bg.classList.add('shk');});at(380,function(){bg.classList.add('drop');});at(820,function(){bg.classList.add('top');});}
 var wason=false;new MutationObserver(function(){var on=bg.classList.contains('on');if(on===wason)return;wason=on;if(on){build();run();}}).observe(bg,{attributes:true,attributeFilter:['class']});
 })();
 // 표지 Practice 호버: 도시 전경에서 빌딩 → 창 하나 → 사무실 안 내 자리까지 줌인 (선 도면)
