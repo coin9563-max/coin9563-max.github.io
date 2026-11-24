@@ -559,6 +559,18 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .bcs .it em{font-style:normal;font-size:14px;color:var(--sub);line-height:1.5}
 .bcs .sz{position:absolute;right:clamp(28px,6vw,96px);bottom:26px;font:10px var(--mono);letter-spacing:.12em;color:var(--pm)}
 .flyin .bcs>*{animation:bcin .7s .05s both}@keyframes bcin{from{opacity:0;transform:translateY(10px)}}
+.tst{position:fixed;inset:0;z-index:120;display:grid;place-items:end center;pointer-events:none}
+.tst::before{content:'';position:absolute;inset:0;background:linear-gradient(to top,#141412 0%,#14141200 70%);opacity:0;transition:opacity .4s}.tst.up::before{opacity:.7}
+.tsk{position:relative;width:min(560px,86vw);aspect-ratio:4/3;margin-bottom:-14%;transform:translateY(110%);transition:transform .6s cubic-bezier(.18,1.25,.4,1)}
+.tst.up .tsk{transform:translateY(0);pointer-events:auto;cursor:pointer}
+.ts{position:absolute;inset:0;background:rgba(238,235,226,.58);-webkit-backdrop-filter:blur(1.5px);backdrop-filter:blur(1.5px);box-shadow:0 1px 0 #fff6 inset,0 18px 40px #0005;transform:translate(var(--x),calc(var(--y) + 40px)) rotate(var(--r));transition:transform .55s cubic-bezier(.2,1.2,.4,1) var(--d)}
+.tst.up .ts{transform:translate(var(--x),var(--y)) rotate(var(--r))}
+.ts:last-child{background:rgba(242,240,233,.8)}
+.ts svg{position:absolute;inset:6% 6% 4%;width:88%;height:auto}.ts svg *{fill:none;stroke:#2b2a26;stroke-width:1.2}.ts svg .f{fill:#c8462e;fill-opacity:.35;stroke:#c8462e}.ts svg .t{stroke:#4da3ff;stroke-width:.8}
+.ts svg text{fill:#2b2a26;stroke:none;font:11px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.08em}
+.ts .tl{position:absolute;left:6%;top:5%;font:600 13px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.24em;color:#1d1c1a}.ts .tl span{display:block;font-weight:400;font-size:10px;letter-spacing:.1em;color:#6f6a60;margin-top:4px}
+.tst.lift .ts{transform:translate(var(--x),calc(var(--y) + 60px)) rotate(var(--r));opacity:.6;transition-delay:0s}.tst.lift .ts:last-child{transform:translateY(-40px) rotate(0);opacity:1}
+.tfly{position:fixed;z-index:130;background:rgba(242,240,233,.8);transition:all .6s cubic-bezier(.7,0,.2,1)}.tfly.go{background:#121311}
 .bst{position:fixed;inset:0;z-index:120;display:grid;place-items:end center;padding-bottom:62px;pointer-events:none;perspective:1600px;perspective-origin:50% 30%}
 .bst::before{content:'';position:absolute;inset:0;background:#141412;opacity:0;transition:opacity .4s}.bst::before{background:linear-gradient(to top,#141412 0%,#14141200 70%)}.bst.up::before{opacity:.7}
 .bsk{position:relative;width:min(520px,80vw);aspect-ratio:9/5;transform-style:preserve-3d;transform-origin:50% 100%;transform:translateY(140%) rotateX(52deg);transition:transform .62s cubic-bezier(.18,1.3,.4,1)}
@@ -646,6 +658,37 @@ if(!document.body.classList.contains('cardpg')&&matchMedia('(hover:hover)').matc
  document.addEventListener('mouseover',function(e){var a=e.target.closest&&e.target.closest('a[href$="about.html"]');if(a)on(a);else if(e.target.closest&&e.target.closest('.bsk'))on(null);});
  document.addEventListener('mouseout',function(e){var a=e.target.closest&&(e.target.closest('a[href$="about.html"]')||e.target.closest('.bsk'));if(a&&!(e.relatedTarget&&a.contains(e.relatedTarget)))off();});
  document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.bsk')&&last)go(e,last.href);});}
+})();
+
+
+// Process: 올리면 실험 도면이 그려진 트레이싱지 더미가 하단 가운데에서 올라오고, 누르면 맨 윗장이 펼쳐지며 이동
+(function(){var rm=matchMedia('(prefers-reduced-motion:reduce)').matches,S=null,busy=false;
+function P(a){return a.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' ');}
+function draw(i){var o='',k;switch(i){
+ case 0: for(k=0;k<9;k++){var y=40+k*24;o+='<path d="M30 '+y+' Q200 '+(y+70-Math.abs(k-4)*12)+' 370 '+y+'"/>';}for(k=0;k<9;k++){var x=30+k*42.5;o+='<path d="M'+x+' 40 Q'+(x+(k-4)*6)+' 150 '+x+' 232"/>';}o+='<text x="30" y="270">LAB 07  현수선 형태 찾기</text>';break;
+ case 1: o+='<polyline points="'+P([[60,250],[60,90],[150,90],[150,120],[200,120],[200,150],[250,150],[250,180],[300,180],[300,250]])+'"/><line x1="60" y1="40" x2="330" y2="250" stroke-dasharray="6 5"/><line x1="20" y1="250" x2="380" y2="250"/><text x="30" y="285">LAB 02  정북일조사선</text>';break;
+ case 2: for(k=0;k<4;k++)o+='<path d="M40 240 Q200 '+(40+k*34)+' 360 240"/>';o+='<polygon points="'+P([[180,200],[230,200],[300,250],[250,250]])+'" class="f"/><rect x="180" y="150" width="50" height="50"/><text x="30" y="285">LAB 06  동지 일조 시간</text>';break;
+ case 3: for(k=0;k<7;k++){o+='<rect x="'+(40+k*46)+'" y="50" width="40" height="70"/><rect x="'+(40+k*46)+'" y="170" width="40" height="70"/>';}o+='<line x1="30" y1="145" x2="370" y2="145" stroke-dasharray="10 6"/><text x="30" y="285">LAB 05  주차 배치</text>';break;
+ case 4: o+='<polyline points="'+P([[80,170],[330,90]])+'"/><line x1="96" y1="165" x2="96" y2="240"/><line x1="40" y1="240" x2="360" y2="240"/>';for(k=-3;k<=6;k++){var a=k*7*Math.PI/180;o+='<line x1="200" y1="205" x2="'+(200-170*Math.cos(a)).toFixed(1)+'" y2="'+(205-170*Math.sin(a)).toFixed(1)+'" class="t"/>';}o+='<circle cx="200" cy="205" r="5" class="f"/><text x="30" y="285">LAB 08  처마와 시선 · 바람</text>';break;
+ case 5: o+='<line x1="40" y1="240" x2="360" y2="240"/><line x1="40" y1="60" x2="40" y2="240"/>';var d='M40 70';for(k=1;k<=32;k++){d+=' L'+(40+k*10)+' '+(240-170*Math.exp(-k/7)).toFixed(1);}o+='<path d="'+d+'"/><rect x="40" y="200" width="110" height="40" class="f"/><text x="30" y="285">LAB 09  오피스 빛 · 열</text>';break;
+ default: for(k=0;k<5;k++)for(var j=0;j<4;j++){var x=80+k*55-j*22,y=70+j*40+k*8;o+='<rect x="'+x+'" y="'+y+'" width="45" height="30"/>';}o+='<text x="30" y="285">LAB 03  그리드 → 프레임</text>';}
+ return '<svg viewBox="0 0 400 300" aria-hidden="true">'+o+'</svg>';}
+function el(){if(S)return S;S=document.createElement('div');S.className='tst';S.setAttribute('aria-hidden','true');var h='';
+ for(var i=6;i>=0;i--){var r=(i%2?1:-1)*(1.2+i*.9),x=(i%3-1)*14,y=-i*9;h+='<div class="ts" style="--r:'+r+'deg;--x:'+x+'px;--y:'+y+'px;--d:'+(i*40)+'ms">'+draw(i)+(i===0?'<p class="tl">PROCESS<span>실험으로 판단하기 · LAB 01–09</span></p>':'')+'</div>';}
+ S.innerHTML='<div class="tsk">'+h+'</div>';document.body.appendChild(S);return S;}
+function go(e,href){if(e&&(e.metaKey||e.ctrlKey||e.shiftKey||e.button>0))return;if(rm||document.body.classList.contains('labpg'))return;e&&e.preventDefault();if(busy)return;busy=true;
+ var s=el(),up=s.classList.contains('up');if(!up){s.classList.add('up');void s.offsetWidth;}
+ setTimeout(function(){s.classList.add('lift');setTimeout(function(){var c=s.querySelector('.ts:last-child'),r=c.getBoundingClientRect(),d=document.createElement('div');d.className='tfly';
+  d.style.cssText='left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px';document.body.appendChild(d);c.style.visibility='hidden';
+  requestAnimationFrame(function(){requestAnimationFrame(function(){d.classList.add('go');d.style.cssText='left:0;top:0;width:100vw;height:100vh';});});
+  setTimeout(function(){location.href=href;},620);},260);},up?0:520);}
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href$="process.html"]');if(!a||a.target==='_blank')return;go(e,a.href);});
+if(!document.body.classList.contains('labpg')&&matchMedia('(hover:hover)').matches){var t,last=null,cv=function(){return document.querySelector('.cv0');};
+ function on(a){clearTimeout(t);if(a)last=a;el().classList.add('up');var v=cv();v&&v.classList.add('pk');}
+ function off(){t=setTimeout(function(){if(busy)return;el().classList.remove('up');var v=cv();v&&v.classList.remove('pk');},160);}
+ document.addEventListener('mouseover',function(e){var a=e.target.closest&&e.target.closest('a[href$="process.html"]');if(a)on(a);else if(e.target.closest&&e.target.closest('.tsk'))on(null);});
+ document.addEventListener('mouseout',function(e){var a=e.target.closest&&(e.target.closest('a[href$="process.html"]')||e.target.closest('.tsk'));if(a&&!(e.relatedTarget&&a.contains(e.relatedTarget)))off();});
+ document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.tsk')&&last)go(e,last.href);});}
 })();
 
 // 표지 인트로 (세션당 한 번, 누르면 건너뜀)
