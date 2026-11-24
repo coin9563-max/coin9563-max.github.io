@@ -520,6 +520,20 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .bcs .it em{font-style:normal;font-size:14px;color:var(--sub);line-height:1.5}
 .bcs .sz{position:absolute;right:clamp(28px,6vw,96px);bottom:26px;font:10px var(--mono);letter-spacing:.12em;color:var(--pm)}
 .flyin .bcs>*{animation:bcin .7s .05s both}@keyframes bcin{from{opacity:0;transform:translateY(10px)}}
+.bg.prjg{background:radial-gradient(80% 60% at 36% 30%,#1c1d1b 0%,#121311 70%);filter:none}
+.fdg{position:absolute;left:36%;top:8%;transform:translateX(-50%);display:grid;grid-template-columns:repeat(3,min(15vw,190px));gap:28px 44px}
+.fd{position:relative;display:block;aspect-ratio:4/3;pointer-events:none;opacity:0;transform:translateY(14px);transition:opacity .35s,transform .5s cubic-bezier(.2,.8,.2,1);transition-delay:calc(var(--i) * 70ms)}
+.prjg.on .fd{opacity:1;transform:none}
+.fd svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.fd .fb0 path{fill:#161715;stroke:#ece8de;stroke-width:1.1;stroke-linejoin:round}
+.fd .ff0 path{fill:#1b1c1a;fill-opacity:.8;stroke:#ece8de;stroke-width:1.1;stroke-linejoin:round}.fd .ff0 .ln{fill:none;stroke-opacity:.35}
+.fd .ff0{transform-origin:50% 100%;transform:perspective(400px) rotateX(0);transition:transform .5s cubic-bezier(.2,.8,.2,1);transition-delay:calc(var(--i) * 70ms + .25s)}
+.prjg.on .fd .ff0{transform:perspective(400px) rotateX(-14deg)}
+.fd img{position:absolute;left:12%;width:76%;top:30%;height:52%;object-fit:cover;border:3px solid #ece8de;box-shadow:0 6px 14px #0008;transform:translateY(16%) rotate(-2deg);transition:transform .6s cubic-bezier(.2,1.3,.4,1);transition-delay:calc(var(--i) * 70ms + .3s)}
+.fd:nth-child(even) img{transform:translateY(16%) rotate(2deg)}
+.prjg.on .fd img{transform:translateY(-38%) rotate(-3deg)}.prjg.on .fd:nth-child(even) img{transform:translateY(-38%) rotate(3deg)}
+.fd .fn{position:absolute;left:0;right:0;top:calc(100% + 8px);font:11px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.08em;color:#cfc9bc;text-align:center;white-space:nowrap}
+@media (max-width:860px){.fdg{left:50%;grid-template-columns:repeat(3,26vw);gap:20px 14px}}
 .bg.pubg{background:radial-gradient(80% 60% at 36% 30%,#26231f 0%,#121110 70%);filter:none;overflow:hidden}
 .shf{position:absolute;left:36%;top:6%;height:min(40vh,360px);transform:translateX(-50%);display:flex;align-items:flex-end;gap:1px;padding:0 18px}
 .shf::after{content:'';position:absolute;left:-10px;right:-10px;bottom:-14px;height:14px;background:linear-gradient(#3a342c,#1d1a16);box-shadow:0 18px 40px #000c}

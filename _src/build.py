@@ -559,6 +559,20 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .bcs .it em{font-style:normal;font-size:14px;color:var(--sub);line-height:1.5}
 .bcs .sz{position:absolute;right:clamp(28px,6vw,96px);bottom:26px;font:10px var(--mono);letter-spacing:.12em;color:var(--pm)}
 .flyin .bcs>*{animation:bcin .7s .05s both}@keyframes bcin{from{opacity:0;transform:translateY(10px)}}
+.bg.prjg{background:radial-gradient(80% 60% at 36% 30%,#1c1d1b 0%,#121311 70%);filter:none}
+.fdg{position:absolute;left:36%;top:8%;transform:translateX(-50%);display:grid;grid-template-columns:repeat(3,min(15vw,190px));gap:28px 44px}
+.fd{position:relative;display:block;aspect-ratio:4/3;pointer-events:none;opacity:0;transform:translateY(14px);transition:opacity .35s,transform .5s cubic-bezier(.2,.8,.2,1);transition-delay:calc(var(--i) * 70ms)}
+.prjg.on .fd{opacity:1;transform:none}
+.fd svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.fd .fb0 path{fill:#161715;stroke:#ece8de;stroke-width:1.1;stroke-linejoin:round}
+.fd .ff0 path{fill:#1b1c1a;fill-opacity:.8;stroke:#ece8de;stroke-width:1.1;stroke-linejoin:round}.fd .ff0 .ln{fill:none;stroke-opacity:.35}
+.fd .ff0{transform-origin:50% 100%;transform:perspective(400px) rotateX(0);transition:transform .5s cubic-bezier(.2,.8,.2,1);transition-delay:calc(var(--i) * 70ms + .25s)}
+.prjg.on .fd .ff0{transform:perspective(400px) rotateX(-14deg)}
+.fd img{position:absolute;left:12%;width:76%;top:30%;height:52%;object-fit:cover;border:3px solid #ece8de;box-shadow:0 6px 14px #0008;transform:translateY(16%) rotate(-2deg);transition:transform .6s cubic-bezier(.2,1.3,.4,1);transition-delay:calc(var(--i) * 70ms + .3s)}
+.fd:nth-child(even) img{transform:translateY(16%) rotate(2deg)}
+.prjg.on .fd img{transform:translateY(-38%) rotate(-3deg)}.prjg.on .fd:nth-child(even) img{transform:translateY(-38%) rotate(3deg)}
+.fd .fn{position:absolute;left:0;right:0;top:calc(100% + 8px);font:11px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.08em;color:#cfc9bc;text-align:center;white-space:nowrap}
+@media (max-width:860px){.fdg{left:50%;grid-template-columns:repeat(3,26vw);gap:20px 14px}}
 .bg.pubg{background:radial-gradient(80% 60% at 36% 30%,#26231f 0%,#121110 70%);filter:none;overflow:hidden}
 .shf{position:absolute;left:36%;top:6%;height:min(40vh,360px);transform:translateX(-50%);display:flex;align-items:flex-end;gap:1px;padding:0 18px}
 .shf::after{content:'';position:absolute;left:-10px;right:-10px;bottom:-14px;height:14px;background:linear-gradient(#3a342c,#1d1a16);box-shadow:0 18px 40px #000c}
@@ -1091,17 +1105,20 @@ open(f'{OUT}/practice.html', 'w').write(page(f'Practice — {SITE["name_ko"]}', 
 def cover():
     INTRO=[use(i,thumb=True)[0] for i in [643,298,3101,280,2966,87,307]]
     feat=[i for i in PRACTICE if i.get('slug')]
-    items=[('01','Projects','projects.html',f'설계 작업 {len(PROJECTS)}',use(PROJECTS[0]['hero'],thumb=True)[0]),
+    items=[('01','Projects','projects.html',f'설계 작업 {len(PROJECTS)}','PRJ'),
            ('02','Publish','publish.html',f'책 {len(PUBLISH)}','PUB'),
            ('03','Practice','practice.html',f'실무 · 활동 {len(PRACTICE)}','PRA'),
            ('04','Process','process.html','AI와 설계하기',''),
            ('05','About','about.html','소개 · 연락처','')]
     import json as _j, html as _h
     rows=[[i.get('year',''),i['title'],i.get('org',''),(i.get('role','') or '').split(' · ')[0]] for i in PRACTICE if not i.get('hide_in_list')]
+    FOLDER_B='<svg class="fb0" viewBox="0 0 160 120" aria-hidden="true"><path d="M4 14 Q4 8 10 8 H56 Q60 8 63 12 L68 18 H150 Q156 18 156 24 V112 Q156 116 152 116 H8 Q4 116 4 112 Z"/></svg>'
+    FOLDER_F='<svg class="ff0" viewBox="0 0 160 120" aria-hidden="true"><path d="M2 50 Q2 44 8 44 H152 Q158 44 158 50 L154 112 Q154 116 150 116 H10 Q6 116 6 112 Z"/><path class="ln" d="M14 106 H60"/></svg>'
+    PRJ_BG='<div class="bg prjg"><div class="fdg">'+''.join(f'<a class="fd" href="works/{p["slug"]}.html" tabindex="-1" style="--i:{k}">'+FOLDER_B+f'<img src="{use(p["hero"],thumb=True)[0]}" alt="">'+FOLDER_F+f'<span class="fn">{p["title"]}</span></a>' for k,p in enumerate(PROJECTS[:6]))+'</div></div>'
     PUB_BG='<div class="bg pubg" data-a="book/from-city-to-earth/01.jpg" data-b="book/unwashed/01.jpg" data-p="'+_h.escape(_j.dumps([p['title'] for p in PROJECTS],ensure_ascii=False))+'"></div>'
     PRA_BG='<div class="bg prag" data-r="'+_h.escape(_j.dumps(rows,ensure_ascii=False))+'"></div>'
     li=''.join(f'<li><a href="{h}" data-bg="{b}"><span class="n">{n}</span><span class="w">{t}</span></a></li>' for n,t,h,c,b in items)
-    return f'''<section class="cv0"><canvas class="cad" aria-hidden="true"></canvas><div class="cvo" aria-hidden="true"></div><div class="ifr" aria-hidden="true">{"".join(f'<img src="{u}" alt="">' for u in INTRO)}</div><div class="bgs">{"".join(f'<div class="bg" style="background-image:url({b})"></div>' if b and b not in ('PUB','PRA') else (PRA_BG if b=='PRA' else '<div class="bg grid"></div>' if b!='PUB' else PUB_BG) for k,(*_,b) in enumerate(items))}</div>
+    return f'''<section class="cv0"><canvas class="cad" aria-hidden="true"></canvas><div class="cvo" aria-hidden="true"></div><div class="ifr" aria-hidden="true">{"".join(f'<img src="{u}" alt="">' for u in INTRO)}</div><div class="bgs">{"".join(f'<div class="bg" style="background-image:url({b})"></div>' if b and b not in ('PUB','PRA','PRJ') else (PRJ_BG if b=='PRJ' else PRA_BG if b=='PRA' else '<div class="bg grid"></div>' if b!='PUB' else PUB_BG) for k,(*_,b) in enumerate(items))}</div>
 <div class="cvh"><p>Portfolio 2021–2026</p><h1>{SITE["name_ko"]}<span>{SITE["name_en"]}</span></h1></div>
 <ol class="cvm">{li}</ol><p class="cvf"><a href="mailto:{SITE["email"]}">{SITE["email"]}</a><span class="cdr"></span><span>{SITE["school"]}</span></p></section><p class="iwd" aria-hidden="true"><span>Land</span><span>Material</span><span>Structure</span></p>'''
 open(f'{OUT}/index.html', 'w').write(page(f'{SITE["name_ko"]} — Portfolio', cover(), '', dark='coverpg', on=''))
