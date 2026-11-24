@@ -55,7 +55,7 @@ function build(){if(built)return;built=true;var C=['#2a2724','#3b3632','#d8d0c2'
  bg.innerHTML='<div class="shf">'+h+'</div><div class="flr"><div class="fb b1" style="background-image:url('+bg.dataset.a+')"></div><div class="fb b2" style="background-image:url('+bg.dataset.b+')"></div></div><div class="ptop"><div class="tb t1" style="background-image:url('+bg.dataset.a+')"></div><div class="tb t2" style="background-image:url('+bg.dataset.b+')"></div><p class="tcap">FROM CITY TO EARTH · UNWASHED — 졸업전시 책자 2026</p></div>';}
 function at(ms,fn){tm.push(setTimeout(fn,ms));}
 function run(){tm.forEach(clearTimeout);tm=[];bg.classList.remove('shk','drop','land','thud','top');if(rm){bg.classList.add('drop','land','top');return;}
- void bg.offsetWidth;at(250,function(){bg.classList.add('shk');});at(380,function(){bg.classList.add('drop');});at(1080,function(){bg.classList.add('top');});}
+ void bg.offsetWidth;at(350,function(){bg.classList.add('shk');});at(620,function(){bg.classList.add('drop');});at(2000,function(){bg.classList.add('top');});}
 var wason=false;new MutationObserver(function(){var on=bg.classList.contains('on');if(on===wason)return;wason=on;if(on){build();run();}}).observe(bg,{attributes:true,attributeFilter:['class']});
 })();
 // 표지 Practice 호버: 크게 잡힌 즉석카메라에서 D'EAU 사진이 천천히 나옴 → 바람에 날리듯 오른쪽 빨랫줄로 → 줌아웃, 전체 사진

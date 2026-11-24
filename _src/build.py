@@ -589,8 +589,8 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .sp.f1,.sp.f2{transform-style:preserve-3d}
 .sp .cvr,.sp .pgs{position:absolute;top:0;left:100%;height:100%;width:calc(var(--bh) * .705);transform-origin:0 50%;transform:rotateY(90deg);background:#1d1c1a center/cover no-repeat;box-shadow:inset 0 0 0 1px #0006}
 .sp .pgs{left:0;transform:rotateY(90deg) translateZ(0);transform-origin:0 50%;background:repeating-linear-gradient(90deg,#e9e3d6 0 2px,#cfc8b9 2px 3px)}
-.pubg.drop .sp.f1{animation:bkf .62s cubic-bezier(.45,0,.8,.5) forwards}
-.pubg.drop .sp.f2{animation:bkf2 .62s cubic-bezier(.45,0,.8,.5) .08s forwards}
+.pubg.drop .sp.f1{animation:bkf 1.05s cubic-bezier(.4,0,.75,.45) forwards}
+.pubg.drop .sp.f2{animation:bkf2 1.05s cubic-bezier(.4,0,.75,.45) .16s forwards}
 @keyframes bkf{0%{transform:none}28%{transform:translate3d(0,-2%,90px)}100%{transform:translate3d(-60px,135%,220px) rotateY(-78deg) rotateZ(-28deg)}}
 @keyframes bkf2{0%{transform:none}28%{transform:translate3d(0,-2%,90px)}100%{transform:translate3d(50px,140%,200px) rotateY(-70deg) rotateZ(22deg)}}
 .flr{position:absolute;left:0;right:0;top:58%;bottom:0;perspective:1100px;perspective-origin:45% 10%;border-top:1px solid #ffffff12;background:linear-gradient(#ffffff06,transparent 60%)}
@@ -602,11 +602,11 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .pubg.land .fb.b2{transform:rotateX(66deg) translate(10px,30px) rotateZ(14deg);transition-delay:.09s}
 .pubg.thud .flr{animation:thd .3s ease-out}@keyframes thd{30%{transform:translateY(4px)}100%{transform:none}}
 @media (max-width:860px){.shf{left:50%}.fb.b1{left:14%}.fb.b2{left:50%}}
-.ptop{position:absolute;inset:0;opacity:0;transition:opacity .18s;background:repeating-linear-gradient(90deg,#1a1815 0 118px,#14120f 118px 120px),#171512;pointer-events:none}
+.ptop{position:absolute;inset:0;opacity:0;transform:scale(1.22);transition:opacity .9s ease,transform 2.6s cubic-bezier(.2,.6,.2,1);background:repeating-linear-gradient(90deg,#1a1815 0 118px,#14120f 118px 120px),#171512;pointer-events:none}
 .ptop::before{content:'';position:absolute;inset:0;background:radial-gradient(60% 60% at 40% 42%,#00000000 0%,#000000aa 100%)}
-.pubg.top .ptop{opacity:1}
-.tb{opacity:0}.pubg.top .tb{animation:tland .42s cubic-bezier(.3,1.4,.5,1) forwards}.pubg.top .tb.t2{animation-delay:.09s}
-@keyframes tland{0%{opacity:1;transform:translateY(-6px) scale(1.12) rotate(var(--r));box-shadow:40px 60px 60px #0008}100%{opacity:1;transform:rotate(var(--r))}}.pubg.top .shf,.pubg.top .flr{opacity:0;transition:opacity .3s}
+.pubg.top .ptop{opacity:1;transform:none}
+.tb{opacity:0}.pubg.top .tb{animation:tland 1.1s cubic-bezier(.25,.9,.35,1) .15s both}.pubg.top .tb.t2{animation-delay:.35s}
+@keyframes tland{0%{opacity:0;transform:translateY(-10px) scale(1.08) rotate(var(--r));box-shadow:40px 60px 60px #0008}30%{opacity:1}100%{opacity:1;transform:rotate(var(--r))}}.pubg.top .shf,.pubg.top .flr{opacity:0;transition:opacity .8s}
 .tb{position:absolute;height:min(46vh,420px);aspect-ratio:.705;background:#1d1c1a center/cover no-repeat;box-shadow:2px 2px 0 #d8d2c6,4px 4px 0 #a39d90,6px 6px 0 #d8d2c6,8px 8px 0 #8a8478,26px 34px 40px #000c}
 .tb.t1{left:22%;top:12%;--r:-13deg;transform:rotate(-13deg)}.tb.t2{left:38%;top:20%;--r:17deg;transform:rotate(17deg)}
 .tcap{position:absolute;left:22%;top:5%;margin:0;font:11px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.08em;color:#cfc6b6;opacity:.7}
@@ -726,7 +726,7 @@ function build(){if(built)return;built=true;var C=['#2a2724','#3b3632','#d8d0c2'
  bg.innerHTML='<div class="shf">'+h+'</div><div class="flr"><div class="fb b1" style="background-image:url('+bg.dataset.a+')"></div><div class="fb b2" style="background-image:url('+bg.dataset.b+')"></div></div><div class="ptop"><div class="tb t1" style="background-image:url('+bg.dataset.a+')"></div><div class="tb t2" style="background-image:url('+bg.dataset.b+')"></div><p class="tcap">FROM CITY TO EARTH · UNWASHED — 졸업전시 책자 2026</p></div>';}
 function at(ms,fn){tm.push(setTimeout(fn,ms));}
 function run(){tm.forEach(clearTimeout);tm=[];bg.classList.remove('shk','drop','land','thud','top');if(rm){bg.classList.add('drop','land','top');return;}
- void bg.offsetWidth;at(250,function(){bg.classList.add('shk');});at(380,function(){bg.classList.add('drop');});at(1080,function(){bg.classList.add('top');});}
+ void bg.offsetWidth;at(350,function(){bg.classList.add('shk');});at(620,function(){bg.classList.add('drop');});at(2000,function(){bg.classList.add('top');});}
 var wason=false;new MutationObserver(function(){var on=bg.classList.contains('on');if(on===wason)return;wason=on;if(on){build();run();}}).observe(bg,{attributes:true,attributeFilter:['class']});
 })();
 // 표지 Practice 호버: 크게 잡힌 즉석카메라에서 D'EAU 사진이 천천히 나옴 → 바람에 날리듯 오른쪽 빨랫줄로 → 줌아웃, 전체 사진
