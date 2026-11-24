@@ -26,7 +26,15 @@ function go(e,href){if(e&&(e.metaKey||e.ctrlKey||e.shiftKey||e.button>0))return;
   requestAnimationFrame(function(){requestAnimationFrame(function(){c.style.cssText='left:0;top:0;width:100vw;height:100vh;right:auto;bottom:auto;transform:none;box-shadow:none';});});
   try{sessionStorage.setItem('bcfly','1');}catch(x){}setTimeout(function(){location.href=href;},700);},up?0:520);}
 window.BCard={el:el,go:go};
-document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href$="about.html"]');if(!a||a.target==='_blank')return;go(e,a.href);});})();
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href$="about.html"]');if(!a||a.target==='_blank')return;go(e,a.href);});
+// 마우스를 올리면 명함이 먼저 올라와 기다림 (모든 페이지)
+if(!document.body.classList.contains('cardpg')&&matchMedia('(hover:hover)').matches){var t,last=null,cv=function(){return document.querySelector('.cv0');};
+ function on(a){clearTimeout(t);last=a;var c=el();c.classList.add('up');var v=cv();v&&v.classList.add('pk');}
+ function off(){t=setTimeout(function(){var c=el();if(c.classList.contains('go'))return;c.classList.remove('up');var v=cv();v&&v.classList.remove('pk');},140);}
+ document.addEventListener('mouseover',function(e){var a=e.target.closest&&e.target.closest('a[href$="about.html"]');if(a)on(a);else if(e.target.closest&&e.target.closest('.bpk'))on(last);});
+ document.addEventListener('mouseout',function(e){var a=e.target.closest&&(e.target.closest('a[href$="about.html"]')||e.target.closest('.bpk'));if(a&&!(e.relatedTarget&&a.contains(e.relatedTarget)))off();});
+ document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.bpk')&&last)go(e,last.href);});}
+})();
 
 
 // 표지 인트로 (세션당 한 번, 누르면 건너뜀)
@@ -87,11 +95,6 @@ function loop(now){requestAnimationFrame(loop);if(now-last<30)return;last=now;
  if(auto||now-at>6000){ax=W*(.5+.38*Math.sin(now/5200))+W*.08*Math.sin(now/1300);ay=H*(.32+.24*Math.sin(now/3700+1));if(!document.body.classList.contains('cvi'))pick(ax,ay,now);}else if(mx>=0)pick(mx,my,now);
  draw(now);}
 addEventListener('resize',function(){size();});size();if(still){draw(performance.now());}else requestAnimationFrame(loop);})();
-// 표지 → About: 메뉴에 올리면 명함이 올라와 기다림 (누르는 동작은 공통 스크립트)
-addEventListener('DOMContentLoaded',function(){var a=document.querySelector('.cvm a[href="about.html"]'),cv=document.querySelector('.cv0');if(!a||!cv||!window.BCard)return;var k=BCard.el(),t;
-function on(){clearTimeout(t);cv.classList.add('pk');k.classList.add('up');}function off(){t=setTimeout(function(){if(k.classList.contains('go'))return;cv.classList.remove('pk');k.classList.remove('up');},120);}
-a.addEventListener('mouseenter',on);a.addEventListener('focus',on);a.addEventListener('mouseleave',off);a.addEventListener('blur',off);k.addEventListener('mouseenter',on);k.addEventListener('mouseleave',off);
-k.addEventListener('click',function(e){BCard.go(e,a.href);});});
 (function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a');
 a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
 m.addEventListener('mouseleave',function(){bg.forEach(function(b){b.classList.remove('on')});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});});})();
