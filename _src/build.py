@@ -572,7 +572,7 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .crl{position:absolute;inset:0;z-index:0;overflow:hidden;background:#121311}
 .crl figure{position:absolute;inset:0;margin:0;opacity:0;transition:opacity 2.2s ease}
 .crl figure.on{opacity:1}
-.crl img{width:100%;height:100%;object-fit:cover;filter:brightness(.38) saturate(.75);transform:scale(1.08);transition:transform 9s linear}
+.crl img{width:100%;height:100%;object-fit:cover;filter:brightness(.38) saturate(.75);transform:scale(1.08);transition:transform 7s linear}
 .crl figure.on img{transform:scale(1)}
 .crl figcaption{position:absolute;right:clamp(20px,4vw,64px);top:clamp(70px,10vh,110px);font:11px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.06em;color:#e9e4da;opacity:.75}
 .cv0.pk .crl,.cv0:has(.cvm.hov) .crl{opacity:.0;transition:opacity .5s}.crl{transition:opacity .5s}
@@ -819,7 +819,7 @@ var wason=false;new MutationObserver(function(){var on=bg.classList.contains('on
 addEventListener('resize',function(){if(built&&wason)lay();});})();
 // 표지 기본 배경: 대표 렌더 6장이 천천히 교차
 (function(){var f=document.querySelectorAll('.cv0 .crl figure');if(!f.length)return;var i=0,rm=matchMedia('(prefers-reduced-motion:reduce)').matches;f[0].classList.add('on');if(rm)return;
-setInterval(function(){if(document.hidden)return;var n=(i+1)%f.length,im=f[n].querySelector('img');if(im.loading==='lazy')im.loading='eager';f[i].classList.remove('on');f[n].classList.add('on');i=n;},7000);})();
+setInterval(function(){if(document.hidden)return;var n=(i+1)%f.length,im=f[n].querySelector('img');if(im.loading==='lazy')im.loading='eager';f[i].classList.remove('on');f[n].classList.add('on');i=n;},5000);})();
 // 표지 Process 호버: 배경 그리드 위에 실험 도면(투라인 + 해치)이 칸에 맞춰 틱 단위로 생성됨
 (function(){var cv0=document.querySelector('.cv0');if(!cv0)return;var lk=document.querySelector('.cvm a[href$="process.html"]');if(!lk)return;
 var bgs=cv0.querySelectorAll('.bg'),bi=[].indexOf.call(document.querySelectorAll('.cvm a'),lk),bg=bgs[bi];if(!bg)return;
@@ -998,6 +998,8 @@ if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.fo
 document.querySelectorAll('.blk,.txt,.work').forEach(el=>{el.classList.add('fade');io.observe(el)})}
 """.replace('__HOLES__',HOLES).replace('__EMAIL__',SITE['email']).replace('__PHONE__',SITE['phone'])
 
+import hashlib as _hl
+CSSV=_hl.md5(CSS.encode()).hexdigest()[:8]
 def page(title, body, root, dark=False, on='', desc='', og='og-card.jpg'):
     return f"""<!doctype html>
 <html lang="ko"><head><meta charset="utf-8">
@@ -1005,7 +1007,7 @@ def page(title, body, root, dark=False, on='', desc='', og='og-card.jpg'):
 <title>{E(title)}</title>
 <meta name="description" content="{E(desc or SITE['name_ko']+' — 건축 포트폴리오')}">
 <meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc or '건축 포트폴리오 2021–2026 · Architectural Designer · 홍익대학교 건축학과')}"><meta property="og:type" content="website"><meta property="og:site_name" content="{SITE['name_ko']} — Portfolio"><meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="{root}style.css">
+<link rel="stylesheet" href="{root}style.css?v={CSSV}">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%231d1c1a%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22%23f6f5f2%22 font-family=%22sans-serif%22%3EH%3C/text%3E%3C/svg%3E">
 <meta property="og:image" content="https://coin9563-max.github.io/{og}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 </head><body class="{dark if isinstance(dark, str) else ('dark' if dark else '')}">
@@ -1210,7 +1212,7 @@ for it in PUBLISH:
 <title>{E(it['title'])} — {SITE['name_ko']}</title>
 <meta name="description" content="{E(it['desc'])}"><meta property="og:title" content="{E(it['title'])}">
 <meta property="og:image" content="https://coin9563-max.github.io/book/{it['slug']}/01.jpg">
-<link rel="stylesheet" href="../style.css"></head>
+<link rel="stylesheet" href="../style.css?v={CSSV}"></head>
 <body class="dark bookpg">
 <header class="top"><a class="name" href="../publish.html">← {SITE['name_ko']}<span>Publish</span></a><span class="bt">{E(it['title'])} <em>{E(it['kind'])} · {it['year']}</em>{pdfa}</span></header>
 <div class="stage"><div id="book"><div class="pg L"></div><div class="pg R"></div><i class="spine"></i></div></div>

@@ -4,7 +4,7 @@
 <title>ALLEY HOUSE — 한승현</title>
 <meta name="description" content="확장되어 사라진 발코니를, 확장할 수 없는 복도로 옮긴다">
 <meta property="og:title" content="ALLEY HOUSE — 한승현"><meta property="og:description" content="확장되어 사라진 발코니를, 확장할 수 없는 복도로 옮긴다"><meta property="og:type" content="website"><meta property="og:site_name" content="한승현 — Portfolio"><meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../style.css?v=698c35e6">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%231d1c1a%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22%23f6f5f2%22 font-family=%22sans-serif%22%3EH%3C/text%3E%3C/svg%3E">
 <meta property="og:image" content="https://coin9563-max.github.io/img/t_298.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 </head><body class="">
@@ -111,7 +111,7 @@ var wason=false;new MutationObserver(function(){var on=bg.classList.contains('on
 addEventListener('resize',function(){if(built&&wason)lay();});})();
 // 표지 기본 배경: 대표 렌더 6장이 천천히 교차
 (function(){var f=document.querySelectorAll('.cv0 .crl figure');if(!f.length)return;var i=0,rm=matchMedia('(prefers-reduced-motion:reduce)').matches;f[0].classList.add('on');if(rm)return;
-setInterval(function(){if(document.hidden)return;var n=(i+1)%f.length,im=f[n].querySelector('img');if(im.loading==='lazy')im.loading='eager';f[i].classList.remove('on');f[n].classList.add('on');i=n;},7000);})();
+setInterval(function(){if(document.hidden)return;var n=(i+1)%f.length,im=f[n].querySelector('img');if(im.loading==='lazy')im.loading='eager';f[i].classList.remove('on');f[n].classList.add('on');i=n;},5000);})();
 // 표지 Process 호버: 배경 그리드 위에 실험 도면(투라인 + 해치)이 칸에 맞춰 틱 단위로 생성됨
 (function(){var cv0=document.querySelector('.cv0');if(!cv0)return;var lk=document.querySelector('.cvm a[href$="process.html"]');if(!lk)return;
 var bgs=cv0.querySelectorAll('.bg'),bi=[].indexOf.call(document.querySelectorAll('.cvm a'),lk),bg=bgs[bi];if(!bg)return;
