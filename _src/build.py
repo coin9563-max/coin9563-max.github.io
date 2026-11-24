@@ -559,10 +559,10 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .bcs .it em{font-style:normal;font-size:14px;color:var(--sub);line-height:1.5}
 .bcs .sz{position:absolute;right:clamp(28px,6vw,96px);bottom:26px;font:10px var(--mono);letter-spacing:.12em;color:var(--pm)}
 .flyin .bcs>*{animation:bcin .7s .05s both}@keyframes bcin{from{opacity:0;transform:translateY(10px)}}
-.bst{position:fixed;inset:0;z-index:120;display:grid;place-items:center;pointer-events:none;perspective:1600px}
-.bst::before{content:'';position:absolute;inset:0;background:#141412;opacity:0;transition:opacity .4s}.bst.up::before{opacity:.42}
-.bsk{position:relative;width:min(460px,74vw);aspect-ratio:9/5;transform-style:preserve-3d;transform:translateY(95vh) rotateX(54deg) rotateZ(-24deg);transition:transform .62s cubic-bezier(.18,1.3,.4,1)}
-.bst.up .bsk{transform:translateY(-2vh) rotateX(54deg) rotateZ(-24deg);pointer-events:auto;cursor:pointer}
+.bst{position:fixed;inset:0;z-index:120;display:grid;place-items:end center;padding-bottom:clamp(40px,9vh,90px);pointer-events:none;perspective:1600px;perspective-origin:50% 100%}
+.bst::before{content:'';position:absolute;inset:0;background:#141412;opacity:0;transition:opacity .4s}.bst::before{background:linear-gradient(to top,#141412 0%,#14141200 70%)}.bst.up::before{opacity:.7}
+.bsk{position:relative;width:min(460px,74vw);aspect-ratio:9/5;transform-style:preserve-3d;transform:translateY(60vh) rotateX(54deg) rotateZ(-24deg);transition:transform .62s cubic-bezier(.18,1.3,.4,1)}
+.bst.up .bsk{transform:translateY(0) rotateX(54deg) rotateZ(-24deg);pointer-events:auto;cursor:pointer}
 .bst.flat .bsk{transform:translateY(0) rotateX(0) rotateZ(0);transition:transform .36s cubic-bezier(.5,0,.2,1)}
 .bsk .ly{position:absolute;inset:0;background:#ebe7de;transform:translateZ(calc(var(--z) * -2.6px));box-shadow:inset 0 0 0 1px #d4cec2;transition:transform .3s,opacity .3s}
 .bsk .ly:nth-child(odd){background:#e4e0d6}.bsk .ly:first-child{box-shadow:inset 0 0 0 1px #c9c3b6,0 40px 70px #000b}
