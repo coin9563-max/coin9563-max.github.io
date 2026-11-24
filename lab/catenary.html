@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LAB 07 현수선 형태 찾기 — 한승현</title>
+<meta name="description" content="그물을 대지 경계에 매달아 자중으로 늘어뜨린 뒤 뒤집어, 압축만 받는 흙 셸을 얻는다.">
+<meta property="og:title" content="LAB 07 현수선 형태 찾기 — 한승현"><meta property="og:description" content="그물을 대지 경계에 매달아 자중으로 늘어뜨린 뒤 뒤집어, 압축만 받는 흙 셸을 얻는다.">
+<link rel="stylesheet" href="../style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%231d1c1a%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22%23f6f5f2%22 font-family=%22sans-serif%22%3EH%3C/text%3E%3C/svg%3E">
+<meta property="og:image" content="https://coin9563-max.github.io/img/t_307.jpg">
+</head><body class="dark labpg">
+<header class="top"><a class="name" href="../index.html">한승현<span>Seunghyun Han</span></a>
+<nav><a href="../projects.html" class="">Projects</a><a href="../publish.html" class="">Publish</a><a href="../practice.html" class="">Practice</a><a href="../process.html" class="on">Process</a><a href="../about.html" class="">About</a><a href="../about.html#contact">Contact</a></nav></header>
+<main>
+<section class="lab" id="lab-catenary"><div class="lh"><p class="k"><a href="../process.html">← AI와 설계하기</a> · LAB 07 · FORM FINDING</p><h3>현수선 형태 찾기</h3><p>대지 경계를 지점으로 삼아 그물을 매달고 힘 밀도법으로 반복 이완해 자중에 늘어진 형태를 찾는다. 이를 뒤집으면 같은 하중에 압축만 받는 셸이 된다. 지점과 천창을 옮기면 형태가 다시 계산되고, 셸 면적 · 흙 물량 · 무게가 나온다. MOSSCAPE 흙 셸을 찾을 때 쓴 방법이다.</p></div><div class="app"></div></section><script>// 실험 앱 공통: 슬라이더 패널 만들기 + 임베드(모달) 모드
+(function(){
+  if(/[?&]embed/.test(location.search)) document.documentElement.classList.add('embed');
+  window.LabUI=function(box,ctl,onChange){
+    const groups={}; ctl.forEach((c,i)=>{c.i=i;(groups[c.g]=groups[c.g]||[]).push(c);});
+    box.innerHTML=Object.entries(groups).map(([g,cs])=>`<fieldset><legend>${g}</legend>${cs.map(c=>c.opts
+      ?`<label><span>${c.k}</span><select data-k="${c.i}">${c.opts.map((o,j)=>`<option value="${j}" ${j==c.get()?'selected':''}>${o}</option>`).join('')}</select><output></output></label>`
+      :`<label><span>${c.k}</span><input type="range" min="${c.min}" max="${c.max}" step="${c.step}" value="${c.get()}" data-k="${c.i}"><output>${c.fmt?c.fmt(c.get()):c.get()}</output></label>`).join('')}</fieldset>`).join('');
+    let tm=null;
+    box.addEventListener('input',e=>{const i=e.target.dataset.k; if(i===undefined) return; const c=ctl[i], v=parseFloat(e.target.value); c.set(v);
+      if(!c.opts) e.target.nextElementSibling.textContent=c.fmt?c.fmt(v):v; clearTimeout(tm); tm=setTimeout(onChange,40);});
+    const dec=c=>{const s=String(c.step||1).split('.')[1];return s?s.length:0;};
+    return function(){box.querySelectorAll('[data-k]').forEach(el=>{const c=ctl[el.dataset.k];let v=c.get();if(!c.opts){v=+(+v).toFixed(dec(c));c.set(v);}el.value=v;if(!c.opts)el.nextElementSibling.textContent=c.fmt?c.fmt(v):v;});};
+  };
+  window.LabRng=function(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}};
+})();
+// 공통 그리기 도구 (어두운 도면 시트)
+window.LD={INK:'#e6e3da',DIM:'#8a8a80',FAINT:'#3a3a35',BG:'#151513',RED:'#ff6b4a',BLUE:'#4da3ff',GREEN:'#9fd36b',MONO:'"JetBrains Mono",ui-monospace,monospace',
+  fit:function(cv){var r=cv.getBoundingClientRect(),d=devicePixelRatio||1;cv.width=r.width*d;cv.height=r.height*d;var g=cv.getContext('2d');g.setTransform(d,0,0,d,0,0);g.lineJoin='round';g.fillStyle='#151513';g.fillRect(0,0,r.width,r.height);return [g,r.width,r.height];},
+  path:function(g,p,close){g.beginPath();p.forEach(function(v,i){i?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1]);});if(close!==false)g.closePath();},
+  text:function(g,s,x,y,o){o=o||{};g.font=(o.w||'')+' '+(o.size||10)+'px '+LD.MONO;g.fillStyle=o.c||LD.DIM;g.textAlign=o.a||'left';g.fillText(s,x,y);},
+  dim:function(g,x1,y1,x2,y2,label,off,c){c=c||LD.BLUE;var dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy)||1,nx=-dy/L*off,ny=dx/L*off;g.strokeStyle=c;g.lineWidth=.7;g.beginPath();
+    g.moveTo(x1,y1);g.lineTo(x1+nx*1.15,y1+ny*1.15);g.moveTo(x2,y2);g.lineTo(x2+nx*1.15,y2+ny*1.15);g.moveTo(x1+nx,y1+ny);g.lineTo(x2+nx,y2+ny);g.stroke();
+    var mx=(x1+x2)/2+nx*1.6,my=(y1+y2)/2+ny*1.6;g.save();g.translate(mx,my);var a=Math.atan2(dy,dx);if(a>Math.PI/2||a<-Math.PI/2)a+=Math.PI;g.rotate(a);LD.text(g,label,0,3,{c:c,a:'center'});g.restore();},
+  stats:function(el,rows,hi,note){el.innerHTML=rows.map(function(r,i){return '<div class="'+(hi&&hi.indexOf(i)>=0?'hi':'')+(r[2]==='ng'?' ng':'')+'"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>';}).join('')+(note?'<p class="note">'+note+'</p>':'');}
+};
+
+// 실사용 도구줄: 좌표 · DXF 입력, PNG · CSV · DXF 내보내기, 링크로 조건 저장
+window.LabIO=function(app,o){
+  const bar=document.createElement('div'); bar.className='lio';
+  bar.innerHTML=(o.poly?`<details class="lin"><summary>대지 입력</summary><p>꼭짓점 좌표를 한 줄에 하나씩 <code>x, y</code> (m, 북쪽이 +y). 또는 DXF의 닫힌 폴리라인을 올리세요.</p><textarea rows="6"></textarea><div><button type="button" class="ap">좌표 적용</button><label class="up">DXF 열기<input type="file" accept=".dxf"></label><span class="msg"></span></div></details>`:'')+
+    `<button type="button" data-x="png">PNG</button><button type="button" data-x="csv">CSV</button>${o.dxf?'<button type="button" data-x="dxf">DXF</button>':''}<button type="button" data-x="link">링크 복사</button>`;
+  app.appendChild(bar);
+  const name=o.name||'lab', msg=bar.querySelector('.msg');
+  const save=(blob,fn)=>{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);};
+  const flash=(b,t)=>{const o2=b.textContent;b.textContent=t;setTimeout(()=>b.textContent=o2,1400);};
+  // 좌표 ↔ 내부 좌표 (내부는 y가 아래로 = 남쪽)
+  const toText=p=>p.map(q=>`${q[0].toFixed(2)}, ${(-q[1]).toFixed(2)}`).join('\n');
+  function setPoly(pts){ if(pts.length<3){msg.textContent='점이 3개 이상 필요해요';return;}
+    const xs=pts.map(p=>p[0]),ys=pts.map(p=>-p[1]),mx=Math.min(...xs),my=Math.min(...ys);
+    o.poly.set(pts.map(p=>[Math.round((p[0]-mx+3)*100)/100,Math.round((-p[1]-my+3)*100)/100])); msg.textContent=pts.length+'개 점 적용'; o.redraw(); }
+  if(o.poly){
+    const ta=bar.querySelector('textarea'); bar.querySelector('.lin').addEventListener('toggle',()=>{ta.value=toText(o.poly.get());});
+    bar.querySelector('.ap').onclick=()=>{const pts=ta.value.split(/\n/).map(l=>l.split(/[,\s\t]+/).filter(Boolean).map(Number)).filter(a=>a.length>=2&&a.every(isFinite)).map(a=>[a[0],a[1]]);setPoly(pts);};
+    bar.querySelector('input[type=file]').onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{
+      const L=t.split(/\r?\n/).map(s=>s.trim()), polys=[]; let cur=null;
+      for(let i=0;i<L.length-1;i+=2){const c=L[i],v=L[i+1];
+        if(c==='0'){ if(cur&&cur.length>2) polys.push(cur); cur=(v==='LWPOLYLINE'||v==='POLYLINE')?[]:(v==='VERTEX'&&cur?cur:null); if(v==='VERTEX'&&polys.length&&!cur){} }
+        else if(cur&&c==='10') cur.push([+v,0]); else if(cur&&c==='20'&&cur.length) cur[cur.length-1][1]=+v; }
+      if(cur&&cur.length>2) polys.push(cur);
+      if(!polys.length){msg.textContent='닫힌 폴리라인을 찾지 못했어요';return;}
+      const ar=p=>Math.abs(p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a[0]*b[1]-b[0]*a[1];},0))/2;
+      let P=polys.sort((a,b)=>ar(b)-ar(a))[0]; const ext=Math.max(...P.map(p=>Math.abs(p[0])),...P.map(p=>Math.abs(p[1])));
+      const xs=P.map(p=>p[0]),ys=P.map(p=>p[1]),span=Math.max(Math.max(...xs)-Math.min(...xs),Math.max(...ys)-Math.min(...ys));
+      if(span>1000) P=P.map(p=>[p[0]/1000,p[1]/1000]); // mm → m
+      setPoly(P); ta.value=toText(o.poly.get());});};
+  }
+  bar.addEventListener('click',e=>{const x=e.target.dataset&&e.target.dataset.x;if(!x)return;
+    if(x==='png'){const cvs=[...app.querySelectorAll('canvas')],h=Math.max(...cvs.map(c=>c.height)),w=cvs.reduce((s,c)=>s+c.width,0);
+      const out=document.createElement('canvas');out.width=w;out.height=h;const g=out.getContext('2d');g.fillStyle='#151513';g.fillRect(0,0,w,h);let ox=0;cvs.forEach(c=>{g.drawImage(c,ox,0);ox+=c.width;});
+      out.toBlob(b=>save(b,name+'.png'));}
+    if(x==='csv'){const rows=[...app.querySelectorAll('.nls div')].map(d=>[d.querySelector('span').textContent,d.querySelector('b').textContent]);
+      const st=o.state();rows.push(['',''],['입력값','']);Object.entries(st.P||{}).forEach(([k,v])=>rows.push([k,v]));
+      if(o.poly) o.poly.get().forEach((p,i)=>rows.push(['대지 점 '+(i+1),p[0].toFixed(2)+' / '+(-p[1]).toFixed(2)]));
+      save(new Blob(['﻿'+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n')],{type:'text/csv'}),name+'.csv');}
+    if(x==='dxf'){const ents=o.dxf();let d='0\nSECTION\n2\nENTITIES\n';
+      ents.forEach(en=>{const p=en.pts,n=p.length,z=en.z||0;for(let i=0;i<(en.closed===false?n-1:n);i++){const a=p[i],b=p[(i+1)%n];
+        d+=`0\nLINE\n8\n${en.layer}\n10\n${a[0].toFixed(3)}\n20\n${(-a[1]).toFixed(3)}\n30\n${(a[2]!==undefined?a[2]:z).toFixed(3)}\n11\n${b[0].toFixed(3)}\n21\n${(-b[1]).toFixed(3)}\n31\n${(b[2]!==undefined?b[2]:z).toFixed(3)}\n`;}});
+      d+='0\nENDSEC\n0\nEOF\n'; save(new Blob([d],{type:'application/dxf'}),name+'.dxf');}
+    if(x==='link'){const u=location.href.split('#')[0]+'#s='+btoa(unescape(encodeURIComponent(JSON.stringify(o.state()))));
+      (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>flash(e.target,'복사됨'),()=>{prompt('이 링크를 복사하세요',u);});}
+  });
+  // 링크로 연 경우 조건 복원
+  const m=location.hash.match(/s=([^&]+)/); if(m){try{o.load(JSON.parse(decodeURIComponent(escape(atob(m[1])))));}catch(e){}}
+};
+// LAB 07 — 현수선 형태 찾기 (Form finding)
+// 그물을 대지 경계에 매달고 자중으로 늘어뜨린 뒤(힘 밀도법 반복 이완), 뒤집어 압축만 받는 셸을 얻는다.
+// MOSSCAPE 흙 셸에서 numpy로 짠 동적 이완 코드를 웹으로 옮긴 것.
+(function(){
+  const root=document.getElementById('lab-catenary'); if(!root) return;
+  const {INK,DIM,FAINT,RED,BLUE,MONO}=LD;
+  const P={n:18,rise:.32,t:.3,yaw:-0.75,flip:1};
+  let poly=[[2,6],[6,1.5],[13,1],[18,4.5],[18.5,11],[13,15],[5,14],[1.5,10.5]];
+  let holes=[[10,8,1.4]];
+  const app=root.querySelector('.app');
+  app.innerHTML=`<div class="lctl"></div>
+  <div class="nlv"><div class="cv sheet"><canvas class="pl"></canvas><p class="hint">파란 점 = 지점(경계) 드래그 · 빨간 원 = 천창 드래그 · 빈 곳 더블클릭 = 천창 추가/삭제</p></div>
+  <div class="cv sheet"><canvas class="iso"></canvas><p class="hint">좌우로 드래그 = 회전</p></div></div><div class="nls"></div>`;
+  const cP=app.querySelector('.pl'), cI=app.querySelector('.iso'), out=app.querySelector('.nls');
+  const refresh=LabUI(app.querySelector('.lctl'),[
+    {g:'그물',k:'그물 밀도',min:10,max:30,step:1,get:()=>P.n,set:v=>P.n=v},
+    {g:'셸',k:'높이/경간',min:.15,max:.6,step:.01,get:()=>P.rise,set:v=>P.rise=v},
+    {g:'셸',k:'흙 두께 m',min:.15,max:.6,step:.05,get:()=>P.t,set:v=>P.t=v},
+  ],()=>{build();});
+
+  const inside=(x,y,p)=>{let c=false;for(let i=0,j=p.length-1;i<p.length;j=i++){const a=p[i],b=p[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])c=!c;}return c;};
+  let M=null, it=0, anim=0, run=false; // M: 그물 (노드 · 고정 · 이웃 · 셀)
+  function build(){
+    const xs=poly.map(p=>p[0]),ys=poly.map(p=>p[1]),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+    const span=Math.max(x1-x0,y1-y0),h=span/P.n,nx=Math.ceil((x1-x0)/h)+1,ny=Math.ceil((y1-y0)/h)+1,id=new Int32Array(nx*ny).fill(-1),N=[];
+    for(let j=0;j<ny;j++)for(let i=0;i<nx;i++){const x=x0+i*h,y=y0+j*h;if(!inside(x,y,poly))continue;if(holes.some(o=>Math.hypot(x-o[0],y-o[1])<o[2]))continue;id[j*nx+i]=N.length;N.push({x,y,i,j,z:0,fix:false,nb:[],edge:false});}
+    N.forEach(o=>{[[1,0],[-1,0],[0,1],[0,-1]].forEach(([a,b])=>{const ii=o.i+a,jj=o.j+b,k=(ii>=0&&ii<nx&&jj>=0&&jj<ny)?id[jj*nx+ii]:-1;if(k>=0)o.nb.push(k);else{
+      // 이웃이 비었을 때: 바깥 경계면 지점(고정), 천창 쪽이면 자유단
+      const x=x0+ii*h,y=y0+jj*h; if(!inside(x,y,poly)) o.fix=true; else o.edge=true;}});});
+    const cells=[];for(let j=0;j<ny-1;j++)for(let i=0;i<nx-1;i++){const a=id[j*nx+i],b=id[j*nx+i+1],c=id[(j+1)*nx+i+1],d=id[(j+1)*nx+i];if(a>=0&&b>=0&&c>=0&&d>=0)cells.push([a,b,c,d]);}
+    M={N,cells,h,span,x0,x1,y0,y1}; it=0; anim=performance.now(); P.flip=0; if(!run){run=true;requestAnimationFrame(tick);}
+  }
+  // 힘 밀도법: z_i = (Σz_j + w)/k — 자중 w로 아래로 늘어진다. 반복할수록 수렴.
+  function relax(n){const N=M.N,w=-M.h*M.h*.06;for(let s=0;s<n;s++){for(const o of N){if(o.fix||!o.nb.length)continue;let sz=0;for(const k of o.nb)sz+=N[k].z;
+    // 천창 가장자리(자유단)는 이웃이 적어 더 처지므로 고리 보 역할로 살짝 묶는다
+    o.z=(sz+w)/(o.nb.length+(o.edge?.15:0));}}it+=n;}
+  function zs(){let m=0;M.N.forEach(o=>m=Math.min(m,o.z));return m;} // 가장 깊은 처짐 (음수)
+
+  function tick(){if(!M)return;const done=it>=900;if(!done)relax(30);const t=(performance.now()-anim)/1000;
+    if(done&&P.flip<1){P.flip=Math.min(1,P.flip+.06);} draw(); if(!done||P.flip<1) requestAnimationFrame(tick); else run=false;}
+
+  let T={};
+  function drawPlan(){const [g,W,H]=LD.fit(cP),pad=26,k=Math.min((W-2*pad)/(M.x1-M.x0+2),(H-2*pad-20)/(M.y1-M.y0+2)),ox=pad+(W-2*pad-(M.x1-M.x0)*k)/2-M.x0*k,oy=pad+10-M.y0*k+((H-2*pad-20)-(M.y1-M.y0)*k)/2;
+    T={k,ox,oy};const G=(x,y)=>[ox+x*k,oy+y*k];const d=zs()||-1,h2=M.h*k/2;
+    M.N.forEach(o=>{const v=o.z/d,[x,y]=G(o.x,o.y);g.fillStyle=`rgba(${Math.round(60+180*v)},${Math.round(58+150*v)},${Math.round(52+80*v)},.9)`;g.fillRect(x-h2,y-h2,h2*2+.5,h2*2+.5);});
+    // 등고선 대신 그물선
+    g.strokeStyle='rgba(21,21,19,.55)';g.lineWidth=.6;M.N.forEach((o,i)=>o.nb.forEach(k2=>{if(k2>i){const a=G(o.x,o.y),b=G(M.N[k2].x,M.N[k2].y);g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke();}}));
+    LD.path(g,poly.map(p=>G(p[0],p[1])));g.strokeStyle=INK;g.lineWidth=1.4;g.stroke();
+    M.N.forEach(o=>{if(o.fix){const [x,y]=G(o.x,o.y);g.fillStyle=RED;g.fillRect(x-1.5,y-1.5,3,3);}});
+    holes.forEach(o=>{const [x,y]=G(o[0],o[1]);g.beginPath();g.arc(x,y,o[2]*k,0,7);g.strokeStyle=RED;g.setLineDash([3,3]);g.lineWidth=1;g.stroke();g.setLineDash([]);g.beginPath();g.arc(x,y,4,0,7);g.fillStyle=RED;g.fill();});
+    poly.forEach(p=>{const [x,y]=G(p[0],p[1]);g.beginPath();g.arc(x,y,5,0,7);g.fillStyle='#151513';g.fill();g.strokeStyle=BLUE;g.lineWidth=2;g.stroke();});
+    const a=G(M.x0,M.y1+.9),b=G(M.x1,M.y1+.9);LD.dim(g,a[0],a[1],b[0],b[1],(M.x1-M.x0).toFixed(1)+' m',6);
+    LD.text(g,P.flip<1?(it<900?'HANG  · 이완 '+it+'회':'FLIP  · 뒤집는 중'):'SHELL · 압축만 받는 형태',12,16,{c:P.flip<1?'#e0a15a':INK});
+    LD.text(g,'■ 지점(고정)',12,H-10,{c:RED});
+  }
+  function drawIso(){const [g,W,H]=LD.fit(cI);const cx=(M.x0+M.x1)/2,cy=(M.y0+M.y1)/2,co=Math.cos(P.yaw),si=Math.sin(P.yaw),k=Math.min(W,H)/(M.span*1.55);
+    const fl=P.flip, d=zs()||-1, s=P.rise*M.span/-d, zz=o=>o.z*s*(2*fl-1)*-1; // 처음엔 아래로(늘어짐), 뒤집히면 위로
+    const pr=(x,y,z)=>{const X=(x-cx)*co-(y-cy)*si,Y=(x-cx)*si+(y-cy)*co;return [W/2+X*k,H*.62+Y*k*.5-z*k,Y];};
+    // 바닥 경계
+    LD.path(g,poly.map(p=>pr(p[0],p[1],0)));g.strokeStyle=FAINT;g.lineWidth=1;g.stroke();
+    const Lx=-.5,Ly=-.6,Lz=.62;
+    M.cells.map(c=>{const p=c.map(i=>M.N[i]),q=p.map(o=>pr(o.x,o.y,zz(o)));
+      const ux=p[2].x-p[0].x,uy=p[2].y-p[0].y,uz=zz(p[2])-zz(p[0]),vx=p[3].x-p[1].x,vy=p[3].y-p[1].y,vz=zz(p[3])-zz(p[1]);
+      let nx=uy*vz-uz*vy,ny=uz*vx-ux*vz,nz=ux*vy-uy*vx;const L=Math.hypot(nx,ny,nz)||1;if(nz<0){nx=-nx;ny=-ny;nz=-nz;}
+      const sh=Math.max(0,(nx*Lx+ny*Ly+nz*Lz)/L);return {q,dep:q.reduce((a,b)=>a+b[2],0),sh};})
+     .sort((a,b)=>a.dep-b.dep).forEach(c=>{LD.path(g,c.q);const v=Math.round(40+150*c.sh);g.fillStyle=`rgb(${v},${v-4},${v-12})`;g.fill();g.strokeStyle='rgba(230,227,218,.35)';g.lineWidth=.5;g.stroke();});
+    let top=null;M.N.forEach(o=>{if(!top||zz(o)>zz(top))top=o;});
+    if(fl>=1&&top){const p=pr(top.x,top.y,zz(top)),b=pr(top.x,top.y,0);g.setLineDash([3,3]);g.strokeStyle=BLUE;g.beginPath();g.moveTo(b[0],b[1]);g.lineTo(p[0],p[1]);g.stroke();g.setLineDash([]);LD.text(g,'▲ '+zz(top).toFixed(2)+' m',p[0]+8,p[1]-4,{c:BLUE});}
+    LD.text(g,fl<1?'자중으로 늘어진 그물':'뒤집은 셸 (흙 두께 '+P.t.toFixed(2)+' m)',12,16,{c:DIM});
+  }
+  function stats(){const d=zs()||-1,s=P.rise*M.span/-d;let area=0,plan=0;M.cells.forEach(c=>{const p=c.map(i=>M.N[i]);const a=(o,b,cc)=>{const ux=b.x-o.x,uy=b.y-o.y,uz=(b.z-o.z)*s,vx=cc.x-o.x,vy=cc.y-o.y,vz=(cc.z-o.z)*s;return Math.hypot(uy*vz-uz*vy,uz*vx-ux*vz,ux*vy-uy*vx)/2;};area+=a(p[0],p[1],p[2])+a(p[0],p[2],p[3]);plan+=M.h*M.h;});
+    const vol=area*P.t,wt=vol*1.8,rise=-d*s;
+    LD.stats(out,[['경간',M.span.toFixed(1)+' m'],['높이',rise.toFixed(2)+' m'],['높이/경간',(rise/M.span).toFixed(2),rise/M.span<.2?'ng':''],['바닥 면적',plan.toFixed(0)+' ㎡'],['셸 면적',area.toFixed(0)+' ㎡'],
+      ['흙 물량',vol.toFixed(1)+' ㎥'],['무게',wt.toFixed(0)+' t'],['그물 노드',M.N.length+'개'],['천창',holes.length+'개'],['상태',P.flip>=1?'압축 셸':'이완 중']],[5,6],
+      '그물을 경계에 매달아 자중으로 늘어뜨리면 장력만 받는 형태가 나온다. 이를 뒤집으면 같은 하중에 압축만 받는 셸이 된다(현수선 원리, Gaudí · Isler). 높이/경간이 0.2보다 낮으면 수평 추력이 커져 흙 셸로는 불리하다.');}
+  function draw(){if(!M)return;drawPlan();drawIso();stats();}
+
+  // 조작: 지점 · 천창 드래그, 더블클릭 = 천창 추가/삭제, 아이소 회전
+  let drag=null,rot=null;
+  const loc=(cv,e)=>{const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top];};
+  const W2=(x,y)=>[(x-T.ox)/T.k,(y-T.oy)/T.k];
+  cP.addEventListener('pointerdown',e=>{const [x,y]=loc(cP,e);
+    const vi=poly.findIndex(p=>Math.hypot(T.ox+p[0]*T.k-x,T.oy+p[1]*T.k-y)<10);if(vi>=0){drag={t:'v',i:vi};}
+    else{const hi=holes.findIndex(o=>Math.hypot(T.ox+o[0]*T.k-x,T.oy+o[1]*T.k-y)<12);if(hi>=0)drag={t:'h',i:hi};}
+    if(drag)cP.setPointerCapture(e.pointerId);});
+  cP.addEventListener('pointermove',e=>{const [x,y]=loc(cP,e);if(!drag){const on=poly.some(p=>Math.hypot(T.ox+p[0]*T.k-x,T.oy+p[1]*T.k-y)<10)||holes.some(o=>Math.hypot(T.ox+o[0]*T.k-x,T.oy+o[1]*T.k-y)<12);cP.style.cursor=on?'move':'default';return;}
+    const [wx,wy]=W2(x,y);if(drag.t==='v')poly[drag.i]=[Math.round(wx*10)/10,Math.round(wy*10)/10];else{holes[drag.i][0]=wx;holes[drag.i][1]=wy;}build();});
+  cP.addEventListener('pointerup',()=>drag=null);
+  cP.addEventListener('dblclick',e=>{const [x,y]=loc(cP,e),[wx,wy]=W2(x,y);const hi=holes.findIndex(o=>Math.hypot(o[0]-wx,o[1]-wy)<o[2]);
+    if(hi>=0)holes.splice(hi,1);else if(inside(wx,wy,poly))holes.push([wx,wy,1.1]);build();});
+  cI.addEventListener('pointerdown',e=>{rot=[e.clientX,P.yaw];cI.setPointerCapture(e.pointerId);});
+  cI.addEventListener('pointermove',e=>{if(!rot)return;P.yaw=rot[1]+(e.clientX-rot[0])*.01;draw();});
+  cI.addEventListener('pointerup',()=>rot=null);
+
+  // 자동 시연: 경계 한 점과 천창이 움직이고, 높이/경간이 바뀐다
+  const base=poly.map(p=>p.slice());let dk=-1;
+  app.demo={step:t=>{const k=Math.floor(t/3.2);P.yaw=-0.75+0.5*Math.sin(t*.25);
+    if(k!==dk){dk=k;poly=base.map((p,i)=>i===k%base.length?[p[0]+(p[0]-10)*.25,p[1]+(p[1]-8)*.25]:p.slice());holes=[[10+3*Math.sin(k),8+2*Math.cos(k*1.3),1.2+.5*(k%2)]];P.rise=[.32,.45,.25,.38][k%4];build();}
+    else draw();},stop:()=>refresh()};
+  LabIO(app,{name:'form-finding',poly:{get:()=>poly,set:v=>poly=v},state:()=>({P,poly,holes}),load:o=>{Object.assign(P,o.P||{});if(o.poly)poly=o.poly;if(o.holes)holes=o.holes;refresh();},redraw:build,
+    dxf:()=>{const d=zs()||-1,s=P.rise*M.span/-d,E=[{layer:'BOUNDARY',pts:poly}];M.N.forEach((o,i)=>o.nb.forEach(k=>{if(k>i){const b=M.N[k];E.push({layer:'SHELL',closed:false,pts:[[o.x,o.y,-o.z*s],[b.x,b.y,-b.z*s]]});}}));return E;}});
+  addEventListener('resize',draw); build();
+})();
+</script>
+<footer>© 2026 한승현 Seunghyun Han</footer>
+</main>
+<div id="lb"><img alt=""><button class="p" aria-label="이전">‹</button><button class="n" aria-label="다음">›</button><div class="c"></div></div>
+<script>
+
+// 표지 인트로 (세션당 한 번, 누르면 건너뜀)
+(function(){var c=document.querySelector('.cv0'),f=document.querySelector('.ifr');if(!c||!f)return;var im=[].slice.call(f.querySelectorAll('img')),b=document.body,h=document.documentElement,v=document.querySelector('.cvv');
+var seen=false;try{seen=sessionStorage.getItem('intro');sessionStorage.setItem('intro','1');}catch(e){}
+if(seen||matchMedia('(prefers-reduced-motion:reduce)').matches){f.remove();return;}
+var r=c.getBoundingClientRect(),fw=Math.min(innerWidth*.22,innerHeight*.36),fh=innerHeight*.58,L0=innerWidth/2-fw/2-r.left,T0=innerHeight/2-fh/2-r.top;c.style.setProperty('--ic','inset('+T0+'px '+(r.width-L0-fw)+'px '+(r.height-T0-fh)+'px '+L0+'px)');
+b.classList.add('cvi');h.classList.add('introing');var T=[],done=false;function at(ms,fn){T.push(setTimeout(fn,ms));}
+function show(i){im.forEach(function(x,j){x.classList.toggle('on',j===i);});}
+function end(){if(done)return;done=true;T.forEach(clearTimeout);b.classList.add('open');setTimeout(function(){b.classList.remove('cvi','open','w1','w2','w3');h.classList.remove('introing');f.classList.add('out');im.forEach(function(x){x.classList.remove('on');});setTimeout(function(){f.remove();},1100);},1200);if(v){try{v.currentTime=0;v.play();}catch(e){}}}
+at(250,function(){b.classList.add('w1');});at(650,function(){b.classList.add('w2');});at(1050,function(){b.classList.add('w3');});
+var n=im.length,t0=400,step=230;for(var i=0;i<n;i++)(function(i){at(t0+i*step,function(){show(i);});})(i);
+at(t0+n*step+500,end);addEventListener('click',end,{once:true});addEventListener('keydown',end,{once:true});})();
+// 표지 기본 화면: 지적도. 커서가 지나간 필지에서 대지 분석 → 정북 사선 → 매스가 한 층씩 쌓인다.
+(function(){var cv=document.querySelector('.cv0 .cad');if(!cv)return;var g=cv.getContext('2d'),W,H,DP=1,P=[],B=[],hot=null,mx=-1,my=-1,auto=true,ax=0,ay=0,at=0,last=0,still=matchMedia('(prefers-reduced-motion:reduce)').matches,info=document.querySelector('.cdr');
+var M=0.42,FH=7,ROT=-0.12,CS=Math.cos(ROT),SN=Math.sin(ROT);
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function area(p){var s=0;for(var i=0;i<p.length;i++){var a=p[i],b=p[(i+1)%p.length];s+=a[0]*b[1]-b[0]*a[1];}return Math.abs(s)/2;}
+function cen(p){var x=0,y=0;p.forEach(function(q){x+=q[0];y+=q[1];});return [x/p.length,y/p.length];}
+function lerp(a,b,t){return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];}
+function inside(x,y,p){var c=false;for(var i=0,j=p.length-1;i<p.length;j=i++){var a=p[i],b=p[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])c=!c;}return c;}
+// 볼록 다각형을 선분 a-b 기준 안쪽으로 d만큼 들인 반평면으로 자르기
+function clipHalf(p,a,b,d,s){var dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy)||1,nx=-dy/L*s,ny=dx/L*s,f=function(q){return (q[0]-a[0])*nx+(q[1]-a[1])*ny-d;},o=[];
+ for(var i=0;i<p.length;i++){var P1=p[i],P2=p[(i+1)%p.length],f1=f(P1),f2=f(P2);if(f1>=0)o.push(P1);if((f1>=0)!==(f2>=0))o.push(lerp(P1,P2,f1/(f1-f2)));}return o;}
+function sgn(p){var s=0;for(var i=0;i<p.length;i++){var a=p[i],b=p[(i+1)%p.length];s+=a[0]*b[1]-b[0]*a[1];}return s>0?1:-1;}
+function inset(p,d){var s=sgn(p),o=p;for(var i=0;i<p.length&&o.length>2;i++)o=clipHalf(o,p[i],p[(i+1)%p.length],d,s);return o;}
+function clipY(p,yc){var o=[];for(var i=0;i<p.length;i++){var a=p[i],b=p[(i+1)%p.length],fa=a[1]-yc,fb=b[1]-yc;if(fa>=0)o.push(a);if((fa>=0)!==(fb>=0))o.push(lerp(a,b,fa/(fa-fb)));}return o;}
+function split(q,R,out){var A=area(q);if(A<(1400+R()*2600)||q.length!==4){out.push(q);return;}
+ var e0=Math.hypot(q[1][0]-q[0][0],q[1][1]-q[0][1])+Math.hypot(q[3][0]-q[2][0],q[3][1]-q[2][1]),e1=Math.hypot(q[2][0]-q[1][0],q[2][1]-q[1][1])+Math.hypot(q[0][0]-q[3][0],q[0][1]-q[3][1]),t=.32+R()*.36,u=t+(R()-.5)*.12;
+ if(e0>=e1){var m1=lerp(q[0],q[1],t),m2=lerp(q[3],q[2],u);split([q[0],m1,m2,q[3]],R,out);split([m1,q[1],q[2],m2],R,out);}
+ else{var n1=lerp(q[1],q[2],t),n2=lerp(q[0],q[3],u);split([q[0],q[1],n1,n2],R,out);split([n2,n1,q[2],q[3]],R,out);}}
+function size(){var r=cv.getBoundingClientRect();DP=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*DP;cv.height=H*DP;g.setTransform(DP,0,0,DP,0,0);
+ var R=rng(11),S=Math.max(120,Math.min(190,W/8)),cols=Math.ceil(W*1.3/S)+2,rows=Math.ceil(H*1.3/S)+2,L=[],ox=-W*.15-S,oy=-H*.15-S;
+ for(var j=0;j<=rows;j++){L[j]=[];for(var i=0;i<=cols;i++){var x=ox+i*S+(R()-.5)*S*.35,y=oy+j*S*.78+(R()-.5)*S*.3;L[j][i]=[W/2+(x-W/2)*CS-(y-H/2)*SN,H/2+(x-W/2)*SN+(y-H/2)*CS];}}
+ P=[];B=[];var no=1;for(j=0;j<rows;j++)for(i=0;i<cols;i++){var blk=[L[j][i],L[j][i+1],L[j+1][i+1],L[j+1][i]],road=(i%3===0||j%4===0)?9:5,q=inset(blk,road);if(q.length<4)continue;q=q.slice(0,4);var out=[];split(q,R,out);
+  out.forEach(function(p){var c=cen(p);if(c[0]<-60||c[0]>W+60||c[1]<-60||c[1]>H+60)return;P.push({p:p,c:c,a:area(p)*M*M,no:(100+((no*37)%900))+'-'+(1+no%23),b:null});no++;});}}
+function line(p,close){g.beginPath();p.forEach(function(v,i){i?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1]);});if(close!==false)g.closePath();}
+// 한 필지의 건물: 대지안의 공지 → 층마다 북쪽(화면 위)에서 정북 사선만큼 깎인 평면
+function plan(o){var R=rng(o.no.length*97+Math.round(o.a)),sb=inset(o.p,4+R()*3);if(sb.length<3)return null;var ys=sb.map(function(q){return q[1];}),y0=Math.min.apply(null,ys),y1=Math.max.apply(null,ys),n=Math.max(2,Math.min(14,Math.round(o.a/45+R()*5))),fl=[];
+ for(var f=0;f<n;f++){var cut=f<3?0:(f-2)*FH*.55,pl=clipY(sb,y0+cut);if(pl.length<3||area(pl)<area(sb)*.25)break;fl.push(pl);}return {fl:fl,y0:y0,y1:y1};}
+function drawB(b,now){var k=Math.min(b.pl.fl.length,Math.floor((now-b.t0)/70)),live=b===hot&&now-b.t0<b.pl.fl.length*70+900,fade=live?1:.62;if(k<=0)return;
+ for(var f=0;f<k;f++){var pl=b.pl.fl[f],z0=-f*FH,z1=-(f+1)*FH;
+  for(var i=0;i<pl.length;i++){var a=pl[i],c=pl[(i+1)%pl.length];
+   line([[a[0],a[1]+z0],[c[0],c[1]+z0],[c[0],c[1]+z1],[a[0],a[1]+z1]]);g.fillStyle='rgba(22,21,19,'+(.92*fade)+')';g.fill();g.strokeStyle='rgba(239,237,230,'+(.32*fade)+')';g.lineWidth=.7;g.stroke();}
+  line(pl.map(function(q){return [q[0],q[1]+z1];}));g.fillStyle=f===k-1&&live?'rgba(255,107,74,.20)':'rgba(46,44,40,'+(.95*fade)+')';g.fill();g.strokeStyle=f===k-1&&live?'#ff6b4a':'rgba(239,237,230,'+(.7*fade)+')';g.lineWidth=f===k-1?1.1:.8;g.stroke();}}
+function draw(now){g.clearRect(0,0,W,H);g.font='9px "JetBrains Mono",ui-monospace,monospace';g.textAlign='center';
+ P.forEach(function(o){line(o.p);g.strokeStyle='rgba(239,237,230,.16)';g.lineWidth=.8;g.stroke();if(o.a>260){g.fillStyle='rgba(239,237,230,.16)';g.fillText(o.no,o.c[0],o.c[1]+3);}});
+ if(hot){var o=hot.o,t=now-hot.t0;line(o.p);g.strokeStyle='#ff6b4a';g.lineWidth=1.4;g.stroke();g.fillStyle='rgba(255,107,74,.07)';g.fill();
+  var sb=inset(o.p,5);if(sb.length>2){g.setLineDash([4,4]);line(sb);g.strokeStyle='rgba(255,107,74,.7)';g.lineWidth=.8;g.stroke();g.setLineDash([]);}
+  g.textAlign='left';o.p.forEach(function(a,i){var c=o.p[(i+1)%o.p.length],L=Math.hypot(c[0]-a[0],c[1]-a[1])*M;if(L<9)return;g.fillStyle='rgba(77,163,255,.9)';g.fillText(L.toFixed(1),(a[0]+c[0])/2+4,(a[1]+c[1])/2-3);});
+  var sc=Math.min(1,t/500);g.strokeStyle='rgba(255,107,74,'+(.5*(1-sc))+')';g.beginPath();var ys=o.p.map(function(q){return q[1];}),ya=Math.min.apply(null,ys),yb=Math.max.apply(null,ys);g.moveTo(o.c[0]-60,ya+(yb-ya)*sc);g.lineTo(o.c[0]+60,ya+(yb-ya)*sc);g.stroke();}
+ B.sort(function(a,b){return a.pl.y1-b.pl.y1;}).forEach(function(b){drawB(b,now);});
+ if(hot&&info){var n=hot.pl.fl.length,k=Math.min(n,Math.max(0,Math.floor((now-hot.t0)/70))),bc=hot.pl.fl.length?Math.round(area(hot.pl.fl[0])/area(hot.o.p)*100):0;
+  info.textContent='지번 '+hot.o.no+' · 대지 '+Math.round(hot.o.a)+'㎡ · 건폐 '+bc+'% · '+k+'/'+n+'F';}}
+function pick(x,y,now){for(var i=0;i<P.length;i++){var o=P[i];if(inside(x,y,o.p)){if(hot&&hot.o===o)return;if(!o.b){var pl=plan(o);if(!pl||!pl.fl.length)return;o.b={o:o,pl:pl,t0:now+420};B.push(o.b);if(B.length>70){var old=B.shift();old.o.b=null;}}else{o.b.t0=now+200;}hot=o.b;return;}}}
+cv.parentNode.addEventListener('mousemove',function(e){var r=cv.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;auto=false;at=performance.now();});
+function loop(now){requestAnimationFrame(loop);if(now-last<30)return;last=now;
+ if(auto||now-at>6000){ax=W*(.5+.38*Math.sin(now/5200))+W*.08*Math.sin(now/1300);ay=H*(.32+.24*Math.sin(now/3700+1));if(!document.body.classList.contains('cvi'))pick(ax,ay,now);}else if(mx>=0)pick(mx,my,now);
+ draw(now);}
+addEventListener('resize',function(){size();});size();if(still){draw(performance.now());}else requestAnimationFrame(loop);})();
+// 표지 → About: 메뉴 자리에서 명함이 화면 가득 펼쳐진 뒤 이동
+(function(){var a=document.querySelector('.cvm a[href="about.html"]');if(!a||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+a.addEventListener('click',function(e){if(e.metaKey||e.ctrlKey||e.shiftKey)return;e.preventDefault();var r=a.getBoundingClientRect(),h=r.width*5/9,d=document.createElement('div');d.className='bfly';
+ d.style.cssText='left:'+r.left+'px;top:'+(r.top+r.height/2-h/2)+'px;width:'+r.width+'px;height:'+h+'px;transform:rotate(-6deg)';document.body.appendChild(d);
+ requestAnimationFrame(function(){requestAnimationFrame(function(){d.style.cssText='left:0;top:0;width:100vw;height:100vh;transform:none;box-shadow:none';});});
+ try{sessionStorage.setItem('bcfly','1');}catch(x){}setTimeout(function(){location.href=a.href;},620);});})();
+(function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a');
+a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
+m.addEventListener('mouseleave',function(){bg.forEach(function(b){b.classList.remove('on')});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});});})();
+(function(){var pv=document.querySelector('.lpv');if(!pv)return;document.querySelectorAll('.lr.f').forEach(function(r){
+r.addEventListener('mouseenter',function(){pv.src=r.dataset.img;pv.classList.add('on');});r.addEventListener('mouseleave',function(){pv.classList.remove('on');});
+r.addEventListener('mousemove',function(e){pv.style.transform='translate('+(e.clientX+28)+'px,'+(e.clientY-120)+'px)';});});})();
+(function(){var st=document.querySelector('.stg');if(!st)return;var sl=st.querySelectorAll('.sl'),li=document.querySelectorAll('.ixl li');
+li.forEach(function(l){l.addEventListener('mouseenter',function(){var i=+l.dataset.i;sl.forEach(function(x,k){x.classList.toggle('on',k===i)});li.forEach(function(o){o.classList.toggle('on',o===l)});});});})();
+
+const lb=document.getElementById('lb'),li=lb.querySelector('img'),lc=lb.querySelector('.c');let L=[],ix=0;
+function show(i){ix=(i+L.length)%L.length;li.src=L[ix].src;const f=L[ix].closest('figure').querySelector('figcaption');lc.textContent=(f?f.textContent:'')+'  '+(ix+1)+' / '+L.length;}
+document.addEventListener('click',e=>{
+ if(e.target.closest('#lb button')){show(ix+(e.target.classList.contains('n')?1:-1));return}
+ if(e.target.closest('#lb')){lb.classList.remove('on');return}
+ const im=e.target.closest('figure img');if(im){L=[...document.querySelectorAll('figure img')];show(L.indexOf(im));lb.classList.add('on')}});
+document.addEventListener('keydown',e=>{if(!lb.classList.contains('on'))return;if(e.key==='Escape')lb.classList.remove('on');if(e.key==='ArrowRight')show(ix+1);if(e.key==='ArrowLeft')show(ix-1)});
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.blk,.txt,.work').forEach(el=>{el.classList.add('fade');io.observe(el)})}
+</script>
+</body></html>
