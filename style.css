@@ -102,7 +102,7 @@ main>footer{padding-left:0}
 .phead dd a,.about td a{text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}.phead dd a:hover,.about td a:hover{color:var(--acc)}
 .bookpg{height:100vh;height:100dvh;overflow:hidden;background:#141412;user-select:none;-webkit-user-select:none}
 .bookpg header.top{background:transparent;backdrop-filter:none;align-items:center}
-.bookpg .bt{font-size:14px;font-weight:600}.bookpg .bt em{font-style:normal;font-weight:400;color:var(--mute);margin-left:.6em}
+.bookpg .bt{font-size:14px;font-weight:600}.bookpg .pdfl{margin-left:1em;color:#d9b97a;text-decoration:none;font-weight:400}.bookpg .bt em{font-style:normal;font-weight:400;color:var(--mute);margin-left:.6em}
 .stage{height:calc(100dvh - 130px);display:flex;align-items:center;justify-content:center;perspective:4200px}
 #book{--w:300px;--h:420px;position:relative;display:flex;width:calc(var(--w)*2);height:var(--h);transition:transform .7s cubic-bezier(.4,.1,.2,1);transform-style:preserve-3d;cursor:pointer}
 #book .pg{width:var(--w);height:var(--h);position:relative;background:#1b1b19;box-shadow:0 18px 50px rgba(0,0,0,.55)}
@@ -440,6 +440,7 @@ pre.code.ask .f{color:var(--mute)}
 .bk .meta b{font-family:'Noto Serif KR',Georgia,serif;font-size:28px;font-weight:500}
 .bk .meta em{font-style:italic;color:var(--mute);font-size:14px}
 .bk .meta u{text-decoration:none;font-size:13px;margin-top:8px;color:#d9b97a}
+.bk.paper .obj{width:62%;box-shadow:6px 6px 0 -1px #e9e5dc,12px 12px 0 -2px #d8d3c8,30px 34px 50px rgba(0,0,0,.55)}.bk.paper .obj i{display:none}.bk.paper .meta b{font-size:20px;line-height:1.4;max-width:24em;margin:0 auto;word-break:keep-all}
 @media (max-width:760px){.shelf{grid-template-columns:1fr;gap:10vh}}
 
 /* ===== Practice: 원장 */

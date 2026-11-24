@@ -141,7 +141,7 @@ main>footer{padding-left:0}
 .phead dd a,.about td a{text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}.phead dd a:hover,.about td a:hover{color:var(--acc)}
 .bookpg{height:100vh;height:100dvh;overflow:hidden;background:#141412;user-select:none;-webkit-user-select:none}
 .bookpg header.top{background:transparent;backdrop-filter:none;align-items:center}
-.bookpg .bt{font-size:14px;font-weight:600}.bookpg .bt em{font-style:normal;font-weight:400;color:var(--mute);margin-left:.6em}
+.bookpg .bt{font-size:14px;font-weight:600}.bookpg .pdfl{margin-left:1em;color:#d9b97a;text-decoration:none;font-weight:400}.bookpg .bt em{font-style:normal;font-weight:400;color:var(--mute);margin-left:.6em}
 .stage{height:calc(100dvh - 130px);display:flex;align-items:center;justify-content:center;perspective:4200px}
 #book{--w:300px;--h:420px;position:relative;display:flex;width:calc(var(--w)*2);height:var(--h);transition:transform .7s cubic-bezier(.4,.1,.2,1);transform-style:preserve-3d;cursor:pointer}
 #book .pg{width:var(--w);height:var(--h);position:relative;background:#1b1b19;box-shadow:0 18px 50px rgba(0,0,0,.55)}
@@ -479,6 +479,7 @@ pre.code.ask .f{color:var(--mute)}
 .bk .meta b{font-family:'Noto Serif KR',Georgia,serif;font-size:28px;font-weight:500}
 .bk .meta em{font-style:italic;color:var(--mute);font-size:14px}
 .bk .meta u{text-decoration:none;font-size:13px;margin-top:8px;color:#d9b97a}
+.bk.paper .obj{width:62%;box-shadow:6px 6px 0 -1px #e9e5dc,12px 12px 0 -2px #d8d3c8,30px 34px 50px rgba(0,0,0,.55)}.bk.paper .obj i{display:none}.bk.paper .meta b{font-size:20px;line-height:1.4;max-width:24em;margin:0 auto;word-break:keep-all}
 @media (max-width:760px){.shelf{grid-template-columns:1fr;gap:10vh}}
 
 /* ===== Practice: 원장 */
@@ -1020,10 +1021,10 @@ def shelf():
     out=[]
     for it in PUBLISH:
         s_,w,h=use(it['img'],thumb=True)
-        out.append(f'''<a class="bk" href="publish/{it["slug"]}.html"><div class="obj"><img src="{s_}" width="{w}" height="{h}" alt="{E(it["title"])}"><i></i></div>
+        out.append(f'''<a class="bk{' paper' if it.get('paper') else ''}" href="publish/{it["slug"]}.html"><div class="obj"><img src="{s_}" width="{w}" height="{h}" alt="{E(it["title"])}"><i></i></div>
 <div class="meta"><span>{E(it["kind"])} · {it["year"]}</span><b>{E(it["title"])}</b><em>{E(it.get("desc",""))}</em><u>펼쳐 읽기 →</u></div></a>''')
     return ''.join(out)
-body = f'''<section class="shelfh"><p class="pk">02 — Publish</p><h1>Books</h1><p>졸업전시를 위해 만든 책 두 권. 표지를 누르면 실제 책처럼 넘겨 볼 수 있다.</p></section><section class="shelf">{shelf()}</section>'''
+body = f'''<section class="shelfh"><p class="pk">02 — Publish</p><h1>Books</h1><p>졸업전시를 위해 만든 책 두 권과 학술대회 논문 한 편. 표지를 누르면 실제 책처럼 넘겨 볼 수 있다.</p></section><section class="shelf">{shelf()}</section>'''
 open(f'{OUT}/publish.html', 'w').write(page(f'Publish — {SITE["name_ko"]}', body, '', dark='pubpg', on='b'))
 
 # ---- Practice: 원장(Ledger)
@@ -1045,7 +1046,7 @@ def cover():
     INTRO=[use(i,thumb=True)[0] for i in [643,298,3101,280,2966,87,307]]
     feat=[i for i in PRACTICE if i.get('slug')]
     items=[('01','Projects','projects.html',f'설계 작업 {len(PROJECTS)}','PRJ'),
-           ('02','Publish','publish.html',f'책 {len(PUBLISH)}','PUB'),
+           ('02','Publish','publish.html',f'책 {sum(1 for x in PUBLISH if not x.get("paper"))} · 논문 {sum(1 for x in PUBLISH if x.get("paper"))}','PUB'),
            ('03','Practice','practice.html',f'실무 · 활동 {len(PRACTICE)}','PRA'),
            ('04','Process','process.html','AI와 설계하기',''),
            ('05','About','about.html','소개 · 연락처','')]
@@ -1122,6 +1123,10 @@ for it in PUBLISH:
         dst=f'{dd}/{k:02d}.jpg'
         if not os.path.exists(dst): shutil.copy(os.path.join(sd,f), dst)
     w,h=Image.open(f'{dd}/01.jpg').size
+    pdfa=''
+    if it.get('pdf'):
+        shutil.copy(os.path.join(os.path.dirname(__file__),it['pdf']), f'{dd}/{it["pdf"]}')
+        pdfa=f' <a class="pdfl" href="../book/{it["slug"]}/{it["pdf"]}" download>PDF ↓</a>'
     cfg=json.dumps(dict(n=len(files), ar=round(w/h,4), dir=f'../book/{it["slug"]}/', back='../publish.html'))
     open(f'{OUT}/publish/{it["slug"]}.html','w').write(f"""<!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -1130,7 +1135,7 @@ for it in PUBLISH:
 <meta property="og:image" content="https://coin9563-max.github.io/book/{it['slug']}/01.jpg">
 <link rel="stylesheet" href="../style.css"></head>
 <body class="dark bookpg">
-<header class="top"><a class="name" href="../publish.html">← {SITE['name_ko']}<span>Publish</span></a><span class="bt">{E(it['title'])} <em>{E(it['kind'])} · {it['year']}</em></span></header>
+<header class="top"><a class="name" href="../publish.html">← {SITE['name_ko']}<span>Publish</span></a><span class="bt">{E(it['title'])} <em>{E(it['kind'])} · {it['year']}</em>{pdfa}</span></header>
 <div class="stage"><div id="book"><div class="pg L"></div><div class="pg R"></div><i class="spine"></i></div></div>
 <div class="bctl"><button id="pv" aria-label="이전">‹</button><span id="cnt"></span><button id="nx" aria-label="다음">›</button></div>
 <p class="bhint">클릭 · 방향키 · 스와이프로 넘기기</p>

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>목욕시설의 기능공간 경계와 공간 간 관계 구성 방식에 관한 비교 연구 — 한승현</title>
+<meta name="description" content="목욕행위 및 이용 조건을 중심으로 — Samedan · Vals · Koganeyu · Les Bains des Docks · Therme Meran"><meta property="og:title" content="목욕시설의 기능공간 경계와 공간 간 관계 구성 방식에 관한 비교 연구">
+<meta property="og:image" content="https://coin9563-max.github.io/book/bath-boundaries/01.jpg">
+<link rel="stylesheet" href="../style.css"></head>
+<body class="dark bookpg">
+<header class="top"><a class="name" href="../publish.html">← 한승현<span>Publish</span></a><span class="bt">목욕시설의 기능공간 경계와 공간 간 관계 구성 방식에 관한 비교 연구 <em>학술논문 · 한국문화공간건축학회 2026 추계학술대회 · 2026</em> <a class="pdfl" href="../book/bath-boundaries/kica26.pdf" download>PDF ↓</a></span></header>
+<div class="stage"><div id="book"><div class="pg L"></div><div class="pg R"></div><i class="spine"></i></div></div>
+<div class="bctl"><button id="pv" aria-label="이전">‹</button><span id="cnt"></span><button id="nx" aria-label="다음">›</button></div>
+<p class="bhint">클릭 · 방향키 · 스와이프로 넘기기</p>
+<script>window.BOOK={"n": 4, "ar": 0.7074, "dir": "../book/bath-boundaries/", "back": "../publish.html"};</script><script>// 플립북: 표지 단독 → 두쪽 펼침면 → (짝이 안 맞으면) 뒷표지 단독. 모바일은 한쪽씩.
+(function(){
+  const B=window.BOOK, N=B.n, src=i=>B.dir+String(i).padStart(2,'0')+'.jpg';
+  const book=document.getElementById('book'), L=book.querySelector('.L'), R=book.querySelector('.R');
+  const cnt=document.getElementById('cnt'), prevB=document.getElementById('pv'), nextB=document.getElementById('nx');
+  const mq=matchMedia('(max-width:760px)');
+  // spreads: [left,right] (0 = 빈쪽)
+  const S=[[0,1]]; for(let p=2;p<=N;p+=2) S.push([p,p+1<=N?p+1:0]);
+  let s=0, single=mq.matches, pg=1, busy=false;
+  const cache={}; function pre(i){ if(i>0&&i<=N&&!cache[i]){const im=new Image(); im.src=src(i); cache[i]=im;} }
+  function face(el,i){ el.innerHTML=i?'<img src="'+src(i)+'" alt="'+i+'쪽" draggable="false">':''; el.classList.toggle('empty',!i); }
+  function size(){
+    const vw=innerWidth, vh=innerHeight-120, ar=B.ar, cols=single?1:2;
+    let h=Math.min(vh,(vw-(single?32:120))/cols/ar); h=Math.max(h,200);
+    book.style.setProperty('--h',h+'px'); book.style.setProperty('--w',(h*ar)+'px');
+  }
+  function shift(){
+    if(single){book.style.transform='';return;}
+    const [l,r]=S[s]; book.style.transform= !l?'translateX(calc(var(--w)*-.5))': !r?'translateX(calc(var(--w)*.5))':'';
+  }
+  function label(){
+    if(single){cnt.textContent=pg+' / '+N; prevB.disabled=pg<=1; nextB.disabled=pg>=N; return;}
+    const [l,r]=S[s]; cnt.textContent=(l&&r? l+'–'+r : (l||r))+' / '+N; prevB.disabled=s<=0; nextB.disabled=s>=S.length-1;
+  }
+  function render(){
+    book.classList.toggle('one',single);
+    if(single){ face(R,pg); face(L,0); pre(pg+1); pre(pg-1); }
+    else { const [l,r]=S[s]; face(L,l); face(R,r); S[s+1]&&S[s+1].forEach(pre); S[s-1]&&S[s-1].forEach(pre); }
+    shift(); label(); size(); upHash();
+  }
+  function upHash(){ try{ history.replaceState(null,'','#'+(single?pg:(S[s][0]||S[s][1]))); }catch(e){} }
+  function turn(dir){
+    if(busy) return;
+    if(single){
+      const t=pg+dir; if(t<1||t>N) return; busy=true;
+      const img=R.querySelector('img'); if(img){img.style.transition='opacity .18s, transform .18s'; img.style.opacity=0; img.style.transform='translateX('+(-dir*24)+'px)';}
+      setTimeout(()=>{pg=t; render(); const n=R.querySelector('img'); if(n){n.style.opacity=0;n.style.transform='translateX('+(dir*24)+'px)'; requestAnimationFrame(()=>requestAnimationFrame(()=>{n.style.transition='opacity .22s, transform .22s';n.style.opacity=1;n.style.transform='';}));} busy=false;},180);
+      return;
+    }
+    const t=s+dir; if(t<0||t>=S.length) return; busy=true;
+    const cur=S[s], nxt=S[t];
+    const leaf=document.createElement('div'); leaf.className='leaf '+(dir>0?'fw':'bw');
+    const fr=document.createElement('div'), bk=document.createElement('div'); fr.className='f'; bk.className='b';
+    face(fr, dir>0?cur[1]:cur[0]); face(bk, dir>0?nxt[0]:nxt[1]);
+    fr.insertAdjacentHTML('beforeend','<i class="sh"></i>'); bk.insertAdjacentHTML('beforeend','<i class="sh"></i>');
+    leaf.append(fr,bk); book.appendChild(leaf);
+    // 넘기는 쪽 아래에는 다음 펼침면의 같은 쪽을 미리 깔아둔다
+    if(dir>0) face(R,nxt[1]); else face(L,nxt[0]);
+    s=t; shift(); label();
+    requestAnimationFrame(()=>requestAnimationFrame(()=>leaf.classList.add('go')));
+    const done=()=>{ if(!leaf.isConnected) return; leaf.remove(); render(); busy=false; };
+    leaf.addEventListener('transitionend',e=>{ if(e.target===leaf) done(); }); setTimeout(done,1100);
+  }
+  // 입력
+  prevB.onclick=()=>turn(-1); nextB.onclick=()=>turn(1);
+  book.addEventListener('click',e=>{ const r=book.getBoundingClientRect(); turn(e.clientX<r.left+r.width/2?-1:1); });
+  addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();turn(1);} if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();turn(-1);} if(e.key==='Escape') location.href=B.back; if(e.key==='Home'){s=0;pg=1;render();} if(e.key==='End'){s=S.length-1;pg=N;render();} });
+  let x0=null,y0=0; addEventListener('touchstart',e=>{x0=e.touches[0].clientX;y0=e.touches[0].clientY;},{passive:true});
+  addEventListener('touchend',e=>{ if(x0===null)return; const dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0; if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)) turn(dx<0?1:-1); x0=null; },{passive:true});
+  mq.addEventListener('change',()=>{ if(mq.matches){ pg=S[s][0]||S[s][1]; } else { s=pg<=1?0:Math.floor(pg/2); } single=mq.matches; render(); });
+  addEventListener('resize',size);
+  // 시작 위치 (#쪽번호)
+  const h=parseInt(location.hash.slice(1)); if(h>0&&h<=N){ pg=h; s=h<=1?0:Math.floor(h/2); }
+  render();
+})();
+</script>
+</body></html>

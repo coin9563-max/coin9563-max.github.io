@@ -199,6 +199,7 @@ ABOUT = dict(
 PUBLISH = [
   dict(title='FROM CITY TO EARTH', kind='졸업전시 책자', year='2026', img=2069, desc='MOSSCAPE OREUM 졸업전시 책자', slug='from-city-to-earth', pages='fcte2'),
   dict(title='UNWASHED', kind='졸업전시 책자', year='2026', img=2071, desc='From Social Escape to Biological Survival', slug='unwashed', pages='unw'),
+  dict(title='목욕시설의 기능공간 경계와 공간 간 관계 구성 방식에 관한 비교 연구', kind='학술논문 · 한국문화공간건축학회 2026 추계학술대회', year='2026', img='kica26_01', desc='목욕행위 및 이용 조건을 중심으로 — Samedan · Vals · Koganeyu · Les Bains des Docks · Therme Meran', slug='bath-boundaries', pages='kica26', pdf='kica26.pdf', paper=True),
 ]
 
 # ---- 메인 3: Practice & Activities (인턴 · 대외활동 작업)
