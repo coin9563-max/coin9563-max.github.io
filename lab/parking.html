@@ -251,11 +251,11 @@ function rnd(n){var x=Math.sin(n*91.3+7.1)*43758.5;return x-Math.floor(x);}
 function build(){if(built)return;built=true;var C=['#2a2724','#3b3632','#d8d0c2','#1f1e1c','#5a4b3c','#8d7e69','#c9bfae','#44403a'],ord=[],h='';
  ['','',''].concat(PJ).concat(['','','','']).forEach(function(t){ord.push({t:t});});ord.splice(4,0,{t:'FROM CITY TO EARTH',f:1});ord.splice(8,0,{t:'UNWASHED',f:2});
  ord.forEach(function(o,i){var w=o.f==1?30:o.f==2?26:Math.round(16+rnd(i)*26),ht=o.f?96:Math.round(78+rnd(i+40)*20),cl=o.f==1?'#161514':o.f==2?'#1b1a17':C[Math.floor(rnd(i+9)*C.length)],tc=o.f==1?'#f2efe8':o.f==2?'#e9c43b':(parseInt(cl.slice(1,3),16)>150?'#3a352f':'#cfc6b6');
-  h+='<div class="sp'+(o.f?' f'+o.f:'')+'" style="width:'+w+'px;height:'+ht+'%;background:'+cl+';color:'+tc+'"><b'+(/[가-힣]/.test(o.t)?' class="ko"':'')+'>'+(o.t||'')+'</b></div>';});
+  h+='<div class="sp'+(o.f?' f'+o.f:'')+'" style="--bh:'+(ht/100*Math.min(innerHeight*.4,360))+'px;width:'+w+'px;height:'+ht+'%;background:'+cl+';color:'+tc+'"><b'+(/[가-힣]/.test(o.t)?' class="ko"':'')+'>'+(o.t||'')+'</b>'+(o.f?'<i class="cvr" style="background-image:url('+(o.f==1?bg.dataset.a:bg.dataset.b)+')"></i><i class="pgs"></i>':'')+'</div>';});
  bg.innerHTML='<div class="shf">'+h+'</div><div class="flr"><div class="fb b1" style="background-image:url('+bg.dataset.a+')"></div><div class="fb b2" style="background-image:url('+bg.dataset.b+')"></div></div><div class="ptop"><div class="tb t1" style="background-image:url('+bg.dataset.a+')"></div><div class="tb t2" style="background-image:url('+bg.dataset.b+')"></div><p class="tcap">FROM CITY TO EARTH · UNWASHED — 졸업전시 책자 2026</p></div>';}
 function at(ms,fn){tm.push(setTimeout(fn,ms));}
 function run(){tm.forEach(clearTimeout);tm=[];bg.classList.remove('shk','drop','land','thud','top');if(rm){bg.classList.add('drop','land','top');return;}
- void bg.offsetWidth;at(250,function(){bg.classList.add('shk');});at(380,function(){bg.classList.add('drop');});at(820,function(){bg.classList.add('top');});}
+ void bg.offsetWidth;at(250,function(){bg.classList.add('shk');});at(380,function(){bg.classList.add('drop');});at(1080,function(){bg.classList.add('top');});}
 var wason=false;new MutationObserver(function(){var on=bg.classList.contains('on');if(on===wason)return;wason=on;if(on){build();run();}}).observe(bg,{attributes:true,attributeFilter:['class']});
 })();
 // 표지 Practice 호버: 도시 전경에서 빌딩 → 창 하나 → 사무실 안 내 자리까지 줌인 (선 도면)

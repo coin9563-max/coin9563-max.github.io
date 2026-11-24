@@ -584,9 +584,14 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .pubg.shk .sp:not(.f1):not(.f2){animation:wob .4s ease-out}
 @keyframes wob{35%{transform:rotate(-1deg)}100%{transform:none}}
 .shf{perspective:700px}
-.sp.f1,.sp.f2{transition:transform .42s cubic-bezier(.55,0,.85,.4),opacity .15s .3s}
-.pubg.drop .sp.f1{transform:rotateX(-70deg) translateY(10%);opacity:0}
-.pubg.drop .sp.f2{transform:rotateX(-70deg) translateY(10%);opacity:0;transition-delay:.07s,.37s}
+.shf{perspective:900px;transform-style:preserve-3d}
+.sp.f1,.sp.f2{transform-style:preserve-3d}
+.sp .cvr,.sp .pgs{position:absolute;top:0;left:100%;height:100%;width:calc(var(--bh) * .705);transform-origin:0 50%;transform:rotateY(90deg);background:#1d1c1a center/cover no-repeat;box-shadow:inset 0 0 0 1px #0006}
+.sp .pgs{left:0;transform:rotateY(90deg) translateZ(0);transform-origin:0 50%;background:repeating-linear-gradient(90deg,#e9e3d6 0 2px,#cfc8b9 2px 3px)}
+.pubg.drop .sp.f1{animation:bkf .62s cubic-bezier(.45,0,.8,.5) forwards}
+.pubg.drop .sp.f2{animation:bkf2 .62s cubic-bezier(.45,0,.8,.5) .08s forwards}
+@keyframes bkf{0%{transform:none}28%{transform:translate3d(0,-2%,90px)}100%{transform:translate3d(-60px,135%,220px) rotateY(-78deg) rotateZ(-28deg)}}
+@keyframes bkf2{0%{transform:none}28%{transform:translate3d(0,-2%,90px)}100%{transform:translate3d(50px,140%,200px) rotateY(-70deg) rotateZ(22deg)}}
 .flr{position:absolute;left:0;right:0;top:58%;bottom:0;perspective:1100px;perspective-origin:45% 10%;border-top:1px solid #ffffff12;background:linear-gradient(#ffffff06,transparent 60%)}
 .fb{position:absolute;top:0;height:min(28vh,250px);aspect-ratio:.705;background:#1d1c1a center/cover no-repeat;box-shadow:1px 1px 0 #cfc9bd,2px 2px 0 #9c968a,3px 3px 0 #cfc9bd,4px 4px 0 #8a8478,14px 22px 30px #000d;opacity:0;transform-origin:50% 100%}
 .fb.b1{left:37%;transform:rotateX(66deg) translateY(-420px) translateZ(220px) rotateZ(-50deg)}
@@ -703,11 +708,11 @@ function rnd(n){var x=Math.sin(n*91.3+7.1)*43758.5;return x-Math.floor(x);}
 function build(){if(built)return;built=true;var C=['#2a2724','#3b3632','#d8d0c2','#1f1e1c','#5a4b3c','#8d7e69','#c9bfae','#44403a'],ord=[],h='';
  ['','',''].concat(PJ).concat(['','','','']).forEach(function(t){ord.push({t:t});});ord.splice(4,0,{t:'FROM CITY TO EARTH',f:1});ord.splice(8,0,{t:'UNWASHED',f:2});
  ord.forEach(function(o,i){var w=o.f==1?30:o.f==2?26:Math.round(16+rnd(i)*26),ht=o.f?96:Math.round(78+rnd(i+40)*20),cl=o.f==1?'#161514':o.f==2?'#1b1a17':C[Math.floor(rnd(i+9)*C.length)],tc=o.f==1?'#f2efe8':o.f==2?'#e9c43b':(parseInt(cl.slice(1,3),16)>150?'#3a352f':'#cfc6b6');
-  h+='<div class="sp'+(o.f?' f'+o.f:'')+'" style="width:'+w+'px;height:'+ht+'%;background:'+cl+';color:'+tc+'"><b'+(/[가-힣]/.test(o.t)?' class="ko"':'')+'>'+(o.t||'')+'</b></div>';});
+  h+='<div class="sp'+(o.f?' f'+o.f:'')+'" style="--bh:'+(ht/100*Math.min(innerHeight*.4,360))+'px;width:'+w+'px;height:'+ht+'%;background:'+cl+';color:'+tc+'"><b'+(/[가-힣]/.test(o.t)?' class="ko"':'')+'>'+(o.t||'')+'</b>'+(o.f?'<i class="cvr" style="background-image:url('+(o.f==1?bg.dataset.a:bg.dataset.b)+')"></i><i class="pgs"></i>':'')+'</div>';});
  bg.innerHTML='<div class="shf">'+h+'</div><div class="flr"><div class="fb b1" style="background-image:url('+bg.dataset.a+')"></div><div class="fb b2" style="background-image:url('+bg.dataset.b+')"></div></div><div class="ptop"><div class="tb t1" style="background-image:url('+bg.dataset.a+')"></div><div class="tb t2" style="background-image:url('+bg.dataset.b+')"></div><p class="tcap">FROM CITY TO EARTH · UNWASHED — 졸업전시 책자 2026</p></div>';}
 function at(ms,fn){tm.push(setTimeout(fn,ms));}
 function run(){tm.forEach(clearTimeout);tm=[];bg.classList.remove('shk','drop','land','thud','top');if(rm){bg.classList.add('drop','land','top');return;}
- void bg.offsetWidth;at(250,function(){bg.classList.add('shk');});at(380,function(){bg.classList.add('drop');});at(820,function(){bg.classList.add('top');});}
+ void bg.offsetWidth;at(250,function(){bg.classList.add('shk');});at(380,function(){bg.classList.add('drop');});at(1080,function(){bg.classList.add('top');});}
 var wason=false;new MutationObserver(function(){var on=bg.classList.contains('on');if(on===wason)return;wason=on;if(on){build();run();}}).observe(bg,{attributes:true,attributeFilter:['class']});
 })();
 // 표지 Practice 호버: 도시 전경에서 빌딩 → 창 하나 → 사무실 안 내 자리까지 줌인 (선 도면)
