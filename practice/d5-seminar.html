@@ -58,25 +58,18 @@ if(!document.body.classList.contains('cardpg')&&matchMedia('(hover:hover)').matc
 })();
 
 
-// 표지 Publish 호버: 책장에서 책을 꺼내 돌려 표지를 보이고, 펼쳐서 넘김
-(function(){var bg=document.querySelector('.cv0 .pubg');if(!bg)return;var A=bg.dataset.a,N=+bg.dataset.n,SQ=bg.dataset.s.split(',').map(Number),PJ=JSON.parse(bg.dataset.p||'[]'),src=function(i){return A+String(i).padStart(2,'0')+'.jpg';},built=false,bk,L,R,tm=[],q=0,rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
-function img(el,i){el.style.backgroundImage=i?'url('+src(i)+')':'none';el.classList.toggle('empty',!i);}
+// 표지 Publish 호버: 책장이 쿵 울리고 책 두 권이 떨어져 바닥에 놓임
+(function(){var bg=document.querySelector('.cv0 .pubg');if(!bg)return;var PJ=JSON.parse(bg.dataset.p||'[]'),built=false,tm=[],rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
 function rnd(n){var x=Math.sin(n*91.3+7.1)*43758.5;return x-Math.floor(x);}
 function build(){if(built)return;built=true;var C=['#2a2724','#3b3632','#d8d0c2','#1f1e1c','#5a4b3c','#8d7e69','#c9bfae','#44403a'],ord=[],h='';
- ['','',''].concat(PJ).concat(['','','','']).forEach(function(t){ord.push({t:t});});ord.splice(4,0,{t:'FROM CITY TO EARTH',me:1});ord.splice(8,0,{t:'UNWASHED',un:1});
- ord.forEach(function(o,i){var w=o.me?30:o.un?26:Math.round(16+rnd(i)*26),ht=o.me||o.un?96:Math.round(78+rnd(i+40)*20),cl=o.me?'#161514':o.un?'#1b1a17':C[Math.floor(rnd(i+9)*C.length)],tc=o.me?'#f2efe8':o.un?'#e9c43b':(parseInt(cl.slice(1,3),16)>150?'#3a352f':'#cfc6b6');
-  h+='<div class="sp'+(o.me?' me':'')+'" style="width:'+w+'px;height:'+ht+'%;background:'+cl+';color:'+tc+'"><b'+(/[가-힣]/.test(o.t)?' class="ko"':'')+'>'+(o.t||'')+'</b></div>';});
- bg.innerHTML='<div class="shf">'+h+'</div><div class="pbs"><div class="pbk"><div class="pp L empty"></div><div class="pp R"></div></div></div>';
- bk=bg.querySelector('.pbk');L=bk.querySelector('.L');R=bk.querySelector('.R');
- SQ.forEach(function(p){[p,p+1].forEach(function(i){var m=new Image();m.src=src(i);});});}
-function reset(){tm.forEach(clearTimeout);tm=[];q=0;bg.classList.remove('pull','turn','show');bk.classList.remove('open');img(L,0);img(R,1);bk.querySelectorAll('.lf').forEach(function(x){x.remove();});}
-function flip(lp){var f=document.createElement('div');f.className='lf';f.innerHTML='<i class="a"></i><i class="b"></i>';f.firstChild.style.backgroundImage=R.style.backgroundImage;f.lastChild.style.backgroundImage='url('+src(lp)+')';bk.appendChild(f);img(R,lp+1<=N?lp+1:0);
- void f.offsetWidth;f.classList.add('go');tm.push(setTimeout(function(){img(L,lp);f.remove();},880));}
+ ['','',''].concat(PJ).concat(['','','','']).forEach(function(t){ord.push({t:t});});ord.splice(4,0,{t:'FROM CITY TO EARTH',f:1});ord.splice(8,0,{t:'UNWASHED',f:2});
+ ord.forEach(function(o,i){var w=o.f==1?30:o.f==2?26:Math.round(16+rnd(i)*26),ht=o.f?96:Math.round(78+rnd(i+40)*20),cl=o.f==1?'#161514':o.f==2?'#1b1a17':C[Math.floor(rnd(i+9)*C.length)],tc=o.f==1?'#f2efe8':o.f==2?'#e9c43b':(parseInt(cl.slice(1,3),16)>150?'#3a352f':'#cfc6b6');
+  h+='<div class="sp'+(o.f?' f'+o.f:'')+'" style="width:'+w+'px;height:'+ht+'%;background:'+cl+';color:'+tc+'"><b'+(/[가-힣]/.test(o.t)?' class="ko"':'')+'>'+(o.t||'')+'</b></div>';});
+ bg.innerHTML='<div class="shf">'+h+'</div><div class="flr"><div class="fb b1" style="background-image:url('+bg.dataset.a+')"></div><div class="fb b2" style="background-image:url('+bg.dataset.b+')"></div></div>';}
 function at(ms,fn){tm.push(setTimeout(fn,ms));}
-function run(){reset();if(rm){bg.classList.add('pull','turn','show');bk.classList.add('open');img(L,SQ[0]);img(R,SQ[0]+1);return;}
- void bg.offsetWidth;at(380,function(){bg.classList.add('pull');});at(1000,function(){bg.classList.add('turn');});at(1250,function(){bg.classList.add('show');});
- at(2250,function(){bk.classList.add('open');flip(SQ[0]);q=1;(function nx(){at(1700,function(){flip(SQ[q%SQ.length]);q++;nx();});})();});}
-var wason=false;new MutationObserver(function(){var on=bg.classList.contains('on');if(on===wason)return;wason=on;if(on){build();run();}else at(700,function(){if(!bg.classList.contains('on')&&built){tm.forEach(clearTimeout);tm=[];}});}).observe(bg,{attributes:true,attributeFilter:['class']});
+function run(){tm.forEach(clearTimeout);tm=[];bg.classList.remove('shk','drop','land','thud');if(rm){bg.classList.add('drop','land');return;}
+ void bg.offsetWidth;at(260,function(){bg.classList.add('shk');});at(420,function(){bg.classList.add('drop');});at(900,function(){bg.classList.add('land');});at(1130,function(){bg.classList.add('thud');});}
+var wason=false;new MutationObserver(function(){var on=bg.classList.contains('on');if(on===wason)return;wason=on;if(on){build();run();}}).observe(bg,{attributes:true,attributeFilter:['class']});
 })();
 // 표지 Practice 호버: 도시 전경에서 빌딩 → 창 하나 → 사무실 안 내 자리까지 줌인 (선 도면)
 (function(){var bg=document.querySelector('.cv0 .prag');if(!bg)return;var rows=JSON.parse(bg.dataset.r),c=document.createElement('canvas');c.className='pdr';bg.appendChild(c);
