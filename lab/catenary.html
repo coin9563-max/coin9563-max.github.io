@@ -270,52 +270,6 @@ function run(){stop();var S=lay();ps.forEach(function(p){p.classList.add('hung')
   scn.style.transition='transform 1.7s cubic-bezier(.45,.05,.25,1)';scn.style.transform='';var rp=bg.querySelector('.rope');rp.style.transition='opacity .8s .3s';rp.style.opacity='';ps.forEach(function(p,i){if(p!==hero){p.style.transition='opacity .6s '+(.45+i*.12)+'s';p.style.opacity='';}});});}
 var wason=false;new MutationObserver(function(){var on=bg.classList.contains('on');if(on===wason)return;wason=on;if(on){build();run();}else stop();}).observe(bg,{attributes:true,attributeFilter:['class']});
 addEventListener('resize',function(){if(built&&wason)lay();});})();
-// 표지 About 호버: 명함으로 지은 빌딩 3동 — 세운 명함 2장(벽) + 눕힌 명함 1장(바닥)이 한 층, 층마다 한 장씩 떨어져 쌓임
-(function(){var bg=document.querySelector('.cv0 .abtg');if(!bg)return;var c=document.createElement('canvas');bg.appendChild(c);var g=c.getContext('2d'),W,H,DP,raf=0,t0=0,CW=90,CH=50,TH=1.6,tex,texB,rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
-var NAME=bg.dataset.n||'',MAIL=bg.dataset.m||'';
-function mk(front){var k=8,cv=document.createElement('canvas');cv.width=CW*k;cv.height=CH*k;var x=cv.getContext('2d');x.fillStyle=front?'#a04d35':'#93452f';x.fillRect(0,0,cv.width,cv.height);
- if(front){x.fillStyle='#3a1a12';[[26,17],[40,17],[54,17]].forEach(function(p){x.save();x.translate((p[0]+5)*k,(p[1]+5.5)*k);x.rotate((p[0]-40)*.004);x.fillRect(-5*k,-5.5*k,10*k,11*k);x.restore();});
-  x.fillStyle='#f8eee5';x.textAlign='center';x.font='600 '+(3.1*k)+'px "Wanted Sans","Noto Sans KR",sans-serif';x.fillText(NAME,45*k,9*k);x.font=(1.5*k)+'px "JetBrains Mono",monospace';x.fillStyle='#ecc2ae';x.fillText('ARCHITECTURAL DESIGNER',45*k,12.6*k);
-  x.font='600 '+(2.3*k)+'px "JetBrains Mono",monospace';x.fillStyle='#f8eee5';x.fillText(MAIL.toUpperCase(),45*k,40*k);x.font=(1.5*k)+'px "JetBrains Mono",monospace';x.fillStyle='#ecc2ae';x.fillText('COIN9563-MAX.GITHUB.IO',45*k,44*k);}
- else{x.strokeStyle='#bd6c5255';x.lineWidth=k*.3;x.strokeRect(4*k,4*k,82*k,42*k);}
- return cv;}
-// 등각 투영
-var S=1,OX=0,OY=0;function P(x,y,z){return [OX+(x-y)*.866*S,OY+(x+y)*.5*S-z*S];}
-// 평행사변형에 텍스처: 로컬(u: 0..CW, v: 0..CH) → a(원점), bu(u끝), bv(v끝)
-function face(im,a,bu,bv,shade){var w=im.width,h=im.height;g.save();g.setTransform(DP*(bu[0]-a[0])/w,DP*(bu[1]-a[1])/w,DP*(bv[0]-a[0])/h,DP*(bv[1]-a[1])/h,DP*a[0],DP*a[1]);g.drawImage(im,0,0);if(shade){g.fillStyle=shade;g.fillRect(0,0,w,h);}g.restore();}
-function quad(pts,fill){g.beginPath();g.moveTo(pts[0][0],pts[0][1]);for(var i=1;i<pts.length;i++)g.lineTo(pts[i][0],pts[i][1]);g.closePath();g.fillStyle=fill;g.fill();}
-// 층 = [벽(뒤), 벽(앞), 바닥판]. 홀수 층은 90° 돌림
-// 동마다 층별 모듈(x 오프셋, 명함 폭 단위) — 아래는 넓고 위로 갈수록 셋백
-var TW=[{x:-.27,F:[[0],[0],[0],[0],[0]]},{x:.0,F:[[-.5,.5],[-.5,.5],[-.5,.5],[0],[0],[0]]},{x:.24,F:[[0,1],[0,1],[.5],[.5]]}],CARDS=[];
-function plan(){CARDS=[];TW.forEach(function(t,ti){t.F.forEach(function(mods,f){var z=f*(CH+TH);mods.forEach(function(m,mi){var cx=m*CW+Math.sin(ti*7+f*3.1+mi)*1.8,cy=Math.cos(ti*5+f*2.3+mi)*1.8,k=f*10+mi;
-  CARDS.push({t:ti,f:f,o:k,k:'w',a:[cx,cy+5,z],u:[1,0,0],n:0});CARDS.push({t:ti,f:f,o:k,k:'w',a:[cx,cy+CH-5,z],u:[1,0,0],n:1});CARDS.push({t:ti,f:f,o:k,k:'r',a:[cx,cy,z+CH],rot:0});});});});
- var order=[];for(var f=0;f<8;f++)for(var ti=0;ti<3;ti++)CARDS.forEach(function(cd){if(cd.t===ti&&cd.f===f)order.push(cd);});
- order.forEach(function(cd,i){cd.d=i*62;});
- CARDS.sort(function(p,q){return p.t-q.t||p.f-q.f||p.o-q.o;});}
-function size(){var r=bg.getBoundingClientRect();W=r.width;H=r.height;DP=Math.min(2,devicePixelRatio||1);c.width=W*DP;c.height=H*DP;c.style.width=W+'px';c.style.height=H+'px';S=Math.min(W/1440,H/860)*.95*(W<860?.75:1);}
-function draw(now){if(!t0)t0=now;var t=rm?1e9:now-t0;g.setTransform(DP,0,0,DP,0,0);g.clearRect(0,0,W,H);var done=true;
- TW.forEach(function(tw,ti){OX=W*(.5+tw.x);OY=H*(W<860?.42:.45);
-  // 그림자
-  g.save();g.globalAlpha=.35;var m0=Math.min.apply(null,tw.F[0]),m1=Math.max.apply(null,tw.F[0])+1;quad([P(m0*CW-6,-6,0),P(m1*CW+6,-6,0),P(m1*CW+6,CH+6,0),P(m0*CW-6,CH+6,0)],'#000');g.restore();
-  CARDS.forEach(function(cd){if(cd.t!==ti)return;var u=(t-cd.d)/520;if(u<=0){done=false;return;}if(u<1)done=false;u=Math.min(1,u);var e=1-Math.pow(1-u,3),dz=(1-e)*140,al=Math.min(1,u*3);g.globalAlpha=al;
-   if(cd.k==='w'){var a=cd.a,ux=cd.u[0]*CW,uy=cd.u[1]*CW,z0=a[2]+dz,
-     A=P(a[0],a[1],z0+CH),BU=P(a[0]+ux,a[1]+uy,z0+CH),BV=P(a[0],a[1],z0);
-     // 두께(옆면, 윗면)
-     var tx=cd.u[1]?TH:0,ty=cd.u[0]?TH:0;
-     quad([P(a[0],a[1],z0+CH),P(a[0]+ux,a[1]+uy,z0+CH),P(a[0]+ux+tx,a[1]+uy+ty,z0+CH),P(a[0]+tx,a[1]+ty,z0+CH)],'#efe2d2');
-     quad([P(a[0]+ux,a[1]+uy,z0),P(a[0]+ux,a[1]+uy,z0+CH),P(a[0]+ux+tx,a[1]+uy+ty,z0+CH),P(a[0]+ux+tx,a[1]+uy+ty,z0)],'#d9c7b2');
-     var A2=P(a[0]+tx,a[1]+ty,z0+CH),BU2=P(a[0]+ux+tx,a[1]+uy+ty,z0+CH),BV2=P(a[0]+tx,a[1]+ty,z0);
-     face(cd.n?tex:texB,A2,BU2,BV2,cd.u[1]?'rgba(0,0,0,.22)':null);}
-   else{var a=cd.a,z0=a[2]+dz,L=cd.rot?CH:CW,D=cd.rot?CW:CH;
-     quad([P(a[0],a[1]+D,z0),P(a[0]+L,a[1]+D,z0),P(a[0]+L,a[1]+D,z0+TH),P(a[0],a[1]+D,z0+TH)],'#e6d6c3');
-     quad([P(a[0]+L,a[1],z0),P(a[0]+L,a[1]+D,z0),P(a[0]+L,a[1]+D,z0+TH),P(a[0]+L,a[1],z0+TH)],'#d2bfa9');
-     if(cd.rot)face(tex,P(a[0]+L,a[1],z0+TH),P(a[0]+L,a[1]+D,z0+TH),P(a[0],a[1],z0+TH),'rgba(255,240,230,.05)');
-     else face(tex,P(a[0],a[1],z0+TH),P(a[0]+L,a[1],z0+TH),P(a[0],a[1]+D,z0+TH),'rgba(255,240,230,.05)');}
-   g.globalAlpha=1;});});
- if(!done)raf=requestAnimationFrame(draw);else raf=0;}
-function start(){cancelAnimationFrame(raf);size();if(!tex){tex=mk(true);texB=mk(false);plan();}t0=0;raf=requestAnimationFrame(draw);}
-var wason=false;new MutationObserver(function(){var on=bg.classList.contains('on');if(on===wason)return;wason=on;if(on)start();else{cancelAnimationFrame(raf);raf=0;}}).observe(bg,{attributes:true,attributeFilter:['class']});
-addEventListener('resize',function(){if(wason){size();t0=-1e9;draw(performance.now());}});})();
 // 표지 Process 호버: 배경 그리드 위에 실험 도면(투라인 + 해치)이 칸에 맞춰 틱 단위로 생성됨
 (function(){var cv0=document.querySelector('.cv0');if(!cv0)return;var lk=document.querySelector('.cvm a[href$="process.html"]');if(!lk)return;
 var bgs=cv0.querySelectorAll('.bg'),bi=[].indexOf.call(document.querySelectorAll('.cvm a'),lk),bg=bgs[bi];if(!bg)return;
