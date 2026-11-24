@@ -543,13 +543,14 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .bc{min-height:calc(100svh - 64px);background:var(--paper);display:flex}
 .bcs{position:relative;flex:1;color:var(--ink);padding:clamp(40px,5vw,72px) clamp(28px,6vw,96px) clamp(56px,6vw,88px);display:grid;grid-template-columns:4fr 4.4fr 3.6fr;grid-template-rows:auto auto 1fr;column-gap:clamp(32px,5vw,88px)}
 .bcs .t1{grid-column:1/-1;font:12px var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--pm);display:flex;gap:28px;flex-wrap:wrap}.bcs .t1 span{letter-spacing:.08em;text-transform:none;font-size:13px;color:#5d5951}
-.bcs .seal{position:absolute;right:clamp(28px,6vw,96px);top:clamp(36px,4.6vw,66px);width:60px;height:60px;border:2px solid #c8462e;color:#c8462e;display:grid;place-items:center;font:600 30px 'Noto Serif KR',serif;font-style:normal;border-radius:4px;transform:rotate(-4deg);opacity:.85}
-.bcs h1{grid-column:1/-1;font-size:clamp(64px,8.4vw,140px);font-weight:600;letter-spacing:-.05em;line-height:.95;margin:clamp(28px,4vh,48px) 0 clamp(36px,6vh,64px);display:flex;align-items:baseline;gap:.35em;flex-wrap:wrap}
+.bcs .seal{position:absolute;right:clamp(28px,6vw,96px);top:clamp(30px,4vw,58px);color:var(--ink);font-style:normal}.bcs .seal .mk{width:clamp(64px,6vw,92px);height:auto}
+.bcs>.cl{position:absolute;inset:0;width:100%;height:100%;color:var(--ink);opacity:.035;pointer-events:none}.bcs>*{position:relative}.bcs>.seal,.bcs>.sz{position:absolute}
+.bcs h1{grid-column:1/-1;font-size:clamp(64px,8.4vw,140px);font-weight:600;letter-spacing:-.05em;line-height:.95;margin:clamp(28px,4vh,48px) 0 20px;display:flex;align-items:baseline;gap:.35em;flex-wrap:wrap}
 .bcs h1 span{font-size:.24em;font-weight:400;letter-spacing:-.01em;color:#5d5951}
 .bcs .c1{display:flex;flex-direction:column;justify-content:space-between;gap:36px}
 .bcs .lead{font-size:clamp(17px,1.35vw,20px);line-height:1.75;color:#2f2d28;letter-spacing:-.01em}
-.bcs .ct{display:grid;grid-template-columns:24px 1fr;gap:6px 12px;font:15px var(--mono)}.bcs .ct dt{color:var(--pm)}.bcs .ct a{color:inherit;text-decoration:none;border-bottom:1px solid #cfcabf}
-.bcs .c3,.bcs .c1s{display:flex;flex-direction:column;gap:30px}.bcs .c1{justify-content:flex-start}.bcs .ct{margin-top:auto;padding-top:8px}
+.bcs .ct{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px 28px;font:15px var(--mono);margin:-12px 0 clamp(36px,6vh,60px);padding-top:12px;border-top:1.5px solid var(--ink)}.bcs .ct div{display:flex;gap:10px}.bcs .ct dt{color:#c8462e}.bcs .ct dt{color:var(--pm)}.bcs .ct a{color:inherit;text-decoration:none;border-bottom:1px solid #cfcabf}
+.bcs .c3,.bcs .c1s{display:flex;flex-direction:column;gap:30px}.bcs .c1{justify-content:flex-start}
 .bcs h3{display:flex;gap:10px;align-items:baseline;font:12px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--ink);font-weight:500;padding-bottom:10px;margin-bottom:6px;border-bottom:1.5px solid var(--ink)}
 .bcs h3 b{color:#c8462e;font-weight:500;letter-spacing:.05em}
 .bcs .it{padding:9px 0;border-bottom:1px solid #dcd8cf;display:flex;flex-direction:column;gap:1px}.bcs section .it:last-child{border-bottom:0}
@@ -562,17 +563,19 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
  transform:translateY(calc(100% + 80px)) rotate(4deg);opacity:0;box-shadow:0 30px 80px #000c;transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .3s,left .7s cubic-bezier(.7,0,.2,1),top .7s cubic-bezier(.7,0,.2,1),width .7s cubic-bezier(.7,0,.2,1),height .7s cubic-bezier(.7,0,.2,1),box-shadow .7s;pointer-events:none}
 .bpk.up{transform:translateY(0) rotate(-3deg);opacity:1;pointer-events:auto}
 .bpk.go{position:fixed;transition:all .7s cubic-bezier(.7,0,.2,1)}
-.bpk .k1{font:10px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.2em;text-transform:uppercase;color:#8a857b}
-.bpk .k2{text-align:right;font-size:11px;line-height:1.5;color:#4a4740}
-.bpk .k3{grid-column:1/-1;align-self:center;font-size:clamp(40px,4.6vw,64px);font-weight:600;letter-spacing:-.05em;line-height:.95}
-.bpk .k3 span{display:block;font-size:.26em;font-weight:400;letter-spacing:-.01em;color:#5d5951;margin-top:.5em}
-.bpk .k4{position:absolute;right:26px;top:44%;width:38px;height:38px;border:2px solid #c8462e;color:#c8462e;display:grid;place-items:center;font:600 20px 'Noto Serif KR',serif;font-style:normal;border-radius:3px;transform:rotate(-4deg);opacity:.85}
-.bpk .k5{grid-column:1/-1;font:9px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.12em;color:#8a857b}
+.bpk{overflow:hidden;padding:24px 28px 22px;grid-template-columns:1fr auto;grid-template-rows:auto 1fr auto}
+.bpk .cl{position:absolute;inset:0;width:100%;height:100%;color:#1d1c1a;opacity:.07;pointer-events:none}
+.bpk>*{position:relative}
+.bpk .k1{font-size:12px;line-height:1.45;color:#1d1c1a;font-weight:500}.bpk .k1 span{color:#8a857b;font-weight:400}
+.bpk .mk{color:#1d1c1a;width:52px;height:52px;justify-self:end}
+.bpk .k3{grid-column:1/-1;align-self:end;font-size:clamp(40px,4.4vw,60px);font-weight:600;letter-spacing:-.05em;line-height:.95;margin-bottom:16px}
+.bpk .k3 span{display:inline;font-size:.3em;font-weight:400;letter-spacing:-.01em;color:#5d5951;margin-left:.6em}
+.bpk .k5{grid-column:1/-1;font:11px/1.7 'JetBrains Mono',ui-monospace,monospace;color:#1d1c1a;border-top:1px solid #1d1c1a;padding-top:8px}.bpk .k5 span{color:#c8462e;margin-right:4px}
 .bpk.go>*{opacity:0;transition:opacity .25s}
 .cv0 .cad,.cv0 .bgs{transition:opacity .5s,filter .5s}.cv0.pk .cad{opacity:.25}.cv0.pk .cvh{opacity:.25;transition:opacity .5s}
 .bfly{position:fixed;z-index:99;background:#f1efe8;transition:all .65s cubic-bezier(.7,0,.2,1);box-shadow:0 30px 80px #000a}
 @media (max-width:1100px){.bcs{grid-template-columns:1fr 1fr}.bcs .c1{grid-column:1/-1;margin-bottom:48px}}
-@media (max-width:700px){.bcs{grid-template-columns:1fr;padding:44px 22px 64px;row-gap:44px}.bcs h1{margin:24px 0 0}.bcs .seal{top:40px;width:46px;height:46px;font-size:23px}.bcs .c1{margin:0}}
+@media (max-width:700px){.bcs{grid-template-columns:1fr;padding:44px 22px 64px;row-gap:44px}.bcs h1{margin:24px 0 0}.bcs .seal .mk{width:52px}.bcs .c1{margin:0}}
 .acard .lio{display:none}
 .acard .dmo{margin-left:auto;background:none;border:0;padding:0;font:11px var(--mono);color:var(--mute);cursor:pointer;display:flex;align-items:center;gap:6px}.acard .dmo:hover{color:#e6e3da}
 .acard .dmo i{font-style:normal}.acard[data-mode=auto] .dmo i{width:6px;height:6px;border-radius:50%;background:#e0a15a;animation:dmo 1.4s ease-in-out infinite}
@@ -583,11 +586,34 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 @media (max-width:900px){.app .lio{grid-column:1}}
 """
 
+
+# ---- 명함 마크: 필지 → 대지안의 공지(점선) → 한 층씩 쌓인 매스 (표지 지적도와 같은 언어)
+import random as _rnd
+def _pts(ps): return ' '.join(f'{x:.1f},{y:.1f}' for x, y in ps)
+def card_mark(size=64):
+    P=[(6,16),(52,9),(58,50),(9,56)]; S=[(14,22),(45,17),(50,44),(17,48)]
+    out=[f'<polygon points="{_pts(P)}" fill="none" stroke="currentColor" stroke-width="1.6"/>',
+         f'<polygon points="{_pts(S)}" fill="none" stroke="#c8462e" stroke-width="1" stroke-dasharray="2.5 2"/>']
+    base=[(19,34),(41,31),(43,43),(21,46)]
+    for i in range(4):
+        dy=-i*5.2; q=[(x,y+dy) for x,y in base]
+        if i: out.append(''.join(f'<line x1="{x:.1f}" y1="{y+5.2:.1f}" x2="{x:.1f}" y2="{y:.1f}" stroke="currentColor" stroke-width=".8"/>' for x,y in q))
+        out.append(f'<polygon points="{_pts(q)}" fill="#f1efe8" stroke="{"#c8462e" if i==3 else "currentColor"}" stroke-width="{1.4 if i==3 else 1}"/>')
+    return f'<svg class="mk" viewBox="0 0 64 64" width="{size}" height="{size}" aria-hidden="true">{"".join(out)}</svg>'
+def card_lines(seed=7, w=900, h=500):
+    R=_rnd.Random(seed); L=[]
+    for j in range(7):
+        y=j*h/6+R.uniform(-25,25); L.append(f'M-20 {y:.0f} L{w+20} {y+R.uniform(-60,60):.0f}')
+    for i in range(10):
+        x=i*w/9+R.uniform(-30,30); L.append(f'M{x:.0f} -20 L{x+R.uniform(-80,80):.0f} {h+20}')
+    return f'<svg class="cl" viewBox="0 0 {w} {h}" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="{" ".join(L)}" fill="none" stroke="currentColor" stroke-width="1"/></svg>'
+MARK=card_mark(); LINES=card_lines()
+
 JS = r"""
 // 어디서든 About을 누르면: 화면 아래에서 명함이 올라오고 → 화면 가득 펼쳐진 뒤 About으로 이동
 (function(){var rm=matchMedia('(prefers-reduced-motion:reduce)').matches,k=null;
 function el(){if(k)return k;var n=document.querySelector('header.top .name'),nm=n?n.innerHTML.replace(/^←\s*/,''):'';k=document.createElement('div');k.className='bpk';k.setAttribute('aria-hidden','true');
- k.innerHTML='<p class="k1">Portfolio 2021–2026</p><p class="k2">Architectural Designer<br>홍익대학교 건축학과</p><b class="k3">'+nm+'</b><i class="k4">韓</i><p class="k5">90 × 50 mm</p>';document.body.appendChild(k);return k;}
+ k.innerHTML='__LINES__<p class="k1">Architectural Designer<br><span>홍익대학교 건축학과</span></p>__MARK__<b class="k3">'+nm+'</b><p class="k5"><span>E</span> __EMAIL__ <span>T</span> __PHONE__<br><span>W</span> coin9563-max.github.io</p>';document.body.appendChild(k);return k;}
 function go(e,href){if(e&&(e.metaKey||e.ctrlKey||e.shiftKey||e.button>0))return;if(rm||document.body.classList.contains('cardpg'))return;e&&e.preventDefault();var c=el(),up=c.classList.contains('up');
  if(!up){c.classList.add('up');void c.offsetWidth;}
  setTimeout(function(){var r=c.getBoundingClientRect();c.classList.add('go');c.style.cssText='left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;right:auto;bottom:auto;transform:rotate(-3deg)';
@@ -681,7 +707,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('keydown',e=>{if(!lb.classList.contains('on'))return;if(e.key==='Escape')lb.classList.remove('on');if(e.key==='ArrowRight')show(ix+1);if(e.key==='ArrowLeft')show(ix-1)});
 if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{rootMargin:'0px 0px -8% 0px'});
 document.querySelectorAll('.blk,.txt,.work').forEach(el=>{el.classList.add('fade');io.observe(el)})}
-"""
+""".replace('__LINES__',LINES).replace('__MARK__',MARK).replace('__EMAIL__',SITE['email']).replace('__PHONE__',SITE['phone'])
 
 def page(title, body, root, dark=False, on='', desc='', og='img/t_307.jpg'):
     return f"""<!doctype html>
@@ -695,7 +721,7 @@ def page(title, body, root, dark=False, on='', desc='', og='img/t_307.jpg'):
 <meta property="og:image" content="https://coin9563-max.github.io/{og}">
 </head><body class="{dark if isinstance(dark, str) else ('dark' if dark else '')}">
 <header class="top"><a class="name" href="{root}index.html">{SITE['name_ko']}<span>{SITE['name_en']}</span></a>
-<nav><a href="{root}projects.html" class="{'on' if on=='w' else ''}">Projects</a><a href="{root}publish.html" class="{'on' if on=='b' else ''}">Publish</a><a href="{root}practice.html" class="{'on' if on=='r' else ''}">Practice</a><a href="{root}process.html" class="{'on' if on=='p' else ''}">Process</a><a href="{root}about.html" class="{'on' if on=='a' else ''}">About</a><a href="{root}about.html#contact">Contact</a></nav></header>
+<nav><a href="{root}projects.html" class="{'on' if on=='w' else ''}">Projects</a><a href="{root}publish.html" class="{'on' if on=='b' else ''}">Publish</a><a href="{root}practice.html" class="{'on' if on=='r' else ''}">Practice</a><a href="{root}process.html" class="{'on' if on=='p' else ''}">Process</a><a href="{root}about.html" class="{'on' if on=='a' else ''}">About</a></nav></header>
 <main>
 {body}
 <footer>© 2026 {SITE['name_ko']} {SITE['name_en']}</footer>
@@ -851,10 +877,10 @@ lead = f'<p class="lead">{E(A["intro"])}</p>' if A.get('intro') else ''
 def bc_sec(no, label, rows):
     return f'<section><h3><b>{no}</b>{label}</h3>' + ''.join(f'<div class="it">' + (f'<span>{E(a)}</span>' if a else '') + f'<strong>{E(b)}</strong>' + (f'<em>{E(c)}</em>' if c else '') + '</div>' for a, b, c in rows) + '</section>'
 body = f'''<section class="bc" aria-label="명함"><div class="bcs">
-<p class="t1">Portfolio 2021–2026<span>Architectural Designer · {SITE["school"]}</span></p><i class="seal" aria-hidden="true">韓</i>
+<p class="t1">Portfolio 2021–2026<span>Architectural Designer · {SITE["school"]}</span></p><i class="seal" aria-hidden="true">{MARK}</i>{LINES}
 <h1>{SITE["name_ko"]}<span>{SITE["name_en"]}</span></h1>
-<div class="c1"><p class="lead">{E(A.get("intro",""))}</p><div class="c1s">{bc_sec('01','Education',A['education'])}{bc_sec('02','Interests',[('',A.get('interests',''),'')])}</div>
-<dl class="ct" id="contact"><dt>E</dt><dd><a href="mailto:{SITE["email"]}">{SITE["email"]}</a></dd><dt>T</dt><dd><a href="tel:{SITE["phone"].replace("-","")}">{SITE["phone"]}</a></dd><dt>W</dt><dd><a href="index.html">coin9563-max.github.io</a></dd></dl></div>
+<dl class="ct" id="contact"><div><dt>E</dt><dd><a href="mailto:{SITE["email"]}">{SITE["email"]}</a></dd></div><div><dt>T</dt><dd><a href="tel:{SITE["phone"].replace("-","")}">{SITE["phone"]}</a></dd></div><div><dt>W</dt><dd><a href="index.html">coin9563-max.github.io</a></dd></div></dl>
+<div class="c1"><p class="lead">{E(A.get("intro",""))}</p><div class="c1s">{bc_sec('01','Education',A['education'])}{bc_sec('02','Interests',[('',A.get('interests',''),'')])}</div></div>
 <div class="c2">{bc_sec('03','Experience',A['experience'])}</div>
 <div class="c3">{bc_sec('04','Awards &amp; Activities',A['activities'])}{bc_sec('05','Skills',[(a,b,'') for a,b in A['skills']])}</div>
 <p class="sz">90 × 50 mm</p><i class="cm" aria-hidden="true"></i></div></section>
