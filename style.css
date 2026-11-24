@@ -461,7 +461,7 @@ pre.code.ask .f{color:var(--mute)}
 .lpv.on{opacity:1}
 @media (max-width:760px){.lcol{display:none}.lr{grid-template-columns:96px 1fr 20px;column-gap:14px;row-gap:4px}.lr .y{grid-column:2;grid-row:1}.lr .th{grid-column:1;grid-row:1/4}.lr .t{grid-column:2}.lr .r{grid-column:2;font-size:13px}.lr .go{grid-row:1;grid-column:3}.lr .th:empty{display:none}.lr:not(.f) .y,.lr:not(.f) .t,.lr:not(.f) .r{grid-column:1/3}}
 
-.cv0 .cvv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;display:block}.cv0 .cvo{position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,#0d0c0bcc 0%,#0d0c0b55 45%,#0d0c0b99 100%),linear-gradient(0deg,#0d0c0bb3 0%,transparent 40%)}@media (prefers-reduced-motion:reduce){.cv0 .cvv{display:none}}
+.cv0 .cad{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block}.cdr{font:11px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.04em;color:#ff8a6e}.cv0 .cvo{position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,#0d0c0bcc 0%,#0d0c0b55 45%,#0d0c0b99 100%),linear-gradient(0deg,#0d0c0bb3 0%,transparent 40%)}@media (prefers-reduced-motion:reduce){.cv0 .cvv{display:none}}
 .cv0 .bgs{z-index:0}
 
 .lio{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start;margin-top:4px}
@@ -487,7 +487,7 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .cvi .iwd span{opacity:0;transition:opacity .5s}.cvi.w1 .iwd span:nth-child(1),.cvi.w2 .iwd span:nth-child(-n+2),.cvi.w3 .iwd span{opacity:1}
 .cvi.open .iwd{opacity:0;transition:opacity .4s}
 /* 표지 영상 위 분석 태그 + 선 스크린 */
-.cv0 .cvo{background:repeating-linear-gradient(90deg,#0000002e 0 1px,transparent 1px 3px),linear-gradient(90deg,#0d0c0bcc 0%,#0d0c0b44 45%,#0d0c0b99 100%),linear-gradient(0deg,#0d0c0bb3 0%,transparent 40%)!important}
+.cv0 .cvo{pointer-events:none;background:radial-gradient(120% 80% at 20% 85%,#0d0c0bd9 0%,#0d0c0b00 45%),radial-gradient(60% 70% at 85% 80%,#0d0c0bcc 0%,#0d0c0b00 60%)!important}
 .ctg{position:absolute;inset:0;z-index:0;pointer-events:none}
 .ctg .tg{position:absolute;transform:translate(-6px,-6px);font:11px/1.35 'JetBrains Mono',ui-monospace,monospace;color:#efede6;letter-spacing:.04em;opacity:0;transition:opacity .35s}
 .ctg .tg.on{opacity:1}

@@ -500,7 +500,7 @@ pre.code.ask .f{color:var(--mute)}
 .lpv.on{opacity:1}
 @media (max-width:760px){.lcol{display:none}.lr{grid-template-columns:96px 1fr 20px;column-gap:14px;row-gap:4px}.lr .y{grid-column:2;grid-row:1}.lr .th{grid-column:1;grid-row:1/4}.lr .t{grid-column:2}.lr .r{grid-column:2;font-size:13px}.lr .go{grid-row:1;grid-column:3}.lr .th:empty{display:none}.lr:not(.f) .y,.lr:not(.f) .t,.lr:not(.f) .r{grid-column:1/3}}
 
-.cv0 .cvv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;display:block}.cv0 .cvo{position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,#0d0c0bcc 0%,#0d0c0b55 45%,#0d0c0b99 100%),linear-gradient(0deg,#0d0c0bb3 0%,transparent 40%)}@media (prefers-reduced-motion:reduce){.cv0 .cvv{display:none}}
+.cv0 .cad{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block}.cdr{font:11px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.04em;color:#ff8a6e}.cv0 .cvo{position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,#0d0c0bcc 0%,#0d0c0b55 45%,#0d0c0b99 100%),linear-gradient(0deg,#0d0c0bb3 0%,transparent 40%)}@media (prefers-reduced-motion:reduce){.cv0 .cvv{display:none}}
 .cv0 .bgs{z-index:0}
 
 .lio{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start;margin-top:4px}
@@ -526,7 +526,7 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .cvi .iwd span{opacity:0;transition:opacity .5s}.cvi.w1 .iwd span:nth-child(1),.cvi.w2 .iwd span:nth-child(-n+2),.cvi.w3 .iwd span{opacity:1}
 .cvi.open .iwd{opacity:0;transition:opacity .4s}
 /* 표지 영상 위 분석 태그 + 선 스크린 */
-.cv0 .cvo{background:repeating-linear-gradient(90deg,#0000002e 0 1px,transparent 1px 3px),linear-gradient(90deg,#0d0c0bcc 0%,#0d0c0b44 45%,#0d0c0b99 100%),linear-gradient(0deg,#0d0c0bb3 0%,transparent 40%)!important}
+.cv0 .cvo{pointer-events:none;background:radial-gradient(120% 80% at 20% 85%,#0d0c0bd9 0%,#0d0c0b00 45%),radial-gradient(60% 70% at 85% 80%,#0d0c0bcc 0%,#0d0c0b00 60%)!important}
 .ctg{position:absolute;inset:0;z-index:0;pointer-events:none}
 .ctg .tg{position:absolute;transform:translate(-6px,-6px);font:11px/1.35 'JetBrains Mono',ui-monospace,monospace;color:#efede6;letter-spacing:.04em;opacity:0;transition:opacity .35s}
 .ctg .tg.on{opacity:1}
@@ -584,14 +584,53 @@ function end(){if(done)return;done=true;T.forEach(clearTimeout);b.classList.add(
 at(250,function(){b.classList.add('w1');});at(650,function(){b.classList.add('w2');});at(1050,function(){b.classList.add('w3');});
 var n=im.length,t0=400,step=230;for(var i=0;i<n;i++)(function(i){at(t0+i*step,function(){show(i);});})(i);
 at(t0+n*step+500,end);addEventListener('click',end,{once:true});addEventListener('keydown',end,{once:true});})();
-// 영상 클립에 맞춰 분석 태그가 깜빡이며 붙는다 (클립 4.5초 간격)
-(function(){var v=document.querySelector('.cvv'),L=document.querySelector('.ctg'),d=document.getElementById('ctgd');if(!v||!L||!d)return;var D=JSON.parse(d.textContent),cur=-1,el=null,CH='▚▞▙▟░▒#/\\<>01';
-function scr(node,txt){var n=0,id=setInterval(function(){n++;var k=Math.floor(n/2);node.textContent=txt.slice(0,k)+(k<txt.length?Array.from({length:Math.min(4,txt.length-k)},function(){return CH[Math.floor(Math.random()*CH.length)];}).join(''):'');if(k>=txt.length)clearInterval(id);},28);}
-function tick(){requestAnimationFrame(tick);if(document.body.classList.contains('cvi'))return;var t=v.currentTime,i=Math.min(D.length-1,Math.floor(t/4.5)),p=t-i*4.5,want=(p>0.9&&p<4.3)?i:-1;if(want===cur)return;cur=want;
- if(el){var o=el;o.classList.remove('on');setTimeout(function(){o.remove();},400);el=null;}
- if(want<0)return;var q=D[want];el=document.createElement('div');el.className='tg';el.style.left=q.x+'%';el.style.top=q.y+'%';el.innerHTML='<i></i><u></u><b></b><small></small>';L.appendChild(el);
- requestAnimationFrame(function(){el&&el.classList.add('on');});scr(el.querySelector('b'),'■ '+q.t);setTimeout(function(){if(el)scr(el.querySelector('small'),q.s);},260);}
-requestAnimationFrame(tick);})();
+// 표지 기본 화면: 지적도. 커서가 지나간 필지에서 대지 분석 → 정북 사선 → 매스가 한 층씩 쌓인다.
+(function(){var cv=document.querySelector('.cv0 .cad');if(!cv)return;var g=cv.getContext('2d'),W,H,DP=1,P=[],B=[],hot=null,mx=-1,my=-1,auto=true,ax=0,ay=0,at=0,last=0,still=matchMedia('(prefers-reduced-motion:reduce)').matches,info=document.querySelector('.cdr');
+var M=0.42,FH=7,ROT=-0.12,CS=Math.cos(ROT),SN=Math.sin(ROT);
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function area(p){var s=0;for(var i=0;i<p.length;i++){var a=p[i],b=p[(i+1)%p.length];s+=a[0]*b[1]-b[0]*a[1];}return Math.abs(s)/2;}
+function cen(p){var x=0,y=0;p.forEach(function(q){x+=q[0];y+=q[1];});return [x/p.length,y/p.length];}
+function lerp(a,b,t){return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];}
+function inside(x,y,p){var c=false;for(var i=0,j=p.length-1;i<p.length;j=i++){var a=p[i],b=p[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])c=!c;}return c;}
+// 볼록 다각형을 선분 a-b 기준 안쪽으로 d만큼 들인 반평면으로 자르기
+function clipHalf(p,a,b,d,s){var dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy)||1,nx=-dy/L*s,ny=dx/L*s,f=function(q){return (q[0]-a[0])*nx+(q[1]-a[1])*ny-d;},o=[];
+ for(var i=0;i<p.length;i++){var P1=p[i],P2=p[(i+1)%p.length],f1=f(P1),f2=f(P2);if(f1>=0)o.push(P1);if((f1>=0)!==(f2>=0))o.push(lerp(P1,P2,f1/(f1-f2)));}return o;}
+function sgn(p){var s=0;for(var i=0;i<p.length;i++){var a=p[i],b=p[(i+1)%p.length];s+=a[0]*b[1]-b[0]*a[1];}return s>0?1:-1;}
+function inset(p,d){var s=sgn(p),o=p;for(var i=0;i<p.length&&o.length>2;i++)o=clipHalf(o,p[i],p[(i+1)%p.length],d,s);return o;}
+function clipY(p,yc){var o=[];for(var i=0;i<p.length;i++){var a=p[i],b=p[(i+1)%p.length],fa=a[1]-yc,fb=b[1]-yc;if(fa>=0)o.push(a);if((fa>=0)!==(fb>=0))o.push(lerp(a,b,fa/(fa-fb)));}return o;}
+function split(q,R,out){var A=area(q);if(A<(1400+R()*2600)||q.length!==4){out.push(q);return;}
+ var e0=Math.hypot(q[1][0]-q[0][0],q[1][1]-q[0][1])+Math.hypot(q[3][0]-q[2][0],q[3][1]-q[2][1]),e1=Math.hypot(q[2][0]-q[1][0],q[2][1]-q[1][1])+Math.hypot(q[0][0]-q[3][0],q[0][1]-q[3][1]),t=.32+R()*.36,u=t+(R()-.5)*.12;
+ if(e0>=e1){var m1=lerp(q[0],q[1],t),m2=lerp(q[3],q[2],u);split([q[0],m1,m2,q[3]],R,out);split([m1,q[1],q[2],m2],R,out);}
+ else{var n1=lerp(q[1],q[2],t),n2=lerp(q[0],q[3],u);split([q[0],q[1],n1,n2],R,out);split([n2,n1,q[2],q[3]],R,out);}}
+function size(){var r=cv.getBoundingClientRect();DP=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*DP;cv.height=H*DP;g.setTransform(DP,0,0,DP,0,0);
+ var R=rng(11),S=Math.max(120,Math.min(190,W/8)),cols=Math.ceil(W*1.3/S)+2,rows=Math.ceil(H*1.3/S)+2,L=[],ox=-W*.15-S,oy=-H*.15-S;
+ for(var j=0;j<=rows;j++){L[j]=[];for(var i=0;i<=cols;i++){var x=ox+i*S+(R()-.5)*S*.35,y=oy+j*S*.78+(R()-.5)*S*.3;L[j][i]=[W/2+(x-W/2)*CS-(y-H/2)*SN,H/2+(x-W/2)*SN+(y-H/2)*CS];}}
+ P=[];B=[];var no=1;for(j=0;j<rows;j++)for(i=0;i<cols;i++){var blk=[L[j][i],L[j][i+1],L[j+1][i+1],L[j+1][i]],road=(i%3===0||j%4===0)?9:5,q=inset(blk,road);if(q.length<4)continue;q=q.slice(0,4);var out=[];split(q,R,out);
+  out.forEach(function(p){var c=cen(p);if(c[0]<-60||c[0]>W+60||c[1]<-60||c[1]>H+60)return;P.push({p:p,c:c,a:area(p)*M*M,no:(100+((no*37)%900))+'-'+(1+no%23),b:null});no++;});}}
+function line(p,close){g.beginPath();p.forEach(function(v,i){i?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1]);});if(close!==false)g.closePath();}
+// 한 필지의 건물: 대지안의 공지 → 층마다 북쪽(화면 위)에서 정북 사선만큼 깎인 평면
+function plan(o){var R=rng(o.no.length*97+Math.round(o.a)),sb=inset(o.p,4+R()*3);if(sb.length<3)return null;var ys=sb.map(function(q){return q[1];}),y0=Math.min.apply(null,ys),y1=Math.max.apply(null,ys),n=Math.max(2,Math.min(14,Math.round(o.a/45+R()*5))),fl=[];
+ for(var f=0;f<n;f++){var cut=f<3?0:(f-2)*FH*.55,pl=clipY(sb,y0+cut);if(pl.length<3||area(pl)<area(sb)*.25)break;fl.push(pl);}return {fl:fl,y0:y0,y1:y1};}
+function drawB(b,now){var k=Math.min(b.pl.fl.length,Math.floor((now-b.t0)/70)),live=b===hot&&now-b.t0<b.pl.fl.length*70+900,fade=live?1:.62;if(k<=0)return;
+ for(var f=0;f<k;f++){var pl=b.pl.fl[f],z0=-f*FH,z1=-(f+1)*FH;
+  for(var i=0;i<pl.length;i++){var a=pl[i],c=pl[(i+1)%pl.length];
+   line([[a[0],a[1]+z0],[c[0],c[1]+z0],[c[0],c[1]+z1],[a[0],a[1]+z1]]);g.fillStyle='rgba(22,21,19,'+(.92*fade)+')';g.fill();g.strokeStyle='rgba(239,237,230,'+(.32*fade)+')';g.lineWidth=.7;g.stroke();}
+  line(pl.map(function(q){return [q[0],q[1]+z1];}));g.fillStyle=f===k-1&&live?'rgba(255,107,74,.20)':'rgba(46,44,40,'+(.95*fade)+')';g.fill();g.strokeStyle=f===k-1&&live?'#ff6b4a':'rgba(239,237,230,'+(.7*fade)+')';g.lineWidth=f===k-1?1.1:.8;g.stroke();}}
+function draw(now){g.clearRect(0,0,W,H);g.font='9px "JetBrains Mono",ui-monospace,monospace';g.textAlign='center';
+ P.forEach(function(o){line(o.p);g.strokeStyle='rgba(239,237,230,.16)';g.lineWidth=.8;g.stroke();if(o.a>260){g.fillStyle='rgba(239,237,230,.16)';g.fillText(o.no,o.c[0],o.c[1]+3);}});
+ if(hot){var o=hot.o,t=now-hot.t0;line(o.p);g.strokeStyle='#ff6b4a';g.lineWidth=1.4;g.stroke();g.fillStyle='rgba(255,107,74,.07)';g.fill();
+  var sb=inset(o.p,5);if(sb.length>2){g.setLineDash([4,4]);line(sb);g.strokeStyle='rgba(255,107,74,.7)';g.lineWidth=.8;g.stroke();g.setLineDash([]);}
+  g.textAlign='left';o.p.forEach(function(a,i){var c=o.p[(i+1)%o.p.length],L=Math.hypot(c[0]-a[0],c[1]-a[1])*M;if(L<9)return;g.fillStyle='rgba(77,163,255,.9)';g.fillText(L.toFixed(1),(a[0]+c[0])/2+4,(a[1]+c[1])/2-3);});
+  var sc=Math.min(1,t/500);g.strokeStyle='rgba(255,107,74,'+(.5*(1-sc))+')';g.beginPath();var ys=o.p.map(function(q){return q[1];}),ya=Math.min.apply(null,ys),yb=Math.max.apply(null,ys);g.moveTo(o.c[0]-60,ya+(yb-ya)*sc);g.lineTo(o.c[0]+60,ya+(yb-ya)*sc);g.stroke();}
+ B.sort(function(a,b){return a.pl.y1-b.pl.y1;}).forEach(function(b){drawB(b,now);});
+ if(hot&&info){var n=hot.pl.fl.length,k=Math.min(n,Math.max(0,Math.floor((now-hot.t0)/70))),bc=hot.pl.fl.length?Math.round(area(hot.pl.fl[0])/area(hot.o.p)*100):0;
+  info.textContent='지번 '+hot.o.no+' · 대지 '+Math.round(hot.o.a)+'㎡ · 건폐 '+bc+'% · '+k+'/'+n+'F';}}
+function pick(x,y,now){for(var i=0;i<P.length;i++){var o=P[i];if(inside(x,y,o.p)){if(hot&&hot.o===o)return;if(!o.b){var pl=plan(o);if(!pl||!pl.fl.length)return;o.b={o:o,pl:pl,t0:now+420};B.push(o.b);if(B.length>70){var old=B.shift();old.o.b=null;}}else{o.b.t0=now+200;}hot=o.b;return;}}}
+cv.parentNode.addEventListener('mousemove',function(e){var r=cv.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;auto=false;at=performance.now();});
+function loop(now){requestAnimationFrame(loop);if(now-last<30)return;last=now;
+ if(auto||now-at>6000){ax=W*(.5+.38*Math.sin(now/5200))+W*.08*Math.sin(now/1300);ay=H*(.32+.24*Math.sin(now/3700+1));if(!document.body.classList.contains('cvi'))pick(ax,ay,now);}else if(mx>=0)pick(mx,my,now);
+ draw(now);}
+addEventListener('resize',function(){size();});size();if(still){draw(performance.now());}else requestAnimationFrame(loop);})();
 // 표지 → About: 메뉴 자리에서 명함이 화면 가득 펼쳐진 뒤 이동
 (function(){var a=document.querySelector('.cvm a[href="about.html"]');if(!a||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
 a.addEventListener('click',function(e){if(e.metaKey||e.ctrlKey||e.shiftKey)return;e.preventDefault();var r=a.getBoundingClientRect(),h=r.width*5/9,d=document.createElement('div');d.className='bfly';
@@ -737,10 +776,6 @@ open(f'{OUT}/practice.html', 'w').write(page(f'Practice — {SITE["name_ko"]}', 
 
 # ---- 표지
 def cover():
-    loc=lambda p:[m[1] for m in p['meta'] if m[0]=='Location'][0].split(' · ')[0]
-    PJ={p['slug']:p for p in PROJECTS}
-    TAGS=[(PJ[k], x, y) for k,x,y in [('mosscape-oreum',38,28),('mosscape-oreum',30,22),('alley-house',34,26),('spare-room',42,20),('in-between',36,30),('stopover',40,24),('emptying-village',30,34)]]
-    TJ=json.dumps([{'t':(f"{p['no']} " if p.get('no') else '')+p['title'],'s':f"{loc(p)} · {p['year']} · {p['kind']}",'x':x,'y':y,'u':'works/'+p['slug']+'.html'} for p,x,y in TAGS],ensure_ascii=False)
     INTRO=[use(i,thumb=True)[0] for i in [643,298,3101,280,2966,87,307]]
     feat=[i for i in PRACTICE if i.get('slug')]
     items=[('01','Projects','projects.html',f'설계 작업 {len(PROJECTS)}',use(PROJECTS[0]['hero'],thumb=True)[0]),
@@ -749,9 +784,9 @@ def cover():
            ('04','Process','process.html','AI와 설계하기',''),
            ('05','About','about.html','소개 · 연락처','')]
     li=''.join(f'<li><a href="{h}" data-bg="{b}"><span class="n">{n}</span><span class="w">{t}</span></a></li>' for n,t,h,c,b in items)
-    return f'''<section class="cv0"><video class="cvv" src="vid/cover.mp4" poster="vid/cover.jpg" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video><div class="cvo" aria-hidden="true"></div><div class="ctg" aria-hidden="true"></div><div class="ifr" aria-hidden="true">{"".join(f'<img src="{u}" alt="">' for u in INTRO)}</div><div class="bgs">{"".join(f'<div class="bg" style="background-image:url({b})"></div>' if b else '<div class="bg grid"></div>' for k,(*_,b) in enumerate(items))}</div>
+    return f'''<section class="cv0"><canvas class="cad" aria-hidden="true"></canvas><div class="cvo" aria-hidden="true"></div><div class="ifr" aria-hidden="true">{"".join(f'<img src="{u}" alt="">' for u in INTRO)}</div><div class="bgs">{"".join(f'<div class="bg" style="background-image:url({b})"></div>' if b else '<div class="bg grid"></div>' for k,(*_,b) in enumerate(items))}</div>
 <div class="cvh"><p>Portfolio 2021–2026</p><h1>{SITE["name_ko"]}<span>{SITE["name_en"]}</span></h1></div>
-<script type="application/json" id="ctgd">{TJ}</script><ol class="cvm">{li}</ol><p class="cvf"><a href="mailto:{SITE["email"]}">{SITE["email"]}</a><span>{SITE["school"]}</span></p></section><p class="iwd" aria-hidden="true"><span>Land</span><span>Material</span><span>Structure</span></p>'''
+<ol class="cvm">{li}</ol><p class="cvf"><a href="mailto:{SITE["email"]}">{SITE["email"]}</a><span class="cdr"></span><span>{SITE["school"]}</span></p></section><p class="iwd" aria-hidden="true"><span>Land</span><span>Material</span><span>Structure</span></p>'''
 open(f'{OUT}/index.html', 'w').write(page(f'{SITE["name_ko"]} — Portfolio', cover(), '', dark='coverpg', on=''))
 
 # ---- projects / practice detail pages
