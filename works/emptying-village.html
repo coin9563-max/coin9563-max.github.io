@@ -35,33 +35,6 @@ a.addEventListener('click',function(e){if(e.metaKey||e.ctrlKey||e.shiftKey)retur
  d.style.cssText='left:'+r.left+'px;top:'+(r.top+r.height/2-h/2)+'px;width:'+r.width+'px;height:'+h+'px;transform:rotate(-6deg)';document.body.appendChild(d);
  requestAnimationFrame(function(){requestAnimationFrame(function(){d.style.cssText='left:0;top:0;width:100vw;height:100vh;transform:none;box-shadow:none';});});
  try{sessionStorage.setItem('bcfly','1');}catch(x){}setTimeout(function(){location.href=a.href;},620);});})();
-// 표지 기본 화면: 실시간 그림자. 기둥 필드가 서울의 지금 해 위치대로 그림자를 드리운다. 마우스 가로 = 하루의 시각.
-(function(){var cv=document.querySelector('.cv0 .topo');if(!cv)return;var g=cv.getContext('2d'),W,H,SP=34,poles=[],still=matchMedia('(prefers-reduced-motion:reduce)').matches,info=document.querySelector('.sunr');
-var LAT=37.57*Math.PI/180,LON=126.98,hov=null,cur=null;
-function now(){var d=new Date(),u=d.getTime()+d.getTimezoneOffset()*6e4,k=new Date(u+9*36e5),st=new Date(Date.UTC(k.getUTCFullYear(),0,0)),n=Math.floor((k-st)/864e5)+0;
- var B=2*Math.PI*(n-81)/364,eot=9.87*Math.sin(2*B)-7.53*Math.cos(B)-1.5*Math.sin(B),clock=k.getUTCHours()+k.getUTCMinutes()/60;
- return {n:n,clock:clock,solar:clock+((LON-135)*4+eot)/60};}
-function sun(n,t){var d=23.44*Math.PI/180*Math.sin(2*Math.PI*(284+n)/365),H=(t-12)*15*Math.PI/180;var alt=Math.asin(Math.sin(LAT)*Math.sin(d)+Math.cos(LAT)*Math.cos(d)*Math.cos(H));
- var az=Math.atan2(Math.sin(H),Math.cos(H)*Math.sin(LAT)-Math.tan(d)*Math.cos(LAT));return {alt:alt,az:az};}
-function size(){var r=cv.getBoundingClientRect(),dp=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*dp;cv.height=H*dp;g.setTransform(dp,0,0,dp,0,0);poles=[];
- for(var y=SP/2;y<H+SP;y+=SP)for(var x=SP/2;x<W+SP;x+=SP){var nz=Math.sin(x*.013)*Math.cos(y*.017)+Math.sin((x+y)*.006);poles.push([x,y,14+9*(nz+2)/4]);}}
-function draw(){var N=now(),t=hov!==null?hov:N.solar,S=sun(N.n,t);cur=S;g.clearRect(0,0,W,H);
- var up=S.alt>0.005,L=up?Math.min(9,1/Math.tan(S.alt)):0,dx=Math.sin(S.az),dy=-Math.cos(S.az),warm=up?Math.max(0,1-S.alt/(Math.PI/4)):0;
- var cR=Math.round(230+25*warm),cG=Math.round(228-40*warm),cB=Math.round(220-110*warm);
- if(up){var gr=g.createRadialGradient(W/2-dx*W*.6,H/2-dy*H*.6,0,W/2,H/2,Math.max(W,H));gr.addColorStop(0,'rgba('+cR+','+cG+','+cB+','+(0.05+0.06*Math.sin(S.alt))+')');gr.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gr;g.fillRect(0,0,W,H);}
- g.lineCap='round';
- for(var i=0;i<poles.length;i++){var p=poles[i],x=p[0],y=p[1];
-  if(up){var l=p[2]*L,ex=x+dx*l,ey=y+dy*l,gg=g.createLinearGradient(x,y,ex,ey);gg.addColorStop(0,'rgba('+cR+','+cG+','+cB+',.38)');gg.addColorStop(1,'rgba('+cR+','+cG+','+cB+',0)');
-   g.strokeStyle=gg;g.lineWidth=1.6;g.beginPath();g.moveTo(x,y);g.lineTo(ex,ey);g.stroke();}
-  g.fillStyle=up?'rgba(239,237,230,.55)':'rgba(239,237,230,.16)';g.beginPath();g.arc(x,y,1.3,0,7);g.fill();}
- var m=document.querySelector('.cvm');if(m){var cr=cv.getBoundingClientRect();m.querySelectorAll('a').forEach(function(x){var r=x.getBoundingClientRect();g.clearRect(r.left-cr.left-12,r.top-cr.top,r.width+24,r.height);});}
- if(info){var hh=Math.floor(t),mm=Math.floor((t-hh)*60),f=function(v){return String(v).padStart(2,'0');},c=hov!==null?'해를 옮기는 중 · 태양시 '+f(((hh%24)+24)%24)+':'+f(mm):'서울 지금 '+f(Math.floor(N.clock))+':'+f(Math.floor((N.clock%1)*60));
-  info.textContent=c+' · 태양 고도 '+(S.alt*180/Math.PI).toFixed(0)+'°'+(up?'':' · 해가 졌어요. 화면을 가로로 훑어 보세요');}}
-var tgt=null;cv.parentNode.addEventListener('mousemove',function(e){var r=cv.getBoundingClientRect();tgt=5+14*(e.clientX-r.left)/r.width;if(hov===null)hov=now().solar;});
-cv.parentNode.addEventListener('mouseleave',function(){tgt=null;});
-var last=0;function loop(ts){requestAnimationFrame(loop);if(ts-last<33)return;last=ts;
- if(tgt!==null){hov+=(tgt-hov)*.12;}else if(hov!==null){var s0=now().solar;hov+=(s0-hov)*.08;if(Math.abs(hov-s0)<.01)hov=null;}draw();}
-addEventListener('resize',function(){size();draw();});size();draw();if(!still)requestAnimationFrame(loop);else setInterval(draw,60000);})();
 (function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a');
 a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
 m.addEventListener('mouseleave',function(){bg.forEach(function(b){b.classList.remove('on')});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});});})();

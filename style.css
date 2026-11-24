@@ -460,7 +460,7 @@ pre.code.ask .f{color:var(--mute)}
 .lpv.on{opacity:1}
 @media (max-width:760px){.lcol{display:none}.lr{grid-template-columns:70px 1fr 20px}.lr .r{grid-column:2}.lr .go{grid-row:1;grid-column:3}.lpv{display:none}}
 
-.cv0 .topo{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block}
+.cv0 .cvv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;display:block}.cv0 .cvo{position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,#0d0c0bcc 0%,#0d0c0b55 45%,#0d0c0b99 100%),linear-gradient(0deg,#0d0c0bb3 0%,transparent 40%)}@media (prefers-reduced-motion:reduce){.cv0 .cvv{display:none}}
 .cv0 .bgs{z-index:0}
 
 .lio{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start;margin-top:4px}
