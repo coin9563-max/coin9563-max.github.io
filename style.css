@@ -582,7 +582,7 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .pol.out,.pol.hung{opacity:1}
 .pol img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;filter:grayscale(.15) contrast(1.02);border:1px solid #2a2926}
 .pol figcaption{font:400 15px/1.2 'Nanum Pen Script',cursive;color:#2a2926;text-align:center;padding:5px 2px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pol .pin{position:absolute;left:50%;top:-22px;width:13px;height:30px;margin-left:-6px;z-index:2}
+.pol:not(.hung) .pin{opacity:0}.pol .pin{transition:opacity .25s;position:absolute;left:50%;top:-22px;width:13px;height:30px;margin-left:-6px;z-index:2}
 .pol.hung{animation:sw 2.6s ease-in-out infinite;animation-delay:calc(var(--d) * .3s)}
 @keyframes sw{0%,100%{transform:rotate(calc(var(--d) * 2.5deg))}50%{transform:rotate(calc(var(--d) * -1.5deg))}}
 @media (max-width:860px){.prag .cam{left:50%;top:44%;width:44vw;margin-left:-22vw}}
