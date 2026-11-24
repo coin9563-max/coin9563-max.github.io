@@ -907,6 +907,9 @@ LABS = {
   'eave': dict(no='08', cat='SIGHT · WIND', en='EAVE · SIGHT · WIND', ko='처마와 시선 · 바람', t='처마와 시선 · 바람', js='lab_eave.js',
     d='해측 처마 높이와 지붕 경사를 바꾸면 앉은 눈높이에서 하늘이 잘리는 각, 남는 바다 띠, 작업 자리 천장고, 처마 끝 바람이 함께 바뀐다.',
     long='굴 작업은 몇 시간씩 앉아 손끝을 보는 일이라, 시야에 밝은 하늘이 들어오면 눈이 부시다. 처마 끝과 눈을 잇는 선으로 하늘이 잘리는 각을 구하고, 안벽 모서리까지의 선으로 바다가 보이는 띠를 구한다. 처마를 낮출수록 바람을 받는 높이도 내려가지만 작업 자리의 천장고가 모자라지므로 경사와 자리를 함께 조정한다. 비어가는 마을 굴막 단면을 정할 때 쓴 논리다.'),
+  'office': dict(no='09', cat='DAYLIGHT · ENERGY', en='DAYLIGHT · HEAT', ko='오피스 빛 · 열', t='오피스 빛 · 열', js='lab_office.js',
+    d='방위 · 창 면적비 · 평면 깊이 · 차양 · 유리를 바꾸면 주광률 분포와 주광 영역, 여름 시간별 냉방 부하, 겨울 난방 부하가 다시 계산된다.',
+    long='창을 키우면 안쪽까지 밝아지지만 일사로 냉방 피크가 오른다. 단면에서는 BRE 평균 주광률식으로 깊이별 주광률과 DF 2% 이상인 주광 영역을, 오른쪽에서는 서울 7월 맑은 날의 태양 위치로 창면 일사와 차양 그림자를 30분마다 구해 일사 · 전도 · 내부 발열 부하를 쌓는다. 오피스 평면 깊이와 입면 창 비율을 정할 때 쓰는 판단이다.'),
   'parking': dict(no='05', cat='OPTIMIZATION', en='PARKING LAYOUT', ko='주차 배치', t='주차 배치', js='lab_parking.js',
     d='대지 꼭짓점을 끌면 주차 모듈을 36개 각도로 깔아 보고 가장 많이 들어가는 배치와 법정 대수 충족 여부가 나온다.',
     long='직각주차 모듈(구획 + 차로 + 구획)을 5° 간격 36개 각도, 오프셋, 세로 연결 차로 위치를 바꿔 가며 깔아 보고 가장 많이 들어가는 안을 고른다. 오른쪽 그래프는 각도별 최대 대수이고, 막대를 누르면 그 각도의 배치를 볼 수 있다. 용도별 시설면적으로 법정 대수와 비교한다.'),
@@ -921,7 +924,7 @@ def lab_page(k):
     body = head + L.get('body', '<div class="app"></div>') + '</section>'
     js = open(os.path.join(SRC, 'lab_ui.js')).read() + open(os.path.join(SRC, L['js'])).read()
     open(f'{OUT}/lab/{k}.html', 'w').write(page(f'LAB {L["no"]} {L["t"]} — {SITE["name_ko"]}', body + f'<script>{js}</script>', '../', dark='dark labpg', on='p', desc=L['d']))
-CARDS = ['eave', 'catenary', 'northlight', 'sun', 'parking', 'frame', 'stair']
+CARDS = ['eave', 'office', 'catenary', 'northlight', 'sun', 'parking', 'frame', 'stair']
 def process_page():
     P = PROCESS
     os.makedirs(f'{OUT}/lab', exist_ok=True)
