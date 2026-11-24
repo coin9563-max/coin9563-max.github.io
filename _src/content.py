@@ -169,7 +169,7 @@ ABOUT = dict(
   education=[('2021–2027','홍익대학교 건축학과','졸업 예정 2027.02')],
   experience=[
     ('2026.07–2026.11','SLA','인턴'),
-    ('2025.06–2025.08','디어 건축사사무소','인턴'),
+    ('2025.06–2025.08','디어 건축사사무소','인턴 · 사이판 모듈러 호텔'),
     ('2025.05–2025.12','이진미 교수 학부조교','RA'),
     ('2024.10–','우동우 건축사사무소','프리랜서'),
     ('2024.10–2025.02','정림 디지털 아카데미 유닛 JAdU 2기','수료 · 팀 설계 · 다이어그램 · 모델링 · 렌더링'),
@@ -245,7 +245,7 @@ PRACTICE = [
       ('pair',['ra_08','ra_09'],''),
       ('pair',['ra_10','ra_11'],''),
     ]),
-  dict(title='디어 건축사사무소', org='디어 건축사사무소', role='인턴', kind='인턴', year='2025'),
+  dict(title='사이판 모듈러 호텔', org='디어 건축사사무소', role='인턴', kind='인턴', year='2025'),
   dict(title='JAdU', org='정림 디지털 아카데미 유닛 JAdU 2기', role='수료 · 프로젝트 우수상', kind='', year='2025', hide_in_list=True),
   dict(slug='d5-seminar', title='D5 Render 세미나', sub='D5 Render Student Ambassador', kind='공개 강연 · 홍익대학교', year='2025',
     org='D5 Render Student Ambassador', role='공개 강연 · 홍익대학교', hero='d5_photo0', thumb='d5_photo0',
