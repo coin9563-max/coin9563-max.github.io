@@ -61,26 +61,38 @@ function run(){tm.forEach(clearTimeout);tm=[];bg.classList.remove('shk','drop','
  void bg.offsetWidth;at(250,function(){bg.classList.add('shk');});at(380,function(){bg.classList.add('drop');});at(1080,function(){bg.classList.add('top');});}
 var wason=false;new MutationObserver(function(){var on=bg.classList.contains('on');if(on===wason)return;wason=on;if(on){build();run();}}).observe(bg,{attributes:true,attributeFilter:['class']});
 })();
-// 표지 Practice 호버: 즉석카메라가 찰칵 → 사진이 나와 줄에 집게로 걸림 (실무 사진)
-(function(){var bg=document.querySelector('.cv0 .prag');if(!bg)return;var PH=JSON.parse(bg.dataset.p),built=false,tm=[],cam,ps=[],rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+// 표지 Practice 호버: 크게 잡힌 즉석카메라에서 D'EAU 사진이 천천히 나옴 → 바람에 날리듯 오른쪽 빨랫줄로 → 줌아웃, 전체 사진
+(function(){var bg=document.querySelector('.cv0 .prag');if(!bg)return;var PH=JSON.parse(bg.dataset.p),built=false,tm=[],anims=[],scn,cam,ps=[],hero,rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
 function at(ms,fn){tm.push(setTimeout(fn,ms));}
-function build(){if(built)return;built=true;var h='<svg class="rope" aria-hidden="true"><path class="r1"/><path class="r2"/></svg><div class="cam">'+bg.dataset.cam+'</div><div class="flash"></div>';
- PH.forEach(function(p,i){h+='<figure class="pol" style="--d:'+(i%2?1:-1)+'">'+bg.dataset.pin+'<img src="'+p[0]+'" alt="" loading="lazy"><figcaption>'+p[1]+'</figcaption></figure>';});
- bg.innerHTML=h;cam=bg.querySelector('.cam');ps=[].slice.call(bg.querySelectorAll('.pol'));}
-// 줄: 2차 곡선, 사진 걸 위치 계산
-function lay(){var R=bg.getBoundingClientRect(),W=R.width,H=R.height,narrow=W<860,x0=W*(narrow?.04:.05),x1=W*(narrow?.96:.64),y0=H*.1,y1=H*.085,cx=(x0+x1)/2,cy=H*(narrow?.2:.2),n=PH.length;
+function build(){if(built)return;built=true;var h='<div class="scn"><svg class="rope" aria-hidden="true"><path class="r1"/><path class="r2"/></svg><div class="cam">'+bg.dataset.cam+'</div>';
+ PH.forEach(function(p,i){h+='<figure class="pol" style="--d:'+(i%2?1:-1)+'">'+bg.dataset.pin+'<img src="'+p[0]+'" alt="" loading="eager"><figcaption>'+p[1]+'</figcaption></figure>';});
+ bg.innerHTML=h+'</div>';scn=bg.querySelector('.scn');cam=bg.querySelector('.cam');ps=[].slice.call(bg.querySelectorAll('.pol'));hero=ps[ps.length-1];}
+function lay(){var R=bg.getBoundingClientRect(),W=R.width,H=R.height,narrow=W<860,x0=W*(narrow?.04:.05),x1=W*(narrow?.96:.64),y0=H*.1,y1=H*.085,cx=(x0+x1)/2,cy=H*.2,n=PH.length;
  var d='M'+x0+','+y0+' Q'+cx+','+cy+' '+x1+','+y1;bg.querySelector('.r1').setAttribute('d',d);bg.querySelector('.r2').setAttribute('d',d);
- var pw=Math.min(132,(x1-x0)/n*.92);ps.forEach(function(p,i){var t=(i+.5)/n,x=(1-t)*(1-t)*x0+2*(1-t)*t*cx+t*t*x1,y=(1-t)*(1-t)*y0+2*(1-t)*t*cy+t*t*y1;p.style.width=pw+'px';p.style.left=(x-pw/2)+'px';p.style.top=(y-6)+'px';p.dataset.x=x;p.dataset.y=y;});}
-function run(){tm.forEach(clearTimeout);tm=[];bg.classList.remove('snap','shot');ps.forEach(function(p){p.classList.remove('hung','out');p.style.transition='none';p.style.transform='';});lay();
- if(rm){bg.classList.add('shot');ps.forEach(function(p){p.classList.add('hung');});return;}
- var cr=cam.getBoundingClientRect(),br=bg.getBoundingClientRect(),sx=cr.left-br.left+cr.width*.52,sy=cr.top-br.top+cr.height*.82;
- at(380,function(){bg.classList.add('snap');});at(560,function(){bg.classList.add('shot');});
- ps.forEach(function(p,i){var pr={w:p.offsetWidth,h:p.offsetHeight},dx=sx-(+p.dataset.x),dy=sy-(+p.dataset.y)-pr.h*.3;
-  p.style.transform='translate('+dx+'px,'+dy+'px) scale(.42) rotate(0deg)';void p.offsetWidth;
-  at(520+i*190,function(){p.classList.add('out');p.style.transition='transform .2s ease-out,opacity .1s';p.style.transform='translate('+dx+'px,'+(dy+30)+'px) scale(.42)';
-   at(200,function(){p.style.transition='transform .75s cubic-bezier(.3,1.25,.45,1)';p.style.transform='';at(760,function(){p.style.transition='';p.classList.add('hung');});});});});}
-var wason=false;new MutationObserver(function(){var on=bg.classList.contains('on');if(on===wason)return;wason=on;if(on){build();run();}}).observe(bg,{attributes:true,attributeFilter:['class']});
-addEventListener('resize',function(){if(built)lay();});})();
+ var pw=Math.min(132,(x1-x0)/n*.92);ps.forEach(function(p,i){var t=(i+.5)/n,x=(1-t)*(1-t)*x0+2*(1-t)*t*cx+t*t*x1,y=(1-t)*(1-t)*y0+2*(1-t)*t*cy+t*t*y1;p.style.width=pw+'px';p.style.left=(x-pw/2)+'px';p.style.top=(y-6)+'px';p.dataset.x=x;p.dataset.y=y;});return {W:W,H:H};}
+function stop(){tm.forEach(clearTimeout);tm=[];anims.forEach(function(a){a.cancel();});anims=[];}
+function run(){stop();var S=lay();ps.forEach(function(p){p.classList.add('hung');p.style.clipPath='';p.style.opacity='';p.style.transition='';});bg.querySelector('.rope').style.opacity='';
+ scn.style.transition='none';scn.style.transform='';
+ if(rm)return;
+ // 슬롯 위치(장면 좌표) — 카메라 svg viewBox 320x260, 슬롯 중심 (168,207)
+ var cw=cam.offsetWidth,ch=cw*260/320,sx=cam.offsetLeft+cw*168/320,sy=cam.offsetTop+ch*207/260,Z=S.W<860?1.8:2.2;
+ scn.style.transformOrigin=sx+'px '+sy+'px';scn.style.transform='translate('+(S.W*.34-sx)+'px,'+(S.H*.5-sy)+'px) scale('+Z+')';
+ var hx=+hero.dataset.x,hy=+hero.dataset.y,w=hero.offsetWidth,h=hero.offsetHeight,dx=sx-hx,dy0=sy-hy-h,dy1=sy-hy-h*.12;
+ hero.classList.remove('hung');hero.style.opacity=1;ps.forEach(function(p){if(p!==hero){p.style.transition='none';p.style.opacity=0;}});bg.querySelector('.rope').style.opacity=0;
+ // 1) 슬롯에서 천천히 나옴: 사진 아랫단부터 보이게
+ var e=hero.animate([{transform:'translate('+dx+'px,'+dy0+'px)',clipPath:'inset('+h+'px -40px -40px -40px)'},{transform:'translate('+dx+'px,'+dy1+'px)',clipPath:'inset('+(h*.12)+'px -40px -40px -40px)'}],{duration:2300,delay:350,easing:'cubic-bezier(.35,.1,.45,1)',fill:'both'});anims.push(e);
+ // 2) 바람에 날리듯 오른쪽 위로 → 줄에 걸림
+ at(2900,function(){var f=hero.animate([
+   {transform:'translate('+dx+'px,'+dy1+'px) rotate(0)',clipPath:'inset(0 -40px -40px -40px)'},
+   {transform:'translate('+(dx*.62)+'px,'+(dy1-90)+'px) rotate(-16deg)',offset:.3},
+   {transform:'translate('+(dx*.28)+'px,'+(dy1*.35-60)+'px) rotate(14deg)',offset:.6},
+   {transform:'translate('+(-14)+'px,-26px) rotate(-7deg)',offset:.85},
+   {transform:'translate(0,0) rotate(0)',clipPath:'inset(-40px -40px -40px -40px)'}],{duration:1500,easing:'cubic-bezier(.35,.05,.3,1)',fill:'forwards'});anims.push(f);
+  e.cancel();f.onfinish=function(){f.cancel();hero.classList.add('hung');};
+  // 3) 줌아웃
+  scn.style.transition='transform 1.7s cubic-bezier(.45,.05,.25,1)';scn.style.transform='';var rp=bg.querySelector('.rope');rp.style.transition='opacity .8s .3s';rp.style.opacity='';ps.forEach(function(p,i){if(p!==hero){p.style.transition='opacity .6s '+(.45+i*.12)+'s';p.style.opacity='';}});});}
+var wason=false;new MutationObserver(function(){var on=bg.classList.contains('on');if(on===wason)return;wason=on;if(on){build();run();}else stop();}).observe(bg,{attributes:true,attributeFilter:['class']});
+addEventListener('resize',function(){if(built&&wason)lay();});})();
 // 표지 Process 호버: 배경 그리드 위에 실험 도면(투라인 + 해치)이 칸에 맞춰 틱 단위로 생성됨
 (function(){var cv0=document.querySelector('.cv0');if(!cv0)return;var lk=document.querySelector('.cvm a[href$="process.html"]');if(!lk)return;
 var bgs=cv0.querySelectorAll('.bg'),bi=[].indexOf.call(document.querySelectorAll('.cvm a'),lk),bg=bgs[bi];if(!bg)return;
