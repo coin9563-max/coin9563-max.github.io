@@ -559,10 +559,10 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .bcs .it em{font-style:normal;font-size:14px;color:var(--sub);line-height:1.5}
 .bcs .sz{position:absolute;right:clamp(28px,6vw,96px);bottom:26px;font:10px var(--mono);letter-spacing:.12em;color:var(--pm)}
 .flyin .bcs>*{animation:bcin .7s .05s both}@keyframes bcin{from{opacity:0;transform:translateY(10px)}}
-.bst{position:fixed;inset:0;z-index:120;display:grid;place-items:end center;padding-bottom:6px;pointer-events:none;perspective:1400px;perspective-origin:50% 0%}
+.bst{position:fixed;inset:0;z-index:120;display:grid;place-items:end center;padding-bottom:62px;pointer-events:none;perspective:1600px;perspective-origin:50% 30%}
 .bst::before{content:'';position:absolute;inset:0;background:#141412;opacity:0;transition:opacity .4s}.bst::before{background:linear-gradient(to top,#141412 0%,#14141200 70%)}.bst.up::before{opacity:.7}
-.bsk{position:relative;width:min(520px,80vw);aspect-ratio:9/5;transform-style:preserve-3d;transform-origin:50% 100%;transform:translateY(110%) rotateX(26deg);transition:transform .62s cubic-bezier(.18,1.3,.4,1)}
-.bst.up .bsk{transform:translateY(0) rotateX(26deg);pointer-events:auto;cursor:pointer}
+.bsk{position:relative;width:min(520px,80vw);aspect-ratio:9/5;transform-style:preserve-3d;transform-origin:50% 100%;transform:translateY(140%) rotateX(52deg);transition:transform .62s cubic-bezier(.18,1.3,.4,1)}
+.bst.up .bsk{transform:translateY(0) rotateX(52deg);pointer-events:auto;cursor:pointer}
 .bst.flat .bsk{transform:translateY(0) rotateX(0) rotateZ(0);transition:transform .36s cubic-bezier(.5,0,.2,1)}
 .bsk .ly{position:absolute;inset:0;background:#ebe7de;transform:translateZ(calc(var(--z) * -3.4px));box-shadow:inset 0 0 0 1px #d4cec2;transition:transform .3s,opacity .3s}
 .bsk .ly:nth-child(odd){background:#e4e0d6}.bsk .ly:first-child{box-shadow:inset 0 0 0 1px #c9c3b6,0 40px 70px #000b}
@@ -626,7 +626,7 @@ MARK=card_mark(); LINES=card_lines()
 JS = r"""
 // 어디서든 About: 올리면 쌓인 명함 더미가 화면 가운데로 탁 올라오고, 누르면 맨 윗장이 떠올라 화면 가득 펼쳐진 뒤 이동
 (function(){var rm=matchMedia('(prefers-reduced-motion:reduce)').matches,S=null,busy=false;
-function el(){if(S)return S;var n=document.querySelector('header.top .name'),nm=n?n.innerHTML.replace(/^←\s*/,''):'',ly='';for(var i=22;i>=1;i--)ly+='<i class="ly" style="--z:'+i+'"></i>';
+function el(){if(S)return S;var n=document.querySelector('header.top .name'),nm=n?n.innerHTML.replace(/^←\s*/,''):'',ly='';for(var i=34;i>=1;i--)ly+='<i class="ly" style="--z:'+i+'"></i>';
  S=document.createElement('div');S.className='bst';S.setAttribute('aria-hidden','true');
  S.innerHTML='<div class="bsk">'+ly+'<div class="bpk"><p class="k1">'+nm+'</p><p class="k2">Architectural Designer</p><div class="km"><span>S · H</span>__HOLES__<span>2 0 2 6</span></div><p class="k5">__EMAIL__</p><p class="k6">__PHONE__ · coin9563-max.github.io</p></div></div>';
  document.body.appendChild(S);return S;}
