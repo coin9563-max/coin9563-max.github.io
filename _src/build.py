@@ -1112,7 +1112,7 @@ def cover():
            ('02','Publish','publish.html',f'책 {sum(1 for x in PUBLISH if not x.get("paper"))} · 논문 {sum(1 for x in PUBLISH if x.get("paper"))}','PUB'),
            ('03','Practice','practice.html',f'실무 · 활동 {len(PRACTICE)}','PRA'),
            ('04','Process','process.html','AI와 설계하기',''),
-           ('05','About','about.html','소개 · 연락처','ABT')]
+           ('05','About','about.html','소개 · 연락처','')]
     import json as _j, html as _h
     rows=[[i.get('year',''),i['title'],i.get('org',''),(i.get('role','') or '').split(' · ')[0]] for i in PRACTICE if not i.get('hide_in_list')]
     FOLDER_B='<svg class="fb0" viewBox="0 0 160 120" aria-hidden="true"><path d="M4 14 Q4 8 10 8 H56 Q60 8 63 12 L68 18 H150 Q156 18 156 24 V112 Q156 116 152 116 H8 Q4 116 4 112 Z"/></svg>'
