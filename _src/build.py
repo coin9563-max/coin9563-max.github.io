@@ -558,6 +558,19 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .bcs .it em{font-style:normal;font-size:14px;color:#6f6a60;line-height:1.5}
 .bcs .sz{position:absolute;right:clamp(28px,6vw,96px);bottom:26px;font:10px var(--mono);letter-spacing:.12em;color:var(--pm)}
 .flyin .bcs>*{animation:bcin .7s .05s both}@keyframes bcin{from{opacity:0;transform:translateY(10px)}}
+.bpk{position:fixed;z-index:60;left:clamp(16px,5vw,72px);bottom:clamp(16px,5vh,56px);width:min(440px,80vw);aspect-ratio:9/5;background:#f1efe8;color:#1d1c1a;padding:22px 26px;display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 1fr auto;cursor:pointer;
+ transform:translateY(calc(100% + 80px)) rotate(4deg);opacity:0;box-shadow:0 30px 80px #000c;transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .3s,left .7s cubic-bezier(.7,0,.2,1),top .7s cubic-bezier(.7,0,.2,1),width .7s cubic-bezier(.7,0,.2,1),height .7s cubic-bezier(.7,0,.2,1),box-shadow .7s;pointer-events:none}
+.bpk.up{transform:translateY(0) rotate(-3deg);opacity:1;pointer-events:auto}
+.bpk.go{position:fixed;transition:all .7s cubic-bezier(.7,0,.2,1)}
+.bpk .k1{font:10px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.2em;text-transform:uppercase;color:#8a857b}
+.bpk .k2{text-align:right;font-size:11px;line-height:1.5;color:#4a4740}
+.bpk .k3{grid-column:1/-1;align-self:center;font-size:clamp(40px,4.6vw,64px);font-weight:600;letter-spacing:-.05em;line-height:.95}
+.bpk .k3 span{display:block;font-size:.26em;font-weight:400;letter-spacing:-.01em;color:#5d5951;margin-top:.5em}
+.bpk .k4{position:absolute;right:26px;top:44%;width:38px;height:38px;border:2px solid #c8462e;color:#c8462e;display:grid;place-items:center;font:600 20px 'Noto Serif KR',serif;font-style:normal;border-radius:3px;transform:rotate(-4deg);opacity:.85}
+.bpk .k5{grid-column:1/-1;font:9px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.12em;color:#8a857b}
+.bpk.go>*{opacity:0;transition:opacity .25s}
+.cv0 .cad,.cv0 .bgs{transition:opacity .5s,filter .5s}.cv0.pk .cad{opacity:.25}.cv0.pk .cvh{opacity:.25;transition:opacity .5s}
+@media (hover:none){.bpk{display:none}}
 .bfly{position:fixed;z-index:99;background:#f1efe8;transition:all .65s cubic-bezier(.7,0,.2,1);box-shadow:0 30px 80px #000a}
 @media (max-width:1100px){.bcs{grid-template-columns:1fr 1fr}.bcs .c1{grid-column:1/-1;margin-bottom:48px}}
 @media (max-width:700px){.bcs{grid-template-columns:1fr;padding:44px 22px 64px;row-gap:44px}.bcs h1{margin:24px 0 0}.bcs .seal{top:40px;width:46px;height:46px;font-size:23px}.bcs .c1{margin:0}}
@@ -631,12 +644,17 @@ function loop(now){requestAnimationFrame(loop);if(now-last<30)return;last=now;
  if(auto||now-at>6000){ax=W*(.5+.38*Math.sin(now/5200))+W*.08*Math.sin(now/1300);ay=H*(.32+.24*Math.sin(now/3700+1));if(!document.body.classList.contains('cvi'))pick(ax,ay,now);}else if(mx>=0)pick(mx,my,now);
  draw(now);}
 addEventListener('resize',function(){size();});size();if(still){draw(performance.now());}else requestAnimationFrame(loop);})();
-// 표지 → About: 메뉴 자리에서 명함이 화면 가득 펼쳐진 뒤 이동
-(function(){var a=document.querySelector('.cvm a[href="about.html"]');if(!a||matchMedia('(prefers-reduced-motion:reduce)').matches)return;
-a.addEventListener('click',function(e){if(e.metaKey||e.ctrlKey||e.shiftKey)return;e.preventDefault();var r=a.getBoundingClientRect(),h=r.width*5/9,d=document.createElement('div');d.className='bfly';
- d.style.cssText='left:'+r.left+'px;top:'+(r.top+r.height/2-h/2)+'px;width:'+r.width+'px;height:'+h+'px;transform:rotate(-6deg)';document.body.appendChild(d);
- requestAnimationFrame(function(){requestAnimationFrame(function(){d.style.cssText='left:0;top:0;width:100vw;height:100vh;transform:none;box-shadow:none';});});
- try{sessionStorage.setItem('bcfly','1');}catch(x){}setTimeout(function(){location.href=a.href;},620);});})();
+// 표지 → About: 메뉴에 올리면 화면 아래에서 명함이 올라와 기다리고, 누르면 그 명함이 화면 가득 펼쳐진 뒤 이동
+(function(){var a=document.querySelector('.cvm a[href="about.html"]'),cv=document.querySelector('.cv0');if(!a||!cv)return;var rm=matchMedia('(prefers-reduced-motion:reduce)').matches,nm=(document.querySelector('.cvh h1')||{}).innerHTML||'';
+var k=document.createElement('div');k.className='bpk';k.setAttribute('aria-hidden','true');
+k.innerHTML='<p class="k1">Portfolio 2021–2026</p><p class="k2">Architectural Designer<br>홍익대학교 건축학과</p><b class="k3">'+nm+'</b><i class="k4">韓</i><p class="k5">90 × 50 mm · 눌러서 열기</p>';document.body.appendChild(k);
+var t;function on(){clearTimeout(t);cv.classList.add('pk');k.classList.add('up');}function off(){t=setTimeout(function(){if(k.classList.contains('go'))return;cv.classList.remove('pk');k.classList.remove('up');},120);}
+a.addEventListener('mouseenter',on);a.addEventListener('focus',on);a.addEventListener('mouseleave',off);a.addEventListener('blur',off);k.addEventListener('mouseenter',on);k.addEventListener('mouseleave',off);
+function go(e){if(e&&(e.metaKey||e.ctrlKey||e.shiftKey))return;if(rm)return;e&&e.preventDefault();var r=k.getBoundingClientRect();k.classList.add('go');
+ k.style.cssText='left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;right:auto;bottom:auto;transform:rotate(-3deg)';
+ requestAnimationFrame(function(){requestAnimationFrame(function(){k.style.cssText='left:0;top:0;width:100vw;height:100vh;right:auto;bottom:auto;transform:none;box-shadow:none';});});
+ try{sessionStorage.setItem('bcfly','1');}catch(x){}setTimeout(function(){location.href=a.href;},700);}
+a.addEventListener('click',go);k.addEventListener('click',go);})();
 (function(){var m=document.querySelector('.cvm');if(!m)return;var bg=document.querySelectorAll('.cv0 .bg'),a=m.querySelectorAll('a');
 a.forEach(function(x,i){x.addEventListener('mouseenter',function(){bg.forEach(function(b,k){b.classList.toggle('on',k===i)});m.classList.add('hov');a.forEach(function(o){o.classList.toggle('on',o===x)});});});
 m.addEventListener('mouseleave',function(){bg.forEach(function(b){b.classList.remove('on')});m.classList.remove('hov');a.forEach(function(o){o.classList.remove('on')});});})();

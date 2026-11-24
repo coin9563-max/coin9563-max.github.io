@@ -519,6 +519,19 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .bcs .it em{font-style:normal;font-size:14px;color:#6f6a60;line-height:1.5}
 .bcs .sz{position:absolute;right:clamp(28px,6vw,96px);bottom:26px;font:10px var(--mono);letter-spacing:.12em;color:var(--pm)}
 .flyin .bcs>*{animation:bcin .7s .05s both}@keyframes bcin{from{opacity:0;transform:translateY(10px)}}
+.bpk{position:fixed;z-index:60;left:clamp(16px,5vw,72px);bottom:clamp(16px,5vh,56px);width:min(440px,80vw);aspect-ratio:9/5;background:#f1efe8;color:#1d1c1a;padding:22px 26px;display:grid;grid-template-columns:1fr auto;grid-template-rows:auto 1fr auto;cursor:pointer;
+ transform:translateY(calc(100% + 80px)) rotate(4deg);opacity:0;box-shadow:0 30px 80px #000c;transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .3s,left .7s cubic-bezier(.7,0,.2,1),top .7s cubic-bezier(.7,0,.2,1),width .7s cubic-bezier(.7,0,.2,1),height .7s cubic-bezier(.7,0,.2,1),box-shadow .7s;pointer-events:none}
+.bpk.up{transform:translateY(0) rotate(-3deg);opacity:1;pointer-events:auto}
+.bpk.go{position:fixed;transition:all .7s cubic-bezier(.7,0,.2,1)}
+.bpk .k1{font:10px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.2em;text-transform:uppercase;color:#8a857b}
+.bpk .k2{text-align:right;font-size:11px;line-height:1.5;color:#4a4740}
+.bpk .k3{grid-column:1/-1;align-self:center;font-size:clamp(40px,4.6vw,64px);font-weight:600;letter-spacing:-.05em;line-height:.95}
+.bpk .k3 span{display:block;font-size:.26em;font-weight:400;letter-spacing:-.01em;color:#5d5951;margin-top:.5em}
+.bpk .k4{position:absolute;right:26px;top:44%;width:38px;height:38px;border:2px solid #c8462e;color:#c8462e;display:grid;place-items:center;font:600 20px 'Noto Serif KR',serif;font-style:normal;border-radius:3px;transform:rotate(-4deg);opacity:.85}
+.bpk .k5{grid-column:1/-1;font:9px 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.12em;color:#8a857b}
+.bpk.go>*{opacity:0;transition:opacity .25s}
+.cv0 .cad,.cv0 .bgs{transition:opacity .5s,filter .5s}.cv0.pk .cad{opacity:.25}.cv0.pk .cvh{opacity:.25;transition:opacity .5s}
+@media (hover:none){.bpk{display:none}}
 .bfly{position:fixed;z-index:99;background:#f1efe8;transition:all .65s cubic-bezier(.7,0,.2,1);box-shadow:0 30px 80px #000a}
 @media (max-width:1100px){.bcs{grid-template-columns:1fr 1fr}.bcs .c1{grid-column:1/-1;margin-bottom:48px}}
 @media (max-width:700px){.bcs{grid-template-columns:1fr;padding:44px 22px 64px;row-gap:44px}.bcs h1{margin:24px 0 0}.bcs .seal{top:40px;width:46px;height:46px;font-size:23px}.bcs .c1{margin:0}}
