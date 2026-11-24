@@ -669,8 +669,8 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 @media (max-width:860px){.prag .cam{left:50%;top:44%;width:44vw;margin-left:-22vw}}
 .bg .pdr{position:absolute;inset:0;pointer-events:none}
 .bst{position:fixed;inset:0;z-index:120;display:grid;place-items:end center;padding-bottom:62px;pointer-events:none;perspective:1600px;perspective-origin:50% 30%}
-.bst::before{content:'';position:absolute;inset:0;background:#141412;opacity:0;transition:opacity .4s}.bst::before{background:linear-gradient(to top,#141412 0%,#14141200 70%)}.bst.up::before{opacity:.7}
-.bsk{position:relative;width:min(520px,80vw);aspect-ratio:9/5;transform-style:preserve-3d;transform-origin:50% 100%;transform:translateY(140%) rotateX(52deg);transition:transform .62s cubic-bezier(.18,1.3,.4,1)}
+.bst::before{content:'';position:absolute;inset:0;background:#141412;opacity:0;transition:opacity .4s}.bst::before{background:linear-gradient(to top,#141412 0%,#14141200 70%)}.bst.up::before{opacity:.7;transition:opacity .9s}
+.bsk{position:relative;width:min(520px,80vw);aspect-ratio:9/5;transform-style:preserve-3d;transform-origin:50% 100%;transform:translateY(175%) rotateX(52deg);transition:transform 1s cubic-bezier(.16,1,.3,1)}
 .bst.up .bsk{transform:translateY(0) rotateX(52deg);pointer-events:auto;cursor:pointer}
 .bst.flat .bsk{transform:translateY(0) rotateX(0) rotateZ(0);transition:transform .36s cubic-bezier(.5,0,.2,1)}
 .bsk .ly{position:absolute;inset:0;background:#ebe7de;transform:translateZ(calc(var(--z) * -3.4px));box-shadow:inset 0 0 0 1px #d4cec2;transition:transform .3s,opacity .3s}
@@ -738,15 +738,15 @@ JS = r"""
 function el(){if(S)return S;var n=document.querySelector('header.top .name'),nm=n?n.innerHTML.replace(/^←\s*/,''):'',ly='';for(var i=34;i>=1;i--)ly+='<i class="ly" style="--z:'+i+'"></i>';
  S=document.createElement('div');S.className='bst';S.setAttribute('aria-hidden','true');
  S.innerHTML='<div class="bsk">'+ly+'<div class="bpk"><p class="k1">'+nm+'</p><p class="k2">Architectural Designer</p><div class="km"><span>S · H</span>__HOLES__<span>2 0 2 6</span></div><p class="k5">__EMAIL__</p><p class="k6">__PHONE__ · coin9563-max.github.io</p></div></div>';
- document.body.appendChild(S);return S;}
+ document.body.appendChild(S);void S.querySelector('.bsk').getBoundingClientRect();return S;}
 function go(e,href){if(e&&(e.metaKey||e.ctrlKey||e.shiftKey||e.button>0))return;if(rm||document.body.classList.contains('cardpg'))return;e&&e.preventDefault();if(busy)return;busy=true;
- var s=el(),up=s.classList.contains('up');if(!up){s.classList.add('up');void s.offsetWidth;}
+ var s=el(),up=s.classList.contains('up');if(!up){void s.offsetWidth;s.classList.add('up');}
  setTimeout(function(){s.classList.add('lift');
   setTimeout(function(){s.classList.add('flat');
    setTimeout(function(){var c=s.querySelector('.bpk'),r=c.getBoundingClientRect(),d=document.createElement('div');d.className='bfly';
     d.style.cssText='left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px';var cc=c.cloneNode(true);cc.style.cssText='position:absolute;inset:0;transform:none;box-shadow:none;transition:opacity .3s';d.appendChild(cc);document.body.appendChild(d);c.style.visibility='hidden';setTimeout(function(){cc.style.opacity=0;},120);
     requestAnimationFrame(function(){requestAnimationFrame(function(){d.style.cssText='left:0;top:0;width:100vw;height:100vh;box-shadow:none';});});
-    try{sessionStorage.setItem('bcfly','1');}catch(x){}setTimeout(function(){location.href=href;},600);},360);},240);},up?0:560);}
+    try{sessionStorage.setItem('bcfly','1');}catch(x){}setTimeout(function(){location.href=href;},600);},360);},240);},up?0:1050);}
 window.BCard={el:el,go:go};
 document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href$="about.html"]');if(!a||a.target==='_blank')return;go(e,a.href);});
 if(!document.body.classList.contains('cardpg')&&matchMedia('(hover:hover)').matches){var t,last=null,cv=function(){return document.querySelector('.cv0');};
