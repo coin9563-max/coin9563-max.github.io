@@ -4,7 +4,7 @@
 <title>우동우 건축사사무소 — 한승현</title>
 <meta name="description" content="계획안이 나올 때마다 모델을 세우고 렌더와 영상으로 보여 주는 일">
 <meta property="og:title" content="우동우 건축사사무소 — 한승현"><meta property="og:description" content="계획안이 나올 때마다 모델을 세우고 렌더와 영상으로 보여 주는 일"><meta property="og:type" content="website"><meta property="og:site_name" content="한승현 — Portfolio"><meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../style.css?v=62c41e77">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&amp;family=Nanum+Pen+Script&amp;family=Noto+Serif+KR:wght@500&amp;display=swap"><link rel="stylesheet" href="../style.css?v=1ad01195">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%231d1c1a%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22%23f6f5f2%22 font-family=%22sans-serif%22%3EH%3C/text%3E%3C/svg%3E">
 <meta property="og:image" content="https://coin9563-max.github.io/img/t_wd_ss_4_2.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 </head><body class="">
@@ -184,22 +184,22 @@ function prog(u,id){if(u<=0)return 0;if(u>=DRAW)return 1;function w(k){var r=rnd
 function frame(now){if(!t0)t0=now;var t=now-t0,pages=Math.ceil(DR.length/PER),PG=PER*(SCAN+DRAW)+HOLD+CLR,pg=Math.floor(t/PG)%pages,u=t%PG,gl=u>PG-CLR?(Math.floor((u-(PG-CLR))/70)%2?0:1)*(1-(u-(PG-CLR))/CLR):1;
  g.setTransform(DP,0,0,DP,0,0);g.clearRect(0,0,W,H);g.translate(OX-G,OY-G);g.lineCap='round';g.lineJoin='round';
  var live=null;
- slots.forEach(function(sl,si){var n=pg*PER+si;if(n>=DR.length)return;var d=DR[n],v=u-si*(SCAN+DRAW),X=sl.x*G,Y=sl.y*G,fw=sl.w*G,fh=sl.h*G;if(v<0&&!still)return;g.font="11px 'JetBrains Mono',ui-monospace,monospace";
+ slots.forEach(function(sl,si){var n=pg*PER+si;if(n>=DR.length)return;var d=DR[n],v=u-si*(SCAN+DRAW),X=sl.x*G,Y=sl.y*G,fw=sl.w*G,fh=sl.h*G;if(v<0&&!still)return;g.font="11px 'JetBrains Mono',ui-monospace,Pretendard,monospace";
   if(!still&&v<SCAN){var q=Math.floor(v/40);for(var k=0;k<10;k++){var cx=Math.floor(rnd(n*31+q*7+k)*sl.w),cy=Math.floor(rnd(n*53+q*11+k)*sl.h);g.fillStyle=k%3?'rgba(236,232,222,'+(.06+.08*rnd(q+k))+')':'rgba(255,110,80,.14)';g.fillRect(X+cx*G+1,Y+cy*G+1,G-1,G-1);}
    g.strokeStyle='rgba(236,232,222,.5)';g.setLineDash([2,4]);g.strokeRect(X+.5,Y+.5,Math.floor(v/SCAN*sl.w*4)/4*G,fh);g.setLineDash([]);g.fillStyle='rgba(255,110,80,.9)';g.fillText('SCAN '+String(Math.floor(v/SCAN*100)).padStart(2,'0')+'%',X,Y-10);return;}
   var pr=still?1:prog(v-SCAN,n);g.save();g.globalAlpha=gl;g.translate(X,Y);g.strokeStyle='rgba(236,232,222,.28)';g.lineWidth=1;g.strokeRect(.5,.5,fw,fh);g.beginPath();g.rect(0,0,fw,fh);g.clip();
   var want=pr*d.T,tip=null;
   for(var i=0;i<d.C.length&&want>0;i++){var s=d.C[i],dl=Math.min(want,s.L);want-=dl;
    if(s.st==6){g.fillStyle='#121311';g.beginPath();s.p.forEach(function(q,k){k?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]);});g.fill();continue;}
-   if(s.t!==undefined){if(dl>=s.L){g.fillStyle=s.st==1?'rgba(255,110,80,.95)':'rgba(236,232,222,.8)';g.font="10px 'JetBrains Mono',ui-monospace,monospace";g.fillText(s.t,s.p[0][0],s.p[0][1]);}continue;}
+   if(s.t!==undefined){if(dl>=s.L){g.fillStyle=s.st==1?'rgba(255,110,80,.95)':'rgba(236,232,222,.8)';g.font="10px 'JetBrains Mono',ui-monospace,Pretendard,monospace";g.fillText(s.t,s.p[0][0],s.p[0][1]);}continue;}
    var y=STY[s.st]||STY[0];g.strokeStyle=y[0];g.lineWidth=y[1];g.setLineDash(y[2]||[]);g.beginPath();g.moveTo(s.p[0][0],s.p[0][1]);var acc=0;
    for(var k=1;k<s.p.length;k++){var L1=Math.hypot(s.p[k][0]-s.p[k-1][0],s.p[k][1]-s.p[k-1][1]);if(acc+L1>=dl){var f=L1?(dl-acc)/L1:0,x=s.p[k-1][0]+(s.p[k][0]-s.p[k-1][0])*f,yy=s.p[k-1][1]+(s.p[k][1]-s.p[k-1][1])*f;g.lineTo(x,yy);tip=[x,yy];break;}g.lineTo(s.p[k][0],s.p[k][1]);acc+=L1;}g.stroke();}
   g.setLineDash([]);
   if(pr<1&&tip){var gx=Math.floor((tip[0]+X)/G),gy=Math.floor((tip[1]+Y)/G);g.fillStyle='rgba(255,110,80,.16)';g.fillRect(gx*G-X+1,gy*G-Y+1,G-1,G-1);g.strokeStyle='rgba(255,110,80,.5)';g.lineWidth=1;g.beginPath();g.moveTo(0,tip[1]+.5);g.lineTo(fw,tip[1]+.5);g.moveTo(tip[0]+.5,0);g.lineTo(tip[0]+.5,fh);g.stroke();
    g.fillStyle='rgba(255,110,80,1)';g.fillRect(tip[0]-2.5,tip[1]-2.5,5,5);live={x:tip[0]+X,y:tip[1]+Y,u:(tip[0]-d.ox)/d.S,w:(tip[1]-d.oy)/d.S*d.f};}
-  g.restore();g.globalAlpha=gl;g.font="11px 'JetBrains Mono',ui-monospace,monospace";var nl=Math.round(d.l.length*Math.min(1,pr*1.5));g.fillStyle='rgba(236,232,222,.85)';g.fillText(d.l.slice(0,nl)+(pr<1&&Math.floor(t/120)%2?'▌':''),X,Y+fh+20);
+  g.restore();g.globalAlpha=gl;g.font="11px 'JetBrains Mono',ui-monospace,Pretendard,monospace";var nl=Math.round(d.l.length*Math.min(1,pr*1.5));g.fillStyle='rgba(236,232,222,.85)';g.fillText(d.l.slice(0,nl)+(pr<1&&Math.floor(t/120)%2?'▌':''),X,Y+fh+20);
   g.fillStyle=pr<1?'rgba(255,110,80,.9)':'rgba(236,232,222,.45)';g.fillText(pr<1?'GEN '+String(Math.floor(pr*100)).padStart(2,'0')+'%':'DONE',X+fw-(pr<1?48:32),Y+fh+20);g.globalAlpha=1;});
- if(live){g.fillStyle='rgba(255,110,80,.95)';g.font="11px 'JetBrains Mono',ui-monospace,monospace";g.fillText('x '+live.u.toFixed(2)+'  y '+live.w.toFixed(2),live.x+8,live.y-8);}
+ if(live){g.fillStyle='rgba(255,110,80,.95)';g.font="11px 'JetBrains Mono',ui-monospace,Pretendard,monospace";g.fillText('x '+live.u.toFixed(2)+'  y '+live.w.toFixed(2),live.x+8,live.y-8);}
  raf=requestAnimationFrame(frame);}
 function start(){if(raf)return;size();t0=0;raf=requestAnimationFrame(frame);}
 function stop(){cancelAnimationFrame(raf);raf=0;g&&g.clearRect(0,0,c.width,c.height);}
