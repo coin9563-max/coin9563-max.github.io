@@ -820,7 +820,7 @@ function run(){stop();var S=lay();ps.forEach(function(p){p.classList.add('hung')
 var wason=false;new MutationObserver(function(){var on=bg.classList.contains('on');if(on===wason)return;wason=on;if(on){build();run();}else stop();}).observe(bg,{attributes:true,attributeFilter:['class']});
 addEventListener('resize',function(){if(built&&wason)lay();});})();
 // 표지 기본 배경: 대표 렌더 6장이 천천히 교차
-(function(){var f=document.querySelectorAll('.cv0 .crl figure');if(!f.length)return;var i=0,rm=matchMedia('(prefers-reduced-motion:reduce)').matches;f[0].classList.add('on');if(rm)return;
+(function(){var c=document.querySelector('.cv0 .crl');if(!c)return;var a=[].slice.call(c.children);for(var j=a.length-1;j>0;j--){var r=Math.random()*(j+1)|0,t=a[j];a[j]=a[r];a[r]=t;}a.forEach(function(x){c.appendChild(x);});var f=c.children,f0=f[0].querySelector('img');f0.loading='eager';var i=0,rm=matchMedia('(prefers-reduced-motion:reduce)').matches;f[0].classList.add('on');if(rm)return;
 setInterval(function(){if(document.hidden)return;var n=(i+1)%f.length,im=f[n].querySelector('img');if(im.loading==='lazy')im.loading='eager';f[i].classList.remove('on');f[n].classList.add('on');i=n;},5000);})();
 // 표지 Process 호버: 배경 그리드 위에 실험 도면(투라인 + 해치)이 칸에 맞춰 틱 단위로 생성됨
 (function(){var cv0=document.querySelector('.cv0');if(!cv0)return;var lk=document.querySelector('.cvm a[href$="process.html"]');if(!lk)return;
@@ -1139,7 +1139,10 @@ def cover():
     phs.sort(key=lambda r: r[1].startswith('SLA'))
     PRA_BG='<div class="bg prag" data-p="'+_h.escape(_j.dumps(phs,ensure_ascii=False))+'" data-cam="'+_h.escape(open(os.path.join(os.path.dirname(__file__),'cover_cam.svg')).read())+'" data-pin="'+_h.escape(open(os.path.join(os.path.dirname(__file__),'cover_pin.svg')).read())+'"></div>'
     ABT_BG='<div class="bg grid abtg">'+open(os.path.join(os.path.dirname(__file__),'cover_seoul.svg')).read()+'</div>'
-    CRL='<div class="crl" aria-hidden="true">'+''.join(f'<figure style="--k:{k}"><i style="background-image:url({use(p["hero"],thumb=True)[0]})"></i><img src="{use(p["hero"],thumb=True)[0]}" alt=""{" loading=lazy" if k else ""}><figcaption>{p["no"]} · {E(p["title"])} · {p["year"]}</figcaption></figure>' for k,p in enumerate(PROJECTS[:6]))+'</div>'
+    _CR=[('mosscape-oreum',['307','643','1604','663','665']),('alley-house',['298','4317','2077','4314','4315']),('spare-room',['280','320','317','347','321']),('in-between',['87','97','2079','2080','4318']),('stopover',['3101','4316','3097','3105']),('emptying-village',['2966','2914','2962','2970','2958','ev_school','ev_steps']),('mvsf-neom',['jadu_32','jr_Image10','jr_Image2','jr_Image4']),('deau-hannam',['sla_ext2','sla_int1','sla_int2','sla_ext1'])]
+    _PJ={p.get('slug'):p for p in PROJECTS+PRACTICE}
+    _cl=[(_PJ[s],i) for s,ids in _CR if s in _PJ for i in ids if os.path.exists(f'{SRC}/{i}.jpg')]
+    CRL='<div class="crl" aria-hidden="true">'+''.join(f'<figure style="--k:{k}"><img src="{use(i,thumb=True)[0]}" alt=""{" loading=lazy" if k else ""}><figcaption>{E(p.get("no","")+" · " if p.get("no") else "")}{E(p["title"])} · {p.get("year","")}</figcaption></figure>' for k,(p,i) in enumerate(_cl))+'</div>'
     li=''.join(f'<li><a href="{h}" data-bg="{b}"><span class="n">{n}</span><span class="w">{t}</span></a></li>' for n,t,h,c,b in items)
     return f'''<section class="cv0">{CRL}<div class="cvo" aria-hidden="true"></div><div class="ifr" aria-hidden="true">{"".join(f'<img src="{u}" alt="">' for u in INTRO)}</div><div class="bgs">{"".join(f'<div class="bg" style="background-image:url({b})"></div>' if b and b not in ('PUB','PRA','PRJ','ABT') else (PRJ_BG if b=='PRJ' else PRA_BG if b=='PRA' else ABT_BG if b=='ABT' else '<div class="bg grid"></div>' if b!='PUB' else PUB_BG) for k,(*_,b) in enumerate(items))}</div>
 <div class="cvh"><p>Portfolio 2021–2026</p><h1>{SITE["name_ko"]}<span>{SITE["name_en"]}</span></h1></div>
