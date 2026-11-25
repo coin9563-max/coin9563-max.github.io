@@ -50,7 +50,7 @@ def pic(i, root, cls='', alt='', sizes='(max-width:860px) 70vw, min(92vw,1400px)
     return f'<img class="{cls}" src="{root}{p}"{srcset} width="{w}" height="{h}" loading="lazy" decoding="async" alt="{E(alt)}">'
 
 CSS = r"""
-:root{--bg:#f6f5f2;--fg:#1d1c1a;--mute:#86827b;--line:#dedad3;--acc:#c8572f;--max:1180px;--text:680px}
+:root{--serif:'Instrument Serif',Hahmlet,Georgia,serif;--bg:#f6f5f2;--fg:#1d1c1a;--mute:#86827b;--line:#dedad3;--acc:#c8572f;--max:1180px;--text:680px}
 .dark{--bg:#0b0b0a;--fg:#ecebe7;--mute:#8d8a84;--line:#2a2927;--acc:#e0673a}
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
@@ -64,7 +64,7 @@ header.top nav a{margin-left:clamp(14px,2.5vw,32px);color:var(--mute);font-size:
 header.top nav a:hover,header.top nav a.on{color:var(--fg)}
 main{padding:0 clamp(16px,4vw,48px)}
 .intro{max-width:var(--max);margin:9vh auto 7vh}
-.intro h1{font-size:clamp(28px,4.4vw,54px);font-weight:500;line-height:1.25;letter-spacing:-.02em}
+.intro h1{font-size:clamp(28px,4.4vw,54px);line-height:1.25;font-family:var(--serif);font-weight:400;letter-spacing:-.005em}
 .intro p{color:var(--mute);margin-top:18px}
 .works{max-width:var(--max);margin:28px auto 14vh;display:grid;grid-template-columns:1fr 1fr;gap:72px 40px}
 .work img{width:100%;transition:opacity .3s}
@@ -83,7 +83,7 @@ main{padding:0 clamp(16px,4vw,48px)}
 .hero img{width:100%;height:auto}
 .phead{max-width:var(--max);margin:64px auto 40px;display:grid;grid-template-columns:5fr 7fr;gap:40px}
 .phead .no{color:var(--mute);font-size:14px}
-.phead h1{font-size:clamp(30px,4vw,48px);font-weight:600;line-height:1.15;letter-spacing:-.01em;margin-top:6px}
+.phead h1{font-size:clamp(30px,4vw,48px);line-height:1.15;margin-top:6px;font-family:var(--serif);font-weight:400;letter-spacing:-.005em}
 .phead h1 small{display:block;font-size:.45em;font-weight:400;color:var(--mute);margin-top:10px;letter-spacing:0}
 .phead dl{margin-top:28px;display:grid;grid-template-columns:auto 1fr;gap:4px 18px;font-size:14px}
 .phead dt{color:var(--mute)}
@@ -116,7 +116,7 @@ main>footer{padding-left:0}
 /* about */
 .about{max-width:var(--max);margin:10vh auto 14vh;display:grid;grid-template-columns:4fr 8fr;gap:56px}
 .about img{width:100%;max-width:340px}
-.about h1{font-size:clamp(28px,3.6vw,44px);font-weight:500;line-height:1.2}
+.about h1{font-size:clamp(28px,3.6vw,44px);line-height:1.2;font-family:var(--serif);font-weight:400;letter-spacing:-.005em}
 .about h1 small{display:block;font-size:.42em;color:var(--mute);font-weight:400;margin-top:10px}
 .about h3{font-size:13px;color:var(--mute);font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
 .about table{border-collapse:collapse;width:100%;font-size:15px}
@@ -231,7 +231,7 @@ main>footer{padding-left:0}
 /* ---- C: index list */
 .ix{max-width:var(--max);margin:9vh auto 16vh;display:grid;grid-template-columns:7fr 5fr;gap:56px;align-items:start}
 .ixh{grid-column:1/-1;margin-bottom:20px}
-.ixh h1{font-size:clamp(36px,5.4vw,68px);font-weight:600;letter-spacing:-.025em;line-height:1.08}
+.ixh h1{font-size:clamp(36px,5.4vw,68px);line-height:1.08;font-family:var(--serif);font-weight:400;letter-spacing:-.005em}
 .ixh h1 span{font-weight:300}
 .ixh .sub{color:var(--mute);margin-top:10px;font-size:15px}
 .ixh .lead{max-width:640px;margin-top:28px;font-size:18px;line-height:1.75}
@@ -294,7 +294,7 @@ main>footer{padding-left:0}
 /* process */
 .phd{max-width:var(--max);margin:10vh auto 10vh}
 .phd .k{color:var(--mute);font-size:14px}
-.phd h1{font-size:clamp(34px,5vw,64px);font-weight:600;letter-spacing:-.025em;line-height:1.1;margin-top:8px}
+.phd h1{font-size:clamp(34px,5vw,64px);line-height:1.1;margin-top:8px;font-family:var(--serif);font-weight:400;letter-spacing:-.005em}
 .phd h1 small{display:block;font-size:.32em;font-weight:400;color:var(--mute);letter-spacing:0;margin-top:14px}
 .phd .lead{max-width:720px;margin-top:28px;font-size:18px;line-height:1.75}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:56px;border-top:1px solid var(--fg);padding-top:20px}
@@ -506,7 +506,7 @@ pre.code.ask .f{color:var(--mute)}
 .pubpg{--bg:#1d1916;--fg:#efe6d6;--mute:#a39784;--line:#3a322b}
 .pubpg header.top{background:color-mix(in srgb,#1d1916 90%,transparent)}
 .shelfh{max-width:var(--max);margin:12vh auto 8vh}
-.shelfh h1{font-family:'Noto Serif KR',Georgia,serif;font-size:clamp(56px,9vw,140px);font-weight:500;letter-spacing:-.03em;line-height:1;margin-top:12px}
+.shelfh h1{font-family:var(--serif);font-size:clamp(56px,9vw,140px);font-weight:500;letter-spacing:-.03em;line-height:1;margin-top:12px}
 .shelfh>p:last-child{max-width:420px;margin-top:20px;color:var(--mute)}
 .shelf{max-width:var(--max);margin:0 auto 16vh;display:grid;grid-template-columns:1fr 1fr;gap:8vw;padding:6vh 0 0;border-top:1px solid var(--line)}
 .bk{color:inherit;text-decoration:none;display:grid;grid-template-rows:auto auto;gap:28px;perspective:1600px}
@@ -516,7 +516,7 @@ pre.code.ask .f{color:var(--mute)}
 .bk:hover .obj{transform:rotateY(-4deg) rotateX(0) translateY(-10px)}
 .bk .meta{display:grid;gap:4px;text-align:center}
 .bk .meta span{font-size:12px;letter-spacing:.1em;color:var(--mute)}
-.bk .meta b{font-family:'Noto Serif KR',Georgia,serif;font-size:28px;font-weight:500}
+.bk .meta b{font-family:var(--serif);font-size:28px;font-weight:500}
 .bk .meta em{font-style:italic;color:var(--mute);font-size:14px}
 .bk .meta u{text-decoration:none;font-size:13px;margin-top:8px;color:#d9b97a}
 .bk.paper .obj{width:62%;box-shadow:6px 6px 0 -1px #e9e5dc,12px 12px 0 -2px #d8d3c8,30px 34px 50px rgba(0,0,0,.55)}.bk.paper .obj i{display:none}.bk.paper .meta b{font-size:20px;line-height:1.4;max-width:24em;margin:0 auto;word-break:keep-all}
@@ -525,7 +525,7 @@ pre.code.ask .f{color:var(--mute)}
 /* ===== Practice: 원장 */
 .ledpg{--bg:#f4f3ef;--fg:#111;--mute:#7b7a75;--line:#111}
 .ledh{max-width:var(--max);margin:12vh auto 0}
-.ledh h1{font-size:clamp(48px,8vw,124px);font-weight:600;letter-spacing:-.045em;line-height:.95;margin:16px 0 8vh}
+.ledh h1{font-size:clamp(48px,8vw,124px);line-height:.95;margin:16px 0 8vh;font-family:var(--serif);font-weight:400;letter-spacing:-.005em}
 .lcol,.lr{display:grid;grid-template-columns:110px 168px 1.3fr 1fr 30px;gap:24px;align-items:center}
 .lr .th{display:block;aspect-ratio:4/3;overflow:hidden;background:#11111108}.lr .th:empty{background:none}.lr .th img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(.15);transition:transform .5s,filter .3s}.lr.f:hover .th img{transform:scale(1.06);filter:none}
 .lcol{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);padding-bottom:10px;border-bottom:2px solid #111}
@@ -595,7 +595,7 @@ html.cviing,html.cviing body{background:#0e0e0d;overflow:hidden}
 .bcs .t1{grid-column:1/-1;font:12px var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--pm);display:flex;gap:28px;flex-wrap:wrap}.bcs .t1 span{letter-spacing:.08em;text-transform:none;font-size:13px;color:var(--sub)}
 .bcs .seal{position:absolute;right:clamp(28px,6vw,96px);top:clamp(30px,4vw,58px);color:var(--ink);font-style:normal}.bcs .seal .kh{width:clamp(150px,14vw,220px);height:auto;display:block}
 .bcs>.cl{position:absolute;inset:0;width:100%;height:100%;color:var(--ink);opacity:.035;pointer-events:none}.bcs>*{position:relative}.bcs>.seal,.bcs>.sz{position:absolute}
-.bcs h1{grid-column:1/-1;font-size:clamp(64px,8.4vw,140px);font-weight:600;letter-spacing:-.05em;line-height:.95;margin:clamp(28px,4vh,48px) 0 20px;display:flex;align-items:baseline;gap:.35em;flex-wrap:wrap}
+.bcs h1{grid-column:1/-1;font-size:clamp(64px,8.4vw,140px);line-height:.95;margin:clamp(28px,4vh,48px) 0 20px;display:flex;align-items:baseline;gap:.35em;flex-wrap:wrap;font-family:var(--serif);font-weight:400;letter-spacing:-.005em}
 .bcs h1 span{font-size:.24em;font-weight:400;letter-spacing:-.01em;color:var(--pm)}
 .bcs .c1{display:flex;flex-direction:column;justify-content:space-between;gap:36px}
 .bcs .lead{font-size:clamp(17px,1.35vw,20px);line-height:1.75;color:var(--ink);letter-spacing:-.01em}
@@ -999,6 +999,13 @@ document.querySelectorAll('.blk,.txt,.work').forEach(el=>{el.classList.add('fade
 """.replace('__HOLES__',HOLES).replace('__EMAIL__',SITE['email']).replace('__PHONE__',SITE['phone'])
 
 import hashlib as _hl
+CSS += """
+/* 타이포 B: 에디토리얼 세리프 */
+.cvh h1{font-family:Hahmlet,var(--serif);font-weight:500;letter-spacing:-.04em}
+.cvh h1 span{font-family:'Instrument Serif',serif;font-style:italic;font-size:.34em;letter-spacing:0;color:#cfcabf}
+.ixl .t{font-family:var(--serif);font-weight:400;letter-spacing:0;font-size:clamp(28px,3vw,42px)}
+.cvm .w{font-family:var(--serif);font-weight:400;letter-spacing:-.005em;font-size:clamp(34px,4vw,60px);line-height:1.05}
+"""
 CSSV=_hl.md5(CSS.encode()).hexdigest()[:8]
 def page(title, body, root, dark=False, on='', desc='', og='og-card.jpg'):
     return f"""<!doctype html>
@@ -1007,7 +1014,7 @@ def page(title, body, root, dark=False, on='', desc='', og='og-card.jpg'):
 <title>{E(title)}</title>
 <meta name="description" content="{E(desc or SITE['name_ko']+' — 건축 포트폴리오')}">
 <meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc or '건축 포트폴리오 2021–2026 · Architectural Designer · 홍익대학교 건축학과')}"><meta property="og:type" content="website"><meta property="og:site_name" content="{SITE['name_ko']} — Portfolio"><meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&amp;family=Nanum+Pen+Script&amp;family=Noto+Serif+KR:wght@500&amp;display=swap"><link rel="stylesheet" href="{root}style.css?v={CSSV}">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;600&amp;family=Nanum+Pen+Script&amp;display=swap"><link rel="stylesheet" href="{root}style.css?v={CSSV}">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 fill=%22%231d1c1a%22/%3E%3Ctext x=%2216%22 y=%2222%22 font-size=%2216%22 text-anchor=%22middle%22 fill=%22%23f6f5f2%22 font-family=%22sans-serif%22%3EH%3C/text%3E%3C/svg%3E">
 <meta property="og:image" content="https://coin9563-max.github.io/{og}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 </head><body class="{dark if isinstance(dark, str) else ('dark' if dark else '')}">
@@ -1215,7 +1222,7 @@ for it in PUBLISH:
 <title>{E(it['title'])} — {SITE['name_ko']}</title>
 <meta name="description" content="{E(it['desc'])}"><meta property="og:title" content="{E(it['title'])}">
 <meta property="og:image" content="https://coin9563-max.github.io/book/{it['slug']}/01.jpg">
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&amp;family=Nanum+Pen+Script&amp;family=Noto+Serif+KR:wght@500&amp;display=swap"><link rel="stylesheet" href="../style.css?v={CSSV}"></head>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;600&amp;family=Instrument+Serif:ital@0;1&amp;family=JetBrains+Mono:wght@400;600&amp;family=Nanum+Pen+Script&amp;display=swap"><link rel="stylesheet" href="../style.css?v={CSSV}"></head>
 <body class="dark bookpg">
 <header class="top"><a class="name" href="../publish.html">← {SITE['name_ko']}<span>Publish</span></a><span class="bt">{E(it['title'])} <em>{E(it['kind'])} · {it['year']}</em>{pdfa}</span></header>
 <div class="stage"><div id="book"><div class="pg L"></div><div class="pg R"></div><i class="spine"></i></div></div>
