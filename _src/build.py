@@ -1001,8 +1001,7 @@ document.querySelectorAll('.blk,.txt,.work').forEach(el=>{el.classList.add('fade
 import hashlib as _hl
 CSS += """
 /* 타이포 B: 에디토리얼 세리프 */
-.cvh h1{font-family:Hahmlet,var(--serif);font-weight:500;letter-spacing:-.04em}
-.cvh h1 span{font-family:'Instrument Serif',serif;font-style:italic;font-size:.34em;letter-spacing:0;color:#cfcabf}
+.cvh h1 span{font-family:'Instrument Serif',serif;font-size:.36em;font-weight:400;letter-spacing:-.005em;color:#cfcabf;margin-top:.35em}
 .ixl .t{font-family:var(--serif);font-weight:400;letter-spacing:0;font-size:clamp(28px,3vw,42px)}
 .cvm .w{font-family:var(--serif);font-weight:400;letter-spacing:-.005em;font-size:clamp(34px,4vw,60px);line-height:1.05}
 """
