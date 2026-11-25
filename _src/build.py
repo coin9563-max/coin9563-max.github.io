@@ -1003,7 +1003,7 @@ CSS += """
 /* 타이포 B: 에디토리얼 세리프 */
 .cvh h1 span{font-family:'Instrument Serif',serif;font-size:.36em;font-weight:400;letter-spacing:-.005em;color:#cfcabf;margin-top:.35em}
 .ixl .t{font-family:var(--serif);font-weight:400;letter-spacing:0;font-size:clamp(28px,3vw,42px)}
-.cvm .w{font-family:var(--serif);font-weight:400;letter-spacing:-.005em;font-size:clamp(34px,4vw,60px);line-height:1.05}
+.cvm .w{font-weight:300;letter-spacing:-.035em}
 """
 CSSV=_hl.md5(CSS.encode()).hexdigest()[:8]
 def page(title, body, root, dark=False, on='', desc='', og='og-card.jpg'):
